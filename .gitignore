@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
+# ignore notebook cache
+*.nb.html
