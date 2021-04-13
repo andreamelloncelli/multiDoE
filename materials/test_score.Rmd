@@ -1,0 +1,166 @@
+---
+title: "MSOpt class"
+output: html_notebook
+---
+
+## MSOpt implementation
+
+```{r}
+# Class for computing several optimization criteria for a multistratum 
+# design with a full quadratic model, given the settings matrix
+#
+# Requires the distribution of factors across strata (cell array), the 
+# number of units in each stratum (array), the number of levels for each 
+# factor (array, or one number for all factors), the ratios of error 
+# variance between subsequent strata (array), the combination of 
+# criteria to be optimized (array) and the model type (string) 
+# in the constructor:
+#
+# mso = MSOpt(facts,units,levels,etas,criteria,model)
+#
+# criteria can be a cell array with any combination of:
+# 'I'  - I-optimality
+# 'Id' - Id-optimality
+# 'D'  - D-optimality
+# 'A'  - A-optimality
+# 'Ds' - Ds-optimality
+# 'As' - As-optimality
+#
+# model can by any of 'main', 'interaction' or 'quadratic'
+#
+# Scoring function:
+#
+# scores = mso.Score(settings,criteria)
+#
+
+# Francesco Sambo, Dept. of Information Engineering, Univ. of Padova, 2013
+```
+
+
+
+### Pipeline
+
+```{r}
+# TODO: from MSOpt.m implement this pipeline
+
+MSOpt <- function(facts, units, levels, etas, criteria, model) {
+  mso <- list()
+  mso$facts = facts
+  mso$nfacts = NULL# TODO: understand this: length([facts{:}])
+  mso$nstrat = length(facts)
+  mso$units = units
+  mso$runs = prod(units)
+  mso$etas = etas
+  mso$avlev = cell(1,mso$nfacts)
+  
+  # ...
+  
+  return(mso)
+}
+
+
+mso <- MSOpt(...)
+
+
+Score <- function(mso, settings) {
+  
+  # ...
+  
+  return(scores)
+}
+
+
+Score(...) # see test_score.m
+```
+
+
+
+## test score
+
+
+```{r}
+facts = list(1:2,3:4) 
+   # cell array con i factors per ogni strato, in questo 
+   # caso split-split-plot con un factor nel primo, due nel secondo e quattro 
+   # nel terzo (per un blocked design, lasci lo strato vuoto, es. {[],1:3})
+units = list(12,4)
+   # numero di unita' per ogni strato, in totale 2 x 4 x 3 
+   # esperimenti
+levels = 3 
+   # numero di livelli per ogni variabile, puo' anche essere un 
+   # vettore con un elemento per ogni variabile se vuoi un numero di
+   # livelli diverso per ogni variabile
+etas = list(1,1) 
+   # rapporto delle varianze fra due strati consecutivi, sono
+   # sempre #strati - 1
+# criteria = c('D','Nt', 'Pwp', 'Psp') 
+model = 'quadratic' # 'quadratic' 'main' o 'interaction'
+
+
+example = matrix(ncol=4, c(
+   1, -1,  1,  0,
+   1, -1, -1,  1,
+   1, -1, -1,  1,
+   1, -1, -1,  1,
+   1, -1,  1,  0,
+   1, -1, -1,  1,
+   1, -1, -1,  1,
+   1, -1, -1,  1,
+   1,  1,  1,  1,
+   1,  1,  0,  1,
+   1,  1, -1,  0,
+   1,  1,  1, -1,
+   1,  1,  1,  1,
+   1,  1,  0,  1,
+   1,  1, -1,  0,
+   1,  1,  1, -1,
+  -1, -1,  0,  1,
+  -1, -1,  1, -1,
+  -1, -1,  1, -1,
+  -1, -1,  0,  1,
+   0, -1,  0, -1,
+   0, -1,  1,  1,
+   0, -1, -1, -1,
+   0, -1, -1,  0,
+   1,  1,  0,  1,
+   1,  1,  1, -1,
+   1,  1,  1,  1,
+   1,  1, -1,  0,
+  -1,  1, -1,  1,
+  -1,  1, -1, -1,
+  -1,  1,  1, -1,
+  -1,  1,  1,  1,
+   0, -1,  0, -1,
+   0, -1,  1,  1,
+   0, -1, -1,  0,
+   0, -1, -1, -1,
+   0, -1,  0, -1,
+   0, -1,  1,  1,
+   0, -1, -1, -1,
+   0, -1, -1,  0,
+   0,  0,  1,  0,
+   0,  0,  1,  0,
+   0,  0,  1,  0,
+   0,  0,  1,  0,
+  -1,  1,  1, -1,
+  -1,  1,  1,  1,
+  -1,  1, -1, -1,
+  -1,  1, -1,  1
+  )
+)
+example
+
+#criteria = c('Psp')
+criteria = c('D','Nt', 'Pwp', 'Psp')
+msopt = MSOpt(facts, units, levels, etas, criteria, model)
+# 
+msopt.Score(example)
+```
+### Expected result
+
+```{r}
+# Expected output
+
+c(0.1089, Inf, Inf, Inf)
+```
+

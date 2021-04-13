@@ -1,0 +1,46 @@
+---
+title: "Help Notebook"
+output: html_notebook
+---
+
+
+
+
+## Matlab help
+
+- [matlab tutorial](https://www.tutorialspoint.com/matlab/matlab_syntax.htm)
+
+
+
+
+## How to create example matrices
+
+```{r}
+# [1      zeros(1,k);
+# zeros(k,1)  eye(k)/3];
+
+k = 3
+
+rbind(
+  cbind(1         , t(integer(k))),
+  cbind(integer(k), diag(k)/3    )
+)
+```
+
+
+```{r}
+model = 'main'
+
+M <- switch (model,
+  'main' = {
+    rbind(
+      cbind(1         , t(integer(k))),
+      cbind(integer(k), diag(k)/3    )
+    )
+  },
+  'interaction' = {
+    NULL
+  }
+)
+M
+```
