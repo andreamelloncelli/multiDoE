@@ -46,7 +46,7 @@ output: html_notebook
 MSOpt <- function(facts, units, levels, etas, criteria, model) {
   mso <- list()
   mso$facts = facts
-  mso$nfacts = NULL# TODO: understand this: length([facts{:}])
+  mso$nfacts = NULL     # TODO: understand this: length([facts{:}])
   mso$nstrat = length(facts)
   mso$units = units
   mso$runs = prod(units)
@@ -79,7 +79,7 @@ Score(...) # see test_score.m
 
 
 ```{r}
-facts = list(1:2,3:4) 
+facts = list(1:2, 3:4) 
    # cell array con i factors per ogni strato, in questo 
    # caso split-split-plot con un factor nel primo, due nel secondo e quattro 
    # nel terzo (per un blocked design, lasci lo strato vuoto, es. {[],1:3})
@@ -151,16 +151,16 @@ example = matrix(ncol=4, c(
 example
 
 #criteria = c('Psp')
-criteria = c('D','Nt', 'Pwp', 'Psp')
+criteria = c('I', 'Id', 'D', 'A', 'Ds', 'As')
 msopt = MSOpt(facts, units, levels, etas, criteria, model)
 # 
-msopt.Score(example)
+Score(msopt, example)
 ```
 ### Expected result
 
 ```{r}
 # Expected output
 
-c(0.1089, Inf, Inf, Inf)
+c( 1.2059,    0.7348,    0.1089,    0.4063,    0.1092, 0.1688)
 ```
 
