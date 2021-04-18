@@ -171,7 +171,6 @@ colprod <- function(X){
 
 
 #### function Score ####
-settings<-example
 Score <- function(mso, settings){
   switch(mso$model,
          "main" = {X <- cbind(rep(1,mso$runs), settings)},
@@ -246,7 +245,7 @@ etas = list(1,1)
    # rapporto delle varianze fra due strati consecutivi, sono
    # sempre #strati - 1
 criteria = c('I', 'Id', 'D', 'A', 'Ds', 'As')
-model = 'interaction' # 'quadratic' 'main' o 'interaction'
+model = 'quadratic' # 'quadratic' 'main' o 'interaction'
 
 example <- matrix(c( 1, -1,  1, 0, 
                      1, -1, -1, 1, 
