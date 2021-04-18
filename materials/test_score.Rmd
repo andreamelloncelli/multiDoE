@@ -3,7 +3,8 @@ title: "MSOpt class"
 output: html_notebook
 ---
 
-## MSOpt implementation
+
+### MSOpt implementation
 
 ```{r}
 # Class for computing several optimization criteria for a multistratum 
@@ -37,46 +38,197 @@ output: html_notebook
 ```
 
 
-
 ### Pipeline
 
 ```{r}
-# TODO: from MSOpt.m implement this pipeline
 
+#### functon MSOpt ####
 MSOpt <- function(facts, units, levels, etas, criteria, model) {
   mso <- list()
   mso$facts = facts
-  mso$nfacts = NULL     # TODO: understand this: length([facts{:}])
+  mso$nfacts = length(unlist(facts))
   mso$nstrat = length(facts)
   mso$units = units
-  mso$runs = prod(units)
+  mso$runs = prod(unlist(units))
   mso$etas = etas
-  mso$avlev = cell(1,mso$nfacts)
+  mso$avlev = as.list(rep(NA,mso$nfact))
   
-  # ...
+  if(length(levels) == 1){
+    mso$levs = rep(1,mso$nfacts)*levels
+    for(i in 1:mso$nfacts){
+      mso$avlev[[i]] = (2*c(0:(levels-1))/(levels-1))-1
+    }
+  } else {
+    mso$levs = levels
+    for(i in 1:mso$nfacts){
+      mso$avlev[[i]] = (2*c(0:(levels[[i]]-1))/(levels[[i]]-1))-1
+    }
+  }
   
+  V = diag(mso$runs)
+  for(i in 1:(mso$nstrat-1)){
+    ones_shape = prod(unlist(units)[(i+1):length(units)])
+    V = V + etas[[1]]*kronecker(diag(prod(unlist(units)[1:i])),
+                                matrix(1,ones_shape,ones_shape))
+  }
+
+  mso$Vinv = t(solve(V))
+  mso$model = model
+  mso$crit = criteria 
+  mso$ncrit = length(criteria)
+
+  if("I" %in% criteria){
+    k = mso$nfacts
+    k2 = k*(k-1)/2
+    switch(model, 
+           "main" = {mso$M <- rbind(
+               cbind(1         , t(integer(k))),
+               cbind(integer(k), diag(k)/3    )
+               )
+             },
+           "interaction" = {mso$M <- rbind(
+             cbind(1,        t(integer(k)), t(integer(k2))),
+             cbind(integer(k),   diag(k)/3, matrix(0,k,k2)),
+             cbind(integer(k2), matrix(0,k2,k), diag(k2)/9)
+             )
+             }, 
+           "quadratic" = {mso$M <- rbind(
+             cbind(1,            t(integer(k)), t(rep(1,k))/3, t(integer(k2))),
+             cbind(integer(k),       diag(k)/3, matrix(0,k,k), matrix(0,k,k2)),
+             cbind(rep(1,k)/3, matrix(0,k,k), (4*diag(k)+5*matrix(1,k,k))/45,
+                   matrix(0,k,k2)),
+             cbind(integer(k2), matrix(0,k2,k), matrix(0,k2,k), diag(k2)/9)
+             )
+             },
+           stop("Model type not valid")
+    )
+  }
+  
+  if("Id" %in% criteria){
+    k = mso$nfacts
+    k2 = k*(k-1)/2
+    switch(model, 
+           "main" = {mso$M0 <- rbind(
+             cbind(1         , t(integer(k))),
+             cbind(integer(k), diag(k)/3    )
+           )
+           },
+           "interaction" = {mso$M0 <- rbind(
+             cbind(1,        t(integer(k)), t(integer(k2))),
+             cbind(integer(k),   diag(k)/3, matrix(0,k,k2)),
+             cbind(integer(k2), matrix(0,k2,k), diag(k2)/9)
+           )
+           }, 
+           "quadratic" = {mso$M0 <- rbind(
+             cbind(1,            t(integer(k)), t(rep(1,k))/3, t(integer(k2))),
+             cbind(integer(k),       diag(k)/3, matrix(0,k,k), matrix(0,k,k2)),
+             cbind(rep(1,k)/3, matrix(0,k,k), (4*diag(k)+5*matrix(1,k,k))/45, matrix(0,k,k2)),
+             cbind(integer(k2), matrix(0,k2,k), matrix(0,k2,k), diag(k2)/9)
+           )
+           },
+           stop("Model type not valid")
+    )
+    mso$M0[,1] <- 0
+    mso$M0[1,] <- 0
+  }
+
+  if("As" %in% criteria){
+    switch(model,
+           "main" = {w <- t(rep(1,mso$nfacts))},
+           "interaction" = {w <- t(rep(1, mso$nfacts+mso$nfacts*(mso$nfacts-1)/2))},
+           "quadratic" = {w <- c(
+             rep(1,mso$nfacts),
+             rep(1,mso$nfacts)/4,
+             rep(1,mso$nfacts*(mso$nfacts-1)/2)
+           )
+           },
+           stop("Model type not valid")
+    )
+    a = length(w/sum(w))
+    mso$W = c(w/sum(w))*diag(a)
+  } 
   return(mso)
 }
 
 
-mso <- MSOpt(...)
 
-
-Score <- function(mso, settings) {
+#### function colprod ####
+colprod <- function(X){
+  n_row <- nrow(X)
+  n_col <- ncol(X)
+  out <- matrix(NA, n_row, n_col*(n_col-1)/2)
   
-  # ...
-  
-  return(scores)
+  k = 1
+  for(i in 1:(n_col-1)){
+    for(j in (i+1):n_col){
+      out[,k] <- X[,i]*X[,j]
+      k = k+1
+    }
+  }
+  return(out)
 }
 
 
-Score(...) # see test_score.m
+
+#### function Score ####
+settings<-example
+Score <- function(mso, settings){
+  switch(mso$model,
+         "main" = {X <- cbind(rep(1,mso$runs), settings)},
+         "interaction" = {X <- cbind(rep(1,mso$runs), settings, colprod(settings))},
+         "quadratic" =   {X <- cbind(rep(1,mso$runs), settings, settings**2, colprod(settings))}
+  )
+  
+  B = t(X)%*%mso$Vinv%*%X
+  determ = det(B)   # fino a qui è giusto
+  scores = as.vector(matrix(Inf,length(mso$crit)))
+  
+  if(rcond(B) > 1e-5 & determ > 0){
+    
+    ind = c(mso$crit == "D") # true/false 
+    if(any(ind)){
+      scores[ind] = 1/determ^(1/dim(X)[2])
+    }
+    
+    if(any(c("I", "Id", "Ds", "A", "As") %in% mso$crit)){
+      Binv = solve(B)
+    }
+    
+    ind = c(mso$crit == "I")
+    if(any(ind)){
+      scores[ind] = sum(diag(Binv%*%mso$M))
+    }
+    
+    ind = c(mso$crit == "Id")
+    if(any(ind)){
+      scores[ind] = sum(diag(Binv%*%mso$M0))
+    }
+    
+    ind = c(mso$crit == "A")
+    if(any(ind)){
+      scores[ind] = sum(diag(Binv))/dim(X)[2]
+    }
+    
+    r = dim(Binv)[1]
+    c = dim(Binv)[2]
+    
+    ind = c(mso$crit == "Ds")
+    if(any(ind)){
+      scores[ind] = (det(Binv[2:r,2:c]))^(1/(dim(X)[2]-1))
+    }
+    
+    ind = c(mso$crit == "As")
+    if(any(ind)){
+      scores[ind] = sum(diag(mso$W%*%Binv[2:r,2:c]))
+    }
+  }
+  return(scores)
+}
+
 ```
 
 
-
-## test score
-
+### Test score
 
 ```{r}
 facts = list(1:2, 3:4) 
@@ -93,69 +245,66 @@ levels = 3
 etas = list(1,1) 
    # rapporto delle varianze fra due strati consecutivi, sono
    # sempre #strati - 1
-# criteria = c('D','Nt', 'Pwp', 'Psp') 
-model = 'quadratic' # 'quadratic' 'main' o 'interaction'
-
-
-example = matrix(ncol=4, c(
-   1, -1,  1,  0,
-   1, -1, -1,  1,
-   1, -1, -1,  1,
-   1, -1, -1,  1,
-   1, -1,  1,  0,
-   1, -1, -1,  1,
-   1, -1, -1,  1,
-   1, -1, -1,  1,
-   1,  1,  1,  1,
-   1,  1,  0,  1,
-   1,  1, -1,  0,
-   1,  1,  1, -1,
-   1,  1,  1,  1,
-   1,  1,  0,  1,
-   1,  1, -1,  0,
-   1,  1,  1, -1,
-  -1, -1,  0,  1,
-  -1, -1,  1, -1,
-  -1, -1,  1, -1,
-  -1, -1,  0,  1,
-   0, -1,  0, -1,
-   0, -1,  1,  1,
-   0, -1, -1, -1,
-   0, -1, -1,  0,
-   1,  1,  0,  1,
-   1,  1,  1, -1,
-   1,  1,  1,  1,
-   1,  1, -1,  0,
-  -1,  1, -1,  1,
-  -1,  1, -1, -1,
-  -1,  1,  1, -1,
-  -1,  1,  1,  1,
-   0, -1,  0, -1,
-   0, -1,  1,  1,
-   0, -1, -1,  0,
-   0, -1, -1, -1,
-   0, -1,  0, -1,
-   0, -1,  1,  1,
-   0, -1, -1, -1,
-   0, -1, -1,  0,
-   0,  0,  1,  0,
-   0,  0,  1,  0,
-   0,  0,  1,  0,
-   0,  0,  1,  0,
-  -1,  1,  1, -1,
-  -1,  1,  1,  1,
-  -1,  1, -1, -1,
-  -1,  1, -1,  1
-  )
-)
-example
-
-#criteria = c('Psp')
 criteria = c('I', 'Id', 'D', 'A', 'Ds', 'As')
-msopt = MSOpt(facts, units, levels, etas, criteria, model)
-# 
-Score(msopt, example)
+model = 'interaction' # 'quadratic' 'main' o 'interaction'
+
+example <- matrix(c( 1, -1,  1, 0, 
+                     1, -1, -1, 1, 
+                     1, -1, -1, 1,
+                     1, -1, -1, 1,
+                     1, -1,  1, 0, 
+                     1, -1, -1, 1,
+                     1, -1, -1, 1, 
+                     1, -1, -1, 1, 
+                     1,  1, 1, 1, 
+                     1, 1, 0, 1,
+                     1, 1, -1, 0, 
+                     1, 1, 1, -1, 
+                     1, 1, 1, 1, 
+                     1, 1, 0, 1, 
+                     1, 1, -1, 0, 
+                     1, 1, 1, -1, 
+                     -1, -1, 0, 1,
+                     -1, -1, 1, -1, 
+                     -1, -1, 1, -1, 
+                     -1, -1, 0, 1, 
+                     0, -1, 0, -1, 
+                     0, -1, 1, 1, 
+                     0, -1, -1, -1, 
+                     0, -1, -1, 0, 
+                     1, 1, 0, 1, 
+                     1, 1, 1, -1, 
+                     1, 1, 1, 1, 
+                     1, 1, -1, 0, 
+                     -1, 1, -1, 1, 
+                     -1, 1, -1, -1, 
+                     -1, 1, 1, -1, 
+                     -1, 1, 1, 1, 
+                     0, -1, 0, -1, 
+                     0, -1, 1, 1, 
+                     0, -1, -1, 0, 
+                     0, -1, -1, -1,
+                     0, -1, 0, -1, 
+                     0, -1, 1, 1,
+                     0, -1, -1, -1, 
+                     0, -1, -1, 0, 
+                     0, 0, 1, 0, 
+                     0, 0, 1, 0, 
+                     0, 0, 1, 0, 
+                     0, 0, 1, 0, 
+                     -1, 1, 1, -1, 
+                     -1, 1, 1, 1, 
+                     -1, 1, -1, -1, 
+                     -1, 1, -1, 1), ncol = 4, byrow = T)
+
+
+msopt <- MSOpt(facts, units, levels, etas, criteria, model)
+score <- Score(msopt, example)
+score
+
 ```
+
+
 ### Expected result
 
 ```{r}
