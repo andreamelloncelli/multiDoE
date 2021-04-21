@@ -1,5 +1,5 @@
 
-# functon MSOpt ---------------------------
+# function MSOpt ---------------------------
 
 # 'units' e 'levels' nel codice matlab sono vettori (qui liste)
 
@@ -124,7 +124,7 @@ MSOpt = function(facts, units, levels, etas, criteria, model) {
 }
 
 
-# functon colprod ---------------------------
+# function colprod ---------------------------
 
 colprod <- function(X) {
 
@@ -143,7 +143,7 @@ colprod <- function(X) {
 }
 
 
-# functon Score ---------------------------
+# function Score ---------------------------
 
 Score <- function(mso, settings) {
 
