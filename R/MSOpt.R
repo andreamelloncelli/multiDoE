@@ -1,4 +1,4 @@
-
+#' @export
 # function MSOpt ---------------------------
 
 # 'units' e 'levels' nel codice matlab sono vettori (qui liste)
@@ -123,7 +123,7 @@ MSOpt = function(facts, units, levels, etas, criteria, model) {
   return(mso)
 }
 
-
+#' @export
 # function colprod ---------------------------
 
 colprod <- function(X) {
@@ -142,7 +142,7 @@ colprod <- function(X) {
   return(out)
 }
 
-
+#' @export
 # function Score ---------------------------
 
 Score <- function(mso, settings) {
