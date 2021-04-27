@@ -9,12 +9,12 @@ output: html_notebook
 #### dati prova ####
 library(multiDoE)
 
-facts = list(1:2, 3:4)
-units = list(12, 4)
-levels = 3
-etas = list(1, 1)
-model = "quadratic"     # 'quadratic', 'main' o 'interaction'
-criteria = c('I', 'Id', 'D', 'A', 'Ds', 'As')
+facts <- list(1:2, 3:4)
+units <- list(12, 4)
+levels <- 3
+etas <- list(1, 1)
+model <- "quadratic"     # 'quadratic', 'main' o 'interaction'
+criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
 
 example <- matrix(c(  1, -1,  1,  0,
                       1, -1, -1,  1,
@@ -76,6 +76,6 @@ round(score, 4)
 
 ```{r}
 # Expected output
-c( 1.2059,    0.7348,    0.1089,    0.4063,    0.1092, 0.1688)
+c( 1.2059, 0.7348, 0.1089, 0.4063, 0.1092, 0.1688)
 ```
 
