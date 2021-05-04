@@ -1,0 +1,26 @@
+---
+title: '"MSSearch function"'
+output: html_notebook
+---
+
+### Template MSSearch
+
+```{r echo=FALSE}
+# template_MSSearch ---------------------------
+
+library(multiDoE)
+
+set.seed(123)
+
+facts <- list(1, 2, 3)
+units <- list(3, 3, 3)
+levels <- 3
+etas <- list(1, 1)
+criteria <- "D"
+model <- "interaction"
+
+msopt <- MSOpt(facts, units, levels, etas, criteria, model)
+mssearch <- MSSearch(msopt, 1, "Restarts", 100)
+
+mssearch
+```
