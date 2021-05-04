@@ -1,7 +1,6 @@
 #' @export
+#'
 # function MSOpt ---------------------------
-
-# 'units' e 'levels' nel codice matlab sono vettori (qui liste)
 
 MSOpt = function(facts, units, levels, etas, criteria, model) {
 
@@ -14,7 +13,7 @@ MSOpt = function(facts, units, levels, etas, criteria, model) {
   mso$etas <- etas
   mso$avlev <- as.list(rep(NA, mso$nfact))
 
-  if (length(levels) == 1) {                                # is.scalar()
+  if (length(levels) == 1) {                      # NOTA: is.scalar()
     mso$levs <- rep(1, mso$nfacts) * levels
     for (i in 1:mso$nfacts) {
       mso$avlev[[i]] <- (2 * 0:(levels - 1) / (levels - 1)) - 1
@@ -123,7 +122,10 @@ MSOpt = function(facts, units, levels, etas, criteria, model) {
   return(mso)
 }
 
+
+
 #' @export
+#'
 # function colprod ---------------------------
 
 colprod <- function(X) {
@@ -143,6 +145,9 @@ colprod <- function(X) {
 }
 
 #' @export
+
+#' @export
+#'
 # function Score ---------------------------
 
 Score <- function(mso, settings) {
@@ -165,9 +170,11 @@ Score <- function(mso, settings) {
 
   if (rcond(B) > 1e-5 & determ > 0) {
 
-    ind <- mso$crit == "D"                              # true/false
+    ind <- mso$crit == "D"             # true/false
     if (any(ind)) {
-      scores[ind] <- 1 / determ ^ (1 / dim(X)[2])
+       # TODO remove round
+       scores[ind] <- round(1 / determ ^ (1 / dim(X)[2]),4)
+
     }
 
     if (any(c("I", "Id", "Ds", "A", "As") %in% mso$crit)) {
@@ -176,30 +183,34 @@ Score <- function(mso, settings) {
 
     ind <- mso$crit == "I"
     if (any(ind)) {
-      scores[ind] <- sum(diag(Binv %*% mso$M))
+      # TODO remove round
+      scores[ind] <- round(sum(diag(Binv %*% mso$M)), 4)
     }
 
     ind <- mso$crit == "Id"
     if (any(ind)) {
-      scores[ind] <- sum(diag(Binv %*% mso$M0))
+      # TODO remove round
+      scores[ind] <- round(sum(diag(Binv %*% mso$M0)), 4)
     }
 
     ind <- mso$crit == "A"
     if (any(ind)) {
-      scores[ind] <- sum(diag(Binv)) / dim(X)[2]
+      # TODO remove round
+      scores[ind] <- round(sum(diag(Binv)) / dim(X)[2], 4)
     }
-
-    rws <- dim(Binv)[1]
-    cls <- dim(Binv)[2]
 
     ind <- mso$crit == "Ds"
     if (any(ind)) {
-      scores[ind] <- (det(Binv[2:rws, 2:cls])) ^ ( 1 / (dim(X)[2] - 1))
+      rws <- dim(Binv)[1]
+      cls <- dim(Binv)[2]
+      # TODO remove round
+      scores[ind] <- round((det(Binv[2:rws, 2:cls])) ^ ( 1 / (dim(X)[2] - 1)), 4)
     }
 
     ind <- mso$crit == "As"
     if (any(ind)) {
-      scores[ind] <- sum(diag(mso$W %*% Binv[2:rws, 2:cls]))
+      # TODO remove round
+      scores[ind] <- round(sum(diag(mso$W %*% Binv[2:rws, 2:cls])), 4)
     }
 
   }
