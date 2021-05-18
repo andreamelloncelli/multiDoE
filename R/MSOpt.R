@@ -2,14 +2,22 @@
 #'
 #' description
 #'
-#' @param facts dwhdj
-#' @param units dwkdo
-#' @param levels
-#' @param etas
-#' @param criteria
-#' @param model
+#' @param facts a list of elements representing the distribution of factors over strata.
+#' @param units a list of numbers specifying the number of units in each stratum.
+#' @param levels a list of numbers specifying the number of levels for each factor.
+#' @param etas a list containing ratios of error variance between subsequent strata
+#' @param criteria list of criteria to be optimized. It can contain any combination of:
+#' \itemize{\item "I" - I-optimality
+#'          \item "Id" - Id-optimality}
 #'
-#' @return
+#' \deqn{p(x) = \frac{\lambda^x e^{-\lambda}}{x!}}{%
+#' p(x) = \lambda^x exp(-\lambda)/x!}
+#' for \eqn{x = 0, 1, 2, \ldots}
+#'
+#' @param model type of model, among "main", "interaction" or "quadratic"
+#'
+#' @return MSOpt
+#'
 #' @export
 #'
 #' @examples
