@@ -1,61 +1,73 @@
+#' MSOpt
+#'
+#' description
+#'
+#' @param facts dwhdj
+#' @param units dwkdo
+#' @param levels
+#' @param etas
+#' @param criteria
+#' @param model
+#'
+#' @return
 #' @export
 #'
-# function MSOpt ---------------------------
-
+#' @examples
+#'
 MSOpt = function(facts, units, levels, etas, criteria, model) {
 
-  mso <- list()
-  mso$facts <- facts
-  mso$nfacts <- length(unlist(facts))
-  mso$nstrat <- length(facts)
-  mso$units <- units
-  mso$runs <- prod(unlist(units))
-  mso$etas <- etas
-  mso$avlev <- as.list(rep(NA, mso$nfact))
+  msopt <- list()
+  msopt$facts <- facts
+  msopt$nfacts <- length(unlist(facts))
+  msopt$nstrat <- length(facts)
+  msopt$units <- units
+  msopt$runs <- prod(unlist(units))
+  msopt$etas <- etas
+  msopt$avlev <- as.list(rep(NA, msopt$nfact))
 
   if (length(levels) == 1) {                      # NOTA: is.scalar()
-    mso$levs <- rep(1, mso$nfacts) * levels
-    for (i in 1:mso$nfacts) {
-      mso$avlev[[i]] <- (2 * 0:(levels - 1) / (levels - 1)) - 1
+    msopt$levs <- rep(1, msopt$nfacts) * levels
+    for (i in 1:msopt$nfacts) {
+      msopt$avlev[[i]] <- (2 * 0:(levels - 1) / (levels - 1)) - 1
     }
   } else {
-    mso$levs <- levels
-    for (i in 1:mso$nfacts) {
-      mso$avlev[[i]] <- (2 * 0:(levels[[i]] - 1) / (levels[[i]] - 1)) - 1
+    msopt$levs <- levels
+    for (i in 1:msopt$nfacts) {
+      msopt$avlev[[i]] <- (2 * 0:(levels[[i]] - 1) / (levels[[i]] - 1)) - 1
     }
   }
 
-  V <- diag(mso$runs)
-  for (i in 1:(mso$nstrat - 1)) {
+  V <- diag(msopt$runs)
+  for (i in 1:(msopt$nstrat - 1)) {
     ones_shape <- prod(unlist(units)[(i + 1):length(units)])
     V <- V + etas[[1]] * kronecker(diag(prod(unlist(units)[1:i])),
                                    matrix(1, ones_shape, ones_shape))
   }
 
-  mso$Vinv <- t(solve(V))
-  mso$model <- model
-  mso$crit <- criteria
-  mso$ncrit <- length(criteria)
+  msopt$Vinv <- t(solve(V))
+  msopt$model <- model
+  msopt$crit <- criteria
+  msopt$ncrit <- length(criteria)
 
   if ("I" %in% criteria) {
-    k <- mso$nfacts
+    k <- msopt$nfacts
     k2 <- k * (k - 1) / 2
     switch (model,
            "main" = {
-             mso$M <- rbind(
+             msopt$M <- rbind(
                cbind(1, t(integer(k))),
                cbind(integer(k), diag(k) / 3)
                )
              },
            "interaction" = {
-             mso$M <- rbind(
+             msopt$M <- rbind(
                cbind(1, t(integer(k)), t(integer(k2))),
                cbind(integer(k), diag(k) / 3, matrix(0, k, k2)),
                cbind(integer(k2), matrix(0, k2, k), diag(k2) / 9)
                )
              },
            "quadratic" = {
-             mso$M <- rbind(
+             msopt$M <- rbind(
                cbind(1, t(integer(k)), t(rep(1, k)) / 3, t(integer(k2))),
                cbind(integer(k), diag(k) / 3, matrix(0, k, k), matrix(0, k, k2)),
                cbind(rep(1, k) / 3, matrix(0, k, k),
@@ -68,24 +80,24 @@ MSOpt = function(facts, units, levels, etas, criteria, model) {
   }
 
   if ("Id" %in% criteria) {
-    k <- mso$nfacts
+    k <- msopt$nfacts
     k2 <- k * (k - 1) / 2
     switch(model,
            "main" = {
-             mso$M0 <- rbind(
+             msopt$M0 <- rbind(
                cbind(1, t(integer(k))),
                cbind(integer(k), diag(k) / 3)
                )
              },
            "interaction" = {
-             mso$M0 <- rbind(
+             msopt$M0 <- rbind(
                cbind(1, t(integer(k)), t(integer(k2))),
                cbind(integer(k), diag(k) / 3, matrix(0, k, k2)),
                cbind(integer(k2), matrix(0, k2, k), diag(k2) / 9)
                )
              },
            "quadratic" = {
-             mso$M0 <- rbind(
+             msopt$M0 <- rbind(
                cbind(1, t(integer(k)), t(rep(1, k)) / 3, t(integer(k2))),
                cbind(integer(k), diag(k) / 3, matrix(0, k, k), matrix(0, k, k2)),
                cbind(rep(1, k) / 3, matrix(0, k, k),
@@ -95,29 +107,29 @@ MSOpt = function(facts, units, levels, etas, criteria, model) {
              },
            stop("Model type not valid")
     )
-    mso$M0[, 1] <- 0
-    mso$M0[1, ] <- 0
+    msopt$M0[, 1] <- 0
+    msopt$M0[1, ] <- 0
   }
 
   if ("As" %in% criteria) {
     switch(model,
            "main" = {
-             w <- t(rep(1, mso$nfacts))
+             w <- t(rep(1, msopt$nfacts))
              },
            "interaction" = {
-             w <- t(rep(1, mso$nfacts + mso$nfacts * (mso$nfacts - 1) / 2))
+             w <- t(rep(1, msopt$nfacts + msopt$nfacts * (msopt$nfacts - 1) / 2))
              },
            "quadratic" = {
              w <- c(
-               rep(1, mso$nfacts),
-               rep(1, mso$nfacts) / 4,
-               rep(1, mso$nfacts * (mso$nfacts - 1) / 2)
+               rep(1, msopt$nfacts),
+               rep(1, msopt$nfacts) / 4,
+               rep(1, msopt$nfacts * (msopt$nfacts - 1) / 2)
                )
              },
            stop("Model type not valid")
     )
     a <- length(w / sum(w))
-    mso$W <- c(w / sum(w)) * diag(a)
+    msopt$W <- c(w / sum(w)) * diag(a)
   }
   return(mso)
 }
@@ -144,62 +156,69 @@ colprod <- function(X) {
   return(out)
 }
 
-#' @export
 
+#' Score
+#'
+#' description
+#'
+#' @param msopt
+#' @param settings
+#'
+#' @return
 #' @export
 #'
-# function Score ---------------------------
+#' @examples
+#'
+Score <- function(msopt, settings) {
 
-Score <- function(mso, settings) {
-
-  switch(mso$model,
+  switch(msopt$model,
          "main" = {
-           X <- cbind(rep(1, mso$runs), settings)
+           X <- cbind(rep(1, msopt$runs), settings)
            },
          "interaction" = {
-           X <- cbind(rep(1, mso$runs), settings, colprod(settings))
+           X <- cbind(rep(1, msopt$runs), settings, colprod(settings))
            },
          "quadratic" = {
-           X <- cbind(rep(1, mso$runs), settings, settings ^ 2, colprod(settings))
+           X <- cbind(rep(1, msopt$runs), settings, settings ^ 2, colprod(settings))
            },
          )
 
-  B <- t(X) %*% mso$Vinv %*% X
+  B <- t(X) %*% msopt$Vinv %*% X
   determ <- det(B)
-  scores <- as.vector(matrix(Inf, length(mso$crit)))
+  scores <- as.vector(matrix(Inf, length(msopt$crit)))
 
   if (rcond(B) > 1e-5 & determ > 0) {
 
-    ind <- mso$crit == "D"             # true/false
+    ind <- msopt$crit == "D"             # true/false
     if (any(ind)) {
        # TODO remove round
        scores[ind] <- round(1 / determ ^ (1 / dim(X)[2]),4)
 
     }
 
-    if (any(c("I", "Id", "Ds", "A", "As") %in% mso$crit)) {
+    if (any(c("I", "Id", "Ds", "A", "As") %in% msopt$crit)) {
       Binv <- solve(B)
     }
 
-    ind <- mso$crit == "I"
+    ind <- msopt$crit == "I"
     if (any(ind)) {
       # TODO remove round
-      scores[ind] <- round(sum(diag(Binv %*% mso$M)), 4)
+      scores[ind] <- round(sum(diag(Binv %*% msopt$M)), 4)
     }
 
-    ind <- mso$crit == "Id"
+    ind <- msopt$crit == "Id"
     if (any(ind)) {
       # TODO remove round
-      scores[ind] <- round(sum(diag(Binv %*% mso$M0)), 4)
+      scores[ind] <- round(sum(diag(Binv %*% msopt$M0)), 4)
     }
 
-    ind <- mso$crit == "A"
+    ind <- msopt$crit == "A"
     if (any(ind)) {
       # TODO remove round
       scores[ind] <- round(sum(diag(Binv)) / dim(X)[2], 4)
     }
 
-    ind <- mso$crit == "Ds"
+    ind <- msopt$crit == "Ds"
     if (any(ind)) {
       rws <- dim(Binv)[1]
       cls <- dim(Binv)[2]
@@ -207,10 +226,10 @@ Score <- function(mso, settings) {
       scores[ind] <- round((det(Binv[2:rws, 2:cls])) ^ ( 1 / (dim(X)[2] - 1)), 4)
     }
 
-    ind <- mso$crit == "As"
+    ind <- msopt$crit == "As"
     if (any(ind)) {
       # TODO remove round
-      scores[ind] <- round(sum(diag(mso$W %*% Binv[2:rws, 2:cls])), 4)
+      scores[ind] <- round(sum(diag(msopt$W %*% Binv[2:rws, 2:cls])), 4)
     }
 
   }
