@@ -1,4 +1,4 @@
-Archive = function(dim, capacity) {
+Archive <- function(dim, capacity) {
   ar <- list()
   if (nargs() < 2) {
     capacity <- 100
