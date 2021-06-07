@@ -3,6 +3,7 @@
 #' description
 #'
 #' @param facts a list of elements representing the distribution of factors over strata.
+#'
 #' @param units a list of numbers specifying the number of units in each stratum.
 #' @param levels a list of numbers specifying the number of levels for each factor.
 #' @param etas a list containing ratios of error variance between subsequent strata
@@ -20,7 +21,6 @@
 #'
 #' @export
 #'
-#' @examples
 #'
 MSOpt = function(facts, units, levels, etas, criteria, model) {
 
@@ -139,7 +139,7 @@ MSOpt = function(facts, units, levels, etas, criteria, model) {
     a <- length(w / sum(w))
     msopt$W <- c(w / sum(w)) * diag(a)
   }
-  return(mso)
+  return(msopt)
 }
 
 
@@ -195,6 +195,7 @@ Score <- function(msopt, settings) {
   determ <- det(B)
   scores <- as.vector(matrix(Inf, length(msopt$crit)))
 
+
   if (rcond(B) > 1e-5 & determ > 0) {
 
     ind <- msopt$crit == "D"             # true/false
@@ -241,6 +242,8 @@ Score <- function(msopt, settings) {
     }
 
   }
+  print("funzione score")
+  print(scores)
   return(scores)
 }
 
