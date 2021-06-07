@@ -1,3 +1,4 @@
+library(pracma)
 
 PFront <- function(arch) {
   pf = list()
@@ -10,7 +11,7 @@ PFront <- function(arch) {
 
   # add the last arch.dim entries to the Pareto Front
   for (i in 0:(arch$dim - 1)) {
-    Add_PF(pf$arch$nsols - i)
+    Add_PF(pf, pf$arch$nsols - i)
   }
   UpdateMinMaxSc(pf)
   # UpdateGaps
