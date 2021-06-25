@@ -242,8 +242,6 @@ Score <- function(msopt, settings) {
     }
 
   }
-  print("funzione score")
-  print(scores)
   return(scores)
 }
 
