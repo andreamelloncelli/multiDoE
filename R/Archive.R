@@ -2,7 +2,7 @@ Archive <- function(dim, capacity) {
   ar <- list()
   if (nargs() < 2) {
     capacity <- 100
-  }a
+  }
   ar$nsols <- 0
   ar$dim <- dim
   ar$scores <- matrix(0, capacity, dim)
@@ -31,15 +31,15 @@ Add <- function(ar, sol, score) {
   return(ar)
 }
 
+# problema con repmat /kronecker
+# prende in input una matrice
 FixRepmat <- function(data, num_rows, num_cols){
-  if (dim(data)[1] == 0) {
+  if (length(data) == 0) {
     return(matrix(0, 0, dim(data)[2] * num_cols))
   } else {
     return(repmat(data, num_rows, num_cols))
   }
 }
-
-# problema con repmat /kronecker
 
 RemoveDominated <- function(ar) {
   # select dominated solutions (and empty lines)
@@ -48,7 +48,7 @@ RemoveDominated <- function(ar) {
   for (i in 1:ar$nsols) {
     toRemove <- toRemove |
     apply((ar$scores >= FixRepmat(ar$scores[i, ], ar$nsols, 1)) &
-      (ar$scores != FixRepmat(ar$scores[i, ], ar$nsols, 1)), 1, all())
+      (ar$scores != FixRepmat(ar$scores[i, ], ar$nsols, 1)), 1, function(x) all(x))
   }
   # remove selected
   ar$solutions <- ar$solutions[ ! toRemove]
@@ -56,8 +56,6 @@ RemoveDominated <- function(ar) {
   ar$nsols <- length(ar$solutions)
   return(ar)
 }
-
-# sono arrivata quiiii a controllare
 
 RemoveDuplicates <- function(ar) {
   i <- ! duplicated(ar$scores)
@@ -74,6 +72,7 @@ Trim <- function(ar) {
   ar$nsols <- length(ar$solutions)
   return(ar)
 }
+
 
 
 
