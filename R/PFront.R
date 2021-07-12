@@ -1,12 +1,12 @@
-library(pracma)
+# library(pracma)
 library(mco)
 
 PFront <- function(arch) {
   pf <- vector(mode = "list")
 
   pf$arch <- arch
-  pf$ptrs <- c()    # NOTA: era nelle properties
-  pf$gaps <- c()    # NOTA: era nelle properties
+  pf$ptrs <- c()
+  pf$gaps <- list()
   pf$scmax <- matrix(0, 1, arch$dim)
   pf$scmin <- matrix(Inf, 1, arch$dim)
 
@@ -14,34 +14,50 @@ PFront <- function(arch) {
   for (i in 0:(arch$dim - 1)) {
     pf <- Add_PF(pf, solPtr = pf$arch$nsols - i)
   }
+
   pf <- UpdateMinMaxSc(pf)
   # UpdateGaps
   return(pf)
 }
 
-# Add è gia una funzione della classe Archive
-# sostituisco con Add_PF
+# Add_PF perchè Add è gia una funzione della classe Archive
+
 # arch$: nsols, dim, scores, solutions
 
 # Add_PF e AddNoNorm (quasi uguali) possono essere unite in un'unica funzione con un
-# argomento T/F opzionale
+# argomento T/F opzionale ?
 
 Add_PF <- function(pf, solPtr) {
 
-  if (IsWeakDominated(pf,solPtr)) {
+  if (IsWeakDominated(pf, solPtr)) {
     return(pf)
   }
 
+  # fino a qui ok
+
   wDom <- GetWeakDominated(pf, solPtr)
-  pf$ptrs <- pf$ptrs(!wDom)
+  print("wdommmmm")
+  print(wDom)
+  print("we")
+
+  pf$ptrs <- pf$ptrs[!wDom]
+
+  # se lo lasciassi fuori dal ciclo restituirebbe NULL
+  print("pfptrs")
+  print(pf$ptrs)
 
   # insert in the correct position
   if (length(pf$ptrs) == 0) {
+    print("entra nel secondooooo if")
+    print("solptr")
+    print(solPtr)
     pf$ptrs <- solPtr
   } else if (rowleq(pf$arch$scores[pf$ptrs[length(pf$ptrs)], ],
                     pf$arch$scores[solPtr, ])) {
+    print("entra nel terzo")
     pf$ptrs <- rbind(pf$ptrs, solPtr)
   } else {
+    print("entra nel quarto")
     for (i in 1:length(pf$ptrs)) {
       if (rowleq(pf$arch$scores[solPtr, ], pf$arch$scores[pf$ptrs[i], ])) {
         pf$ptrs = rbind(pf$ptrs[1:(i-1)], solPtr, pf$ptrs[i:length(pf$ptrs)])
@@ -49,6 +65,7 @@ Add_PF <- function(pf, solPtr) {
       }
     }
   }
+
   pf <- UpdateMinMaxSc(pf)
   return(pf)
 }
@@ -95,8 +112,14 @@ GetWeakDominated <- function(pf, solPtr) {
 }
 
 UpdateMinMaxSc <- function(pf) {
-  pf$scmax <- apply(pf$arch$scores[pf$ptrs, ], 2, max)
-  pf$scmin <- apply(pf$arch$scores[pf$ptrs, ], 2, min)
+  temp <- pf$arch$scores[pf$ptrs, ]
+  if (is.matrix(temp)) {
+    pf$scmax <- apply(temp, 2, max)
+    pf$scmin <- apply(temp, 2, min)
+  } else {
+   pf$scmax <- temp
+   pf$scmin <- temp
+  }
   return(pf)
 }
 
