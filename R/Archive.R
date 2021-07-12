@@ -32,23 +32,37 @@ Add <- function(ar, sol, score) {
 }
 
 # problema con repmat /kronecker
-# prende in input una matrice
-FixRepmat <- function(data, num_rows, num_cols){
-  if (length(data) == 0) {
-    return(matrix(0, 0, dim(data)[2] * num_cols))
+
+# non uso direttamente repmat (pacchetto pracma) perchè quando "data" è una matrice
+# con elementi nulli il risultato è null, mentre dovrei avere come risultato
+# una matrice di altre dimensioni con elementi nulli.
+# Fixrepmat prende in input solitamente (verificare se sempre) una riga di una matrice.
+
+# CASI CHE DANNO PROBLEMI:
+# es. repmat(matrix(c(0,0,1,2,3,3), 2,3, byrow = T),0,1) -- diverso da matlab
+# es. repmat(matrix(NA,0,3),2,1) -- NULL
+
+FixRepmat <- function(data, num_rows, num_cols) {
+  if ((length(data) == 0 & is.matrix(data)) || (num_rows == 0 & is.matrix(data))) {
+    return(matrix(NA, 0, dim(data)[2] * num_cols))
+  } else if (num_rows == 0) {
+
+      return(matrix(NA, 0, length(data) * num_cols))
   } else {
     return(repmat(data, num_rows, num_cols))
   }
 }
+
+# RemoveDominated: rivedere i simboli
 
 RemoveDominated <- function(ar) {
   # select dominated solutions (and empty lines)
   toRemove <- matrix(0, ar$nsols, 1)
 
   for (i in 1:ar$nsols) {
+    i.score <- FixRepmat(ar$scores[i, ], ar$nsols, 1)
     toRemove <- toRemove |
-    apply((ar$scores >= FixRepmat(ar$scores[i, ], ar$nsols, 1)) &
-      (ar$scores != FixRepmat(ar$scores[i, ], ar$nsols, 1)), 1, function(x) all(x))
+    apply((ar$scores >= i.score) & (ar$scores != i.score), 1, all)
   }
   # remove selected
   ar$solutions <- ar$solutions[ ! toRemove]
@@ -66,9 +80,9 @@ RemoveDuplicates <- function(ar) {
 }
 
 Trim <- function(ar) {
-  toRemove <- ! apply(ar$scores, 1, function(x) all(x == 0))
-  ar$scores <- ar$scores[toRemove, ]
-  ar$solutions <- ar$solutions[toRemove]
+  toRemove <- apply(ar$scores == 0, 1, all)
+  ar$scores <- ar$scores[ ! toRemove, ]
+  ar$solutions <- ar$solutions[ ! toRemove]
   ar$nsols <- length(ar$solutions)
   return(ar)
 }
