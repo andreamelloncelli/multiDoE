@@ -11,8 +11,8 @@ Archive <- function(dim, capacity) {
 }
 
 Resize <- function(ar) {
-  n <- dim(ar$scores)[1]
-  m <- dim(ar$scores)[2]
+  n <- dim(ar$scores)[1] # capacity
+  m <- dim(ar$scores)[2] # dim (numero criteri)
   ar$scores <- rbind(ar$scores, matrix(0, n, m))
   ar$solutions <- c(ar$solutions, vector("list", n))
   return(ar)
@@ -35,7 +35,7 @@ Add <- function(ar, sol, score) {
 
 # non uso direttamente repmat (pacchetto pracma) perchè quando "data" è una matrice
 # con elementi nulli il risultato è null, mentre dovrei avere come risultato
-# una matrice di altre dimensioni con elementi nulli.
+# una matrice di dimensione diversa da 1, con elementi nulli.
 # Fixrepmat prende in input solitamente (verificare se sempre) una riga di una matrice.
 
 # CASI CHE DANNO PROBLEMI:
@@ -53,14 +53,22 @@ FixRepmat <- function(data, num_rows, num_cols) {
   }
 }
 
-# RemoveDominated: rivedere i simboli
+# RemoveDominated: Problema se il numero di soluzioni ar$nsols è
+# diverso (minore) dalle righe della matrice scores. Vuol dire che rimangono
+# delle righe di zeri, da rimuovere poi con la funzione Trim (mai usata?!)
 
+# In questo modo in R funziona se e solo se il numero di soluzioni coincide con
+# la lunghezza della matrice scores dei punteggi
 RemoveDominated <- function(ar) {
   # select dominated solutions (and empty lines)
-  toRemove <- matrix(0, ar$nsols, 1)
+  # toRemove <- matrix(0, dim(ar$scores)[1], 1)
+    toRemove <- matrix(0, ar$nsols, 1)
 
   for (i in 1:ar$nsols) {
+  # i.score <- FixRepmat(ar$scores[i, ], dim(ar$scores)[1], 1)
     i.score <- FixRepmat(ar$scores[i, ], ar$nsols, 1)
+    print(i.score)
+    print(ar$scores)
     toRemove <- toRemove |
     apply((ar$scores >= i.score) & (ar$scores != i.score), 1, all)
   }
