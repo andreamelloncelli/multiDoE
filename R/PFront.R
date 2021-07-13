@@ -30,37 +30,29 @@ PFront <- function(arch) {
 Add_PF <- function(pf, solPtr) {
 
   if (IsWeakDominated(pf, solPtr)) {
+    #print("entra nel 1")
     return(pf)
   }
 
-  # fino a qui ok
-
   wDom <- GetWeakDominated(pf, solPtr)
-  print("wdommmmm")
-  print(wDom)
-  print("we")
-
   pf$ptrs <- pf$ptrs[!wDom]
-
-  # se lo lasciassi fuori dal ciclo restituirebbe NULL
-  print("pfptrs")
-  print(pf$ptrs)
 
   # insert in the correct position
   if (length(pf$ptrs) == 0) {
-    print("entra nel secondooooo if")
-    print("solptr")
-    print(solPtr)
     pf$ptrs <- solPtr
   } else if (rowleq(pf$arch$scores[pf$ptrs[length(pf$ptrs)], ],
                     pf$arch$scores[solPtr, ])) {
-    print("entra nel terzo")
-    pf$ptrs <- rbind(pf$ptrs, solPtr)
+    #print("entra nel 3")
+    pf$ptrs <- c(pf$ptrs, solPtr)
   } else {
-    print("entra nel quarto")
+    #print("entra nel 4")
     for (i in 1:length(pf$ptrs)) {
       if (rowleq(pf$arch$scores[solPtr, ], pf$arch$scores[pf$ptrs[i], ])) {
-        pf$ptrs = rbind(pf$ptrs[1:(i-1)], solPtr, pf$ptrs[i:length(pf$ptrs)])
+        if ( (i - 1) < 1 ) {
+          pf$ptrs = c(solPtr, pf$ptrs[i:length(pf$ptrs)])
+        } else {
+          pf$ptrs = c(pf$ptrs[1:(i-1)], solPtr, pf$ptrs[i:length(pf$ptrs)])
+        }
         break
       }
     }
@@ -127,7 +119,7 @@ SetMinMaxSc <- function(pf, scmax, scmin) {
   pf$scmax <- scmax
   pf$scmin <- scmin
   return(pf)
-}
+} # OK
 
 GetNorm <- function(pf, solInd) {
   cnorm <- (pf$arch$scores[solInd, ] - FixRepmat(pf$scmin, length(solInd), 1)) /
