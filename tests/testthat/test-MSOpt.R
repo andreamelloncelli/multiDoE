@@ -23,7 +23,11 @@ w <-  c(
   rep(1, 4) / 4,
   rep(1, 4 * (4 - 1) / 2)
   )
+
+
 a <- length(w / sum(w))
+
+
 Wq <- c(w / sum(w)) * diag(a)
 
 
