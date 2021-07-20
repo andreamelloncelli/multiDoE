@@ -16,7 +16,7 @@ MSSearch <- function(msopt, alpha, ...) {
     for (i in seq(1, nargs() - 3, 2)) {
       switch (varargin[[i]],
               "Start" = {
-                sol <- varargin[[i + 1]]
+                sol <- varargin[[i + 1]][[1]]
                 random_start <- 0;
               },
               "Normalize" = {
@@ -50,15 +50,14 @@ MSSearch <- function(msopt, alpha, ...) {
   trend <- numeric(restarts)
 
   for (t in 1:restarts) {
-
     if (random_start) {       # generate initial random solution
 
       # sample for each stratum
       for (s in 1:msopt$nstrat) {
         for (i in 1:totUnits[s]) {
           for (j in msopt$facts[[s]]) {
-            sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
-              msopt$avlev[[j]][sample(1:msopt$levs[j], 1)]
+           sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
+            msopt$avlev[[j]][sample(1:msopt$levs[j], 1)]
           }
         }
       }
@@ -66,7 +65,11 @@ MSSearch <- function(msopt, alpha, ...) {
 
     # score initial solution
     score <- Score(msopt, sol)
-    wscore <- alpha * ((score - CritTR) / CritSC)
+    wscore <- as.matrix(alpha) %*% as.matrix((score - CritTR) / CritSC)
+
+    if (is.nan(wscore) | is.na(wscore)){
+      wscore = Inf
+    }
     feval <- feval + 1
 
     # Try to improve
@@ -85,10 +88,11 @@ MSSearch <- function(msopt, alpha, ...) {
               if (sol[i * sizUnits[s], j] != msopt$avlev[[j]][f]) {
                 sol2[(sizUnits[s]*(i - 1) + 1):(i * sizUnits[s]), j] <- msopt$avlev[[j]][f]
                 score2 <- Score(msopt, sol2)
-                wscore2 <- alpha * ((score2 - CritTR) / CritSC)
-                feval <- feval + 1
 
-                if (wscore2 < wscore){
+                wscore2 <- as.matrix(alpha) %*% as.matrix((score2 - CritTR) / CritSC)
+                feval <- feval + 1
+                #print(wscore2)
+                if ((!is.nan(wscore2)) && (!is.na(wscore2)) && (wscore2 < wscore)){
                   sol <- sol2
                   wscore <- wscore2
                   improvement <- 1
