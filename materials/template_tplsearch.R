@@ -22,8 +22,8 @@ for (i in 1:iters) {
   tpls <- TPLSearch(facts, units, criteria, model, "Etas", etas,
                     "Levels", levels, "Restarts", restarts, "RestInit",
                     restInit, "RngSeed", i)
-  ar[i] <- tpls$ar
-  stats[i] <- tpls$stats
+  ar[[i]] <- tpls$ar
+  stats[[i]] <- tpls$stats
 }
 
 
