@@ -143,9 +143,6 @@ MSOpt = function(facts, units, levels, etas, criteria, model) {
 }
 
 
-
-#' @export
-#'
 # function colprod ---------------------------
 
 colprod <- function(X) {
@@ -174,9 +171,7 @@ colprod <- function(X) {
 #'
 #' @return
 #' @export
-#'
-#' @examples
-#'
+
 Score <- function(msopt, settings) {
 
   switch(msopt$model,
@@ -201,8 +196,7 @@ Score <- function(msopt, settings) {
     ind <- msopt$crit == "D"             # true/false
     if (any(ind)) {
        # TODO remove round
-       scores[ind] <- round(1 / determ ^ (1 / dim(X)[2]),4)
-
+       scores[ind] <- round(1 / determ ^ (1 / dim(X)[2]), 10)
     }
 
     if (any(c("I", "Id", "Ds", "A", "As") %in% msopt$crit)) {
@@ -212,19 +206,19 @@ Score <- function(msopt, settings) {
     ind <- msopt$crit == "I"
     if (any(ind)) {
       # TODO remove round
-      scores[ind] <- round(sum(diag(Binv %*% msopt$M)), 4)
+      scores[ind] <- round(sum(diag(Binv %*% msopt$M)), 10)
     }
 
     ind <- msopt$crit == "Id"
     if (any(ind)) {
       # TODO remove round
-      scores[ind] <- round(sum(diag(Binv %*% msopt$M0)), 4)
+      scores[ind] <- round(sum(diag(Binv %*% msopt$M0)), 10)
     }
 
     ind <- msopt$crit == "A"
     if (any(ind)) {
       # TODO remove round
-      scores[ind] <- round(sum(diag(Binv)) / dim(X)[2], 4)
+      scores[ind] <- round(sum(diag(Binv)) / dim(X)[2], 10)
     }
 
     ind <- msopt$crit == "Ds"
@@ -232,15 +226,14 @@ Score <- function(msopt, settings) {
       rws <- dim(Binv)[1]
       cls <- dim(Binv)[2]
       # TODO remove round
-      scores[ind] <- round((det(Binv[2:rws, 2:cls])) ^ ( 1 / (dim(X)[2] - 1)), 4)
+      scores[ind] <- round((det(Binv[2:rws, 2:cls])) ^ ( 1 / (dim(X)[2] - 1)), 10)
     }
 
     ind <- msopt$crit == "As"
     if (any(ind)) {
       # TODO remove round
-      scores[ind] <- round(sum(diag(msopt$W %*% Binv[2:rws, 2:cls])), 4)
+      scores[ind] <- round(sum(diag(msopt$W %*% Binv[2:rws, 2:cls])), 10)
     }
-
   }
   return(scores)
 }
