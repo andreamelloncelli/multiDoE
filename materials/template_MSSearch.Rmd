@@ -1,5 +1,5 @@
 ---
-title: '"MSSearch function"'
+title: "MSSearch function"
 output: html_notebook
 ---
 
@@ -7,10 +7,10 @@ output: html_notebook
 
 ```{r echo=FALSE}
 # template_MSSearch ---------------------------
-
+# vettore y = "C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\provv2.txt"
 library(multiDoE)
-
 set.seed(123)
+options(digits = 10)
 
 facts <- list(1, 2, 3)
 units <- list(3, 3, 3)

@@ -1,0 +1,80 @@
+---
+title: "instance 1"
+output: html_document
+---
+
+### Test score: MSOpt e Score
+
+```{r}
+#### dati prova ####
+library(multiDoE)
+
+facts <- list(1, 2:5)
+units <- list(6, 5)
+levels <- 3
+etas <- list(1)
+criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
+model <- "quadratic"
+
+example <- matrix(c( 0,  1,  0,  0,  0,
+                     0,  0,  0,  1,  1,
+                     0,  0, -1, -1,  0,
+                     0,  0,  1,  0, -1,
+                     0, -1,  0,  0,  0,
+                     0,  0, -1,  0,  0,
+                     0,  0,  1,  0,  0,
+                     0, -1,  0,  0,  0,
+                     0,  0,  0,  1, -1,
+                     0,  1,  0, -1, -1,
+                    -1, -1,  1, -1,  1,
+                    -1,  1, -1, -1,  1,
+                    -1, -1, -1,  1,  1,
+                    -1,  1,  1,  1,  1,
+                    -1,  0,  0,  0, -1,
+                     1, -1, -1,  1, -1,
+                     1,  0,  0, -1,  0,
+                     1,  1,  1,  1, -1,
+                     1, -1,  1,  1,  1,
+                     1,  1, -1,  1,  1,
+                    -1,  0,  0,  0,  1,
+                    -1,  1, -1,  1, -1,
+                    -1,  1,  1, -1,  0,
+                    -1, -1, -1, -1, -1,
+                    -1, -1,  1,  1, -1,
+                     1,  1,  1, -1,  1,
+                     1, -1,  1, -1, -1,
+                     1,  1, -1,  0, -1,
+                     1, -1, -1, -1,  1,
+                     1,  0,  0,  1,  0),
+                  ncol = 5, byrow = T)
+
+msopt <- MSOpt(facts, units, levels, etas, criteria, model)
+score <- Score(msopt, example)
+score
+```
+
+### Expected result 
+
+```{r}
+# Expected output
+print(c(0.747685709700000, 0.543760607000000, 0.101656312400000, 0.182661344700000, 0.098274211800000, 0.104602040100000))
+print(score)
+```
+
+ 
+
+```{r}
+set.seed(123)
+# y sta in 
+msopt <- MSOpt(facts, units, levels, etas, "D", model)
+mssearch <- MSSearch(msopt, 1, "Restarts", 100)
+mssearch
+
+# $optsc
+# [1] 0.0930225192
+
+# $feval
+# [1] 158978
+
+```
+

@@ -3,7 +3,7 @@ title: "MSOpt class"
 output: html_notebook
 ---
 
-### Test score
+### Test score: MSOpt e Score
 
 ```{r}
 #### dati prova ####
@@ -11,10 +11,10 @@ library(multiDoE)
 
 facts <- list(1:2, 3:4)
 units <- list(12, 4)
-levels <- 3
+levels <- list(4, 4, 4, 2)
 etas <- list(1, 1)
-model <- "quadratic"     # 'quadratic', 'main' o 'interaction'
 criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
+model <- "quadratic"    
 
 example <- matrix(c(  1, -1,  1,  0,
                       1, -1, -1,  1,
@@ -68,14 +68,15 @@ example <- matrix(c(  1, -1,  1,  0,
 
 msopt <- MSOpt(facts, units, levels, etas, criteria, model)
 score <- Score(msopt, example)
-round(score, 4)
-
+score
 ```
 
-### Expected result
+### Expected result 
 
 ```{r}
 # Expected output
-c( 1.2059, 0.7348, 0.1089, 0.4063, 0.1092, 0.1688)
+print(c(1.2059, 0.7348, 0.1089, 0.4063, 0.1092, 0.1688))
+print(round(score, 4))
 ```
+
 
