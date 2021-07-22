@@ -8,7 +8,10 @@
 TPLSearch <- function(facts, units, criteria, model, ...) {
 
   varargin <- list(...)
+
   tplsearch <- list()     # contiene ar, stats
+  tplsearch$ar <- list()
+  tplsearch$stats <- 0
 
   nStrat <- length(facts)
   nCrit <- length(criteria)
@@ -24,7 +27,7 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
   interact <- 0   # interactive è nome di funzione
 
   # optional parameters
-  if (nargs() > 5){          # ho dovuto aggiungere l'if
+  if (nargs() > 5){          # if aggiunto
     for (i in seq(1, nargs() - 5, 2)) {
       switch(varargin[[i]],
              "Restarts" = {
@@ -60,34 +63,55 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
   set.seed(rngSeed)
 
   # good quality solutions for the single objectives
-  initSol <- vector(mode = "list", length = nCrit)
-  initScores <- matrix(0, nCrit, nCrit)
-  totFEval <- 0
+   initSol <- vector(mode = "list", length = nCrit)
+  # lista di lunghezza 6 con 6 soluzioni iniziali [[i]] matrice
+   initScores <- matrix(0, nCrit, nCrit) # matrice 6 x 6
+   totFEval <- 0 # numero
+  #
 
-  print("fin qui ok")
+
+   o = 0
+
+   for (i in 1:nCrit) {
+     a <- t(c(numeric(i - 1), 1, numeric(nCrit - i)))   # alpha
+     mssearch <- MSSearch(mso, a, "Restarts", restInit)
+
+     initSol[[i]] <- mssearch$optsol
+     initScores[i, ] <- mssearch$optsc
+     totFEval <- totFEval + mssearch$feval
+   }
+
+   print("il primo vettore è lungo così")
+
+############################################ x confronto MATLAB
+    uno <- as.matrix(read.csv2("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\initSol1.txt",
+                                sep = ",", header = F, colClasses = c("double", "double", "double", "double")), ncol = 4, byrow = T)
+    due <- as.matrix(read.csv2("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\initSol2.txt",
+                                sep = ",", header = F, colClasses = c("double", "double", "double", "double")), ncol = 4, byrow = T)
+    tre <- as.matrix(read.csv2("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\initSol3.txt",
+                                sep = ",", header = F, colClasses = c("double", "double", "double", "double")), ncol = 4, byrow = T)
+    qua <- as.matrix(read.csv2("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\initSol4.txt",
+                                sep = ",", header = F, colClasses = c("double", "double", "double", "double")), ncol = 4, byrow = T)
+    cin <- as.matrix(read.csv2("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\initSol5.txt",
+                                sep = ",", header = F, colClasses = c("double", "double", "double", "double")), ncol = 4, byrow = T)
+    sei <- as.matrix(read.csv2("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\initSol6.txt",
+                               sep = ",", header = F, colClasses = c("double", "double", "double", "double")), ncol = 4, byrow = T)
+    initSol2 <- list(uno, due, tre, qua, cin, sei)
+    initScores2 <- as.matrix(read.csv2("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\initScores.txt",
+                            sep = ",",  dec = ".", header = F, colClasses = c("double", "double", "double", "double", "double", "double")))
+    totFEval2 <- as.numeric(read.csv("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\totFEval.txt",
+                          sep = ",", header = F))
+    initSol <- initSol2
+    totFEval <- totFEval2
+    initScores <- initScores2
+############################################
 
 
-  for (i in 1:nCrit) {
-    print('number of crit')
-    print(i)
-    a <- t(c(numeric(i - 1), 1, numeric(nCrit - i)))   # alpha
-    mssearch <- MSSearch(mso, a, "Restarts", restInit)   # modifica con a[i]
-    print(mso)
-    initSol[[i]] <- mssearch$optsol
-    initScores[i, ] <- mssearch$optsc
-    totFEval <- totFEval + mssearch$feval
-    print("optsc")
-    print(mssearch$optsc)
-
-  }
-  print("before ar")
   ar <- Archive(nCrit, scalarizations + nCrit)
 
-  print("before add for")
   for (i in 1:nCrit) {
-    Add(ar, initSol[[i]], initScores[i, ])
+    ar <- Add(ar, initSol[[i]], initScores[i, ])
   }
-  print("before pf")
 
   pf <- PFront(ar)
 
@@ -95,7 +119,6 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
     stats <- totFEval
   }
 
-  print("before interact")
   if (interact) {
     if (nCrit==2){
       plot(ar$scores[1:ar$nsols, 1], ar$scores[1:ar$nsols, 2], col = "blue")
@@ -110,18 +133,25 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
   }
 
   for (i in 1:scalarizations) {
-    norms <- cbind(pf$scmin, pf$scmax - pf$scmin)
-    r <- matrix(runif(nCrit - 1), 1, nCrit - 1)
+    norms <- c(pf$scmin, pf$scmax - pf$scmin)
+    # r <- matrix(runif(nCrit - 1), 1, nCrit - 1)
+    r <- as.matrix(read.csv("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\r.txt", sep = ",", header = F))
     alpha <- cbind(r, 1 - sum(r))
-    start <- ar$solutions[pf$ptrs(sample(1, 1:length(pf$ptrs)))]
+    # alpha <- as.matrix(read.csv("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\alpha.txt", sep = ",", header = F))
+    # start <- pf$arch$solutions[pf$ptrs[sample(1, 1:length(pf$ptrs))]]
+    start <- read.csv("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\start.txt", sep = ",", header = F)
+    start <- list(as.matrix(start))
 
+
+    print("entro nel secondo MSSearch")
+    print(i)
     newMssearch <- MSSearch(mso, alpha, "Start", start, "Normalize", norms)
     newSol <- newMssearch$optsol
     newScore <- newMssearch$optsc
     newFeval <- newMssearch$feval
 
-    Add(ar, newSol, newScore)
-    Add_PF(pf, ar$nsols)
+    pf$arch <- Add(pf$arch, newSol, newScore)
+    pf <- Add_PF(pf, pf$arch$nsols)
 
     if (interact) {
       if (nCrit==2){
@@ -135,13 +165,13 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
         #pause(Inf)
       }
     }
+
     if (length(tplsearch) > 1) {
-      stats <- cbind(stats, newFeval + as.matrix(stats)[dim(stats)[1], 1])
+      stats <- c(stats, newFeval + stats[which.max(stats)])
     }
   }
 
-  tplsearch$ar <- ar
+  tplsearch$ar <- pf$arch
   tplsearch$stats <- stats
   return(tplsearch)
-
 }
