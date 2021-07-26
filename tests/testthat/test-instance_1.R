@@ -1,4 +1,5 @@
 options(digits = 10)
+set.seed(123)
 
 facts <- list(1, 2:5)
 units <- list(6, 5)
@@ -120,6 +121,10 @@ test_that("Score works",
   )
 }
 )
+
+
+
+
 
 
 
