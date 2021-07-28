@@ -46,12 +46,11 @@ MSSearch2 <- function(msopt, alpha, ...) {
   feval <- 0
   trend <- numeric(restarts)
 
- # y <- read.csv("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\.txt", header = T, sep = ";")
-#  y <- as.matrix(y)[,2]
+  # y <- read.csv("C:\\Users\\Francesca\\Desktop\\multiDoE_zip\\.txt", header = T, sep = ";")
+  # y <- as.matrix(y)[,2]
+  # y <- c()
 
-   y <- c()
-
-   o = 1
+  o = 1
   for (t in 1:restarts) {
     if (random_start) {       # generate initial random solution
 
@@ -59,13 +58,12 @@ MSSearch2 <- function(msopt, alpha, ...) {
       for (s in 1:msopt$nstrat) {
         for (i in 1:totUnits[s]) {
           for (j in msopt$facts[[s]]) {
-             y[o] <- sample(1:msopt$levs[j], 1)
-
-             sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
+            # y[o] <- sample(1:msopt$levs[j], 1)
+            sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
               msopt$avlev[[j]][y[[o]]]
-             o = o + 1
-           # sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
-            #  msopt$avlev[[j]][sample(1:msopt$levs[j], 1)]
+            o = o + 1
+            # sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
+            # msopt$avlev[[j]][sample(1:msopt$levs[j], 1)]
           }
         }
       }

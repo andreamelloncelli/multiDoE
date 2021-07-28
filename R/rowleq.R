@@ -24,5 +24,5 @@ rowleq2 <- function(A, B) {
   return(A[argmin] <= B[argmin])
 }
 
-a <- c(1,2,2,5)
-b <- c(1,2,2,4)
+# a <- c(1,2,2,5)
+# b <- c(1,2,2,4)

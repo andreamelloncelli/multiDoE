@@ -49,19 +49,24 @@ MSSearch <- function(msopt, alpha, ...) {
   feval <- 0
   trend <- numeric(restarts)
 
+
   for (t in 1:restarts) {
     if (random_start) {       # generate initial random solution
 
       # sample for each stratum
       for (s in 1:msopt$nstrat) {
+       print( "sono nel primo ciclo")
         for (i in 1:totUnits[s]) {
+         print("sono nel secondo ciclo")
           for (j in msopt$facts[[s]]) {
+           print( "sono nel terzo e ultimoooo")
            sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
             msopt$avlev[[j]][sample(1:msopt$levs[j], 1)]
           }
         }
       }
     } # if
+
 
     # score initial solution
     score <- Score(msopt, sol)

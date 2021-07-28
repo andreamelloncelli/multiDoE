@@ -59,6 +59,7 @@ FixRepmat <- function(data, num_rows, num_cols) {
 
 # In questo modo in R funziona se e solo se il numero di soluzioni coincide con
 # la lunghezza della matrice scores dei punteggi
+
 RemoveDominated <- function(ar) {
   # select dominated solutions (and empty lines)
   # toRemove <- matrix(0, dim(ar$scores)[1], 1)
@@ -67,8 +68,6 @@ RemoveDominated <- function(ar) {
   for (i in 1:ar$nsols) {
   # i.score <- FixRepmat(ar$scores[i, ], dim(ar$scores)[1], 1)
     i.score <- FixRepmat(ar$scores[i, ], ar$nsols, 1)
-    print(i.score)
-    print(ar$scores)
     toRemove <- toRemove |
     apply((ar$scores >= i.score) & (ar$scores != i.score), 1, all)
   }
