@@ -1,5 +1,6 @@
 #' MSOpt
 #'
+#' quihqdhwqushoAIZLadhoidhwqiod
 #'
 #' @param facts a list of elements representing the distribution of factors over strata.
 #' @param units a list of numbers specifying the number of units in each stratum.
