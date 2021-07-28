@@ -1,15 +1,17 @@
 #' MSOpt
-#'
-#' description
+#' MSOpt returns a list
 #'
 #' @param facts a list of elements representing the distribution of factors over strata.
-#'
 #' @param units a list of numbers specifying the number of units in each stratum.
 #' @param levels a list of numbers specifying the number of levels for each factor.
 #' @param etas a list containing ratios of error variance between subsequent strata
 #' @param criteria list of criteria to be optimized. It can contain any combination of:
-#' \itemize{\item "I" - I-optimality
-#'          \item "Id" - Id-optimality}
+#'
+#' \itemize{\item 'I' - I-optimality
+#'          \item 'Id' - Id-optimality
+#'          \item 'D' - D-optimality
+#'          \item 'Ds' - Ds-optimality
+#'          \item 'As' - As-optimality}
 #'
 #' \deqn{p(x) = \frac{\lambda^x e^{-\lambda}}{x!}}{%
 #' p(x) = \lambda^x exp(-\lambda)/x!}
@@ -22,9 +24,11 @@
 #' @export
 #'
 #'
-MSOpt = function(facts, units, levels, etas, criteria, model) {
+
+MSOpt <- function(facts, units, levels, etas, criteria, model) {
 
   msopt <- list()
+
   msopt$facts <- facts
   msopt$nfacts <- length(unlist(facts))
   msopt$nstrat <- length(facts)
