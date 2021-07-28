@@ -6,8 +6,8 @@ output: html_document
 ### Test score: MSOpt e Score
 
 ```{r}
-#### dati prova ####
 library(multiDoE)
+options(digits = 10)
 
 facts <- list(1:2, 3:4)
 units <- list(10, 5)
@@ -70,13 +70,11 @@ example <- matrix(c( -1,  1, -1, -1,
 
 msopt <- MSOpt(facts, units, levels, etas, criteria, model)
 score <- Score(msopt, example)
-score
 ```
 
 ### Expected result 
 
 ```{r}
-# Expected output
 print(c(0.511761111700000, 0.426046826000000, 0.097706485000000, 0.179635486900000, 0.096282604200000, 0.118533289500000))
 print(score)
 ```

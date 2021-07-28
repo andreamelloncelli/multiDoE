@@ -1,0 +1,59 @@
+---
+title: "esperimento4_p2"
+output: html_document
+---
+
+### Test score: MSOpt e Score
+
+```{r}
+options(digits = 10)
+library(multiDoE)
+
+facts <- list(c(), 1:3)
+units <- list(7, 4)
+levels <- 3
+etas <- list(1)
+criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
+model <- 'quadratic'
+
+example <- matrix(c( 0,  0,  0,
+                     1, -1, -1,
+                    -1,  1, -1,
+                    -1, -1,  1,
+                     1, -1,  1,
+                     0,  1,  0,
+                    -1, -1, -1,
+                     0,  0,  0,
+                     0,  0,  0,
+                     1,  0,  1,
+                     0, -1, -1,
+                    -1,  1,  0,
+                     1,  1,  0,
+                     0, -1,  1,
+                    -1,  1,  1,
+                    -1,  0, -1,
+                     0, -1,  0,
+                     0,  0,  1,
+                     1,  1, -1,
+                    -1,  0,  0,
+                    -1, -1,  0,
+                     0,  1,  1,
+                     1,  0, -1,
+                     0,  0,  0,
+                     1,  1,  1,
+                     0,  1, -1,
+                    -1,  0,  1,
+                     1, -1,  0),
+                   ncol = 3, byrow = T)
+
+msopt <- MSOpt(facts, units, levels, etas, criteria, model)
+score <- Score(msopt, example)
+```
+
+### Expected result 
+
+```{r}
+print(c(0.346163804300000, 0.177527693800000, 0.103064944200000, 0.128787948000000, 0.096959114100000, 0.086644705600000))
+print(score)
+```
+
