@@ -1,4 +1,4 @@
-
+options(digits = 10)
 # template TPLSearch
 facts <- list(1:2, 3:4)
 units <- list(12, 4)
