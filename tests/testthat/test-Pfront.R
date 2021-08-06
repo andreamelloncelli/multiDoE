@@ -30,19 +30,6 @@ test_that("PFront works",
 
 
 # ####
-test_that("SetMinMaxSc works",
-          {expect_equal(SetMinMaxSc(pf, c(3, 3, 3), c(9, 8, 7)),
-                        list("arch" = ar,
-                                         "gaps" = list(),
-                                         "scmax" = c(2, 1, 1),
-                                         "scmin" = c(2, 1, 1),
-                                         "ptrs" = 5
-          )
-          )
-          }
-)
-
-
 
 
 SetMinMaxSc <- function(pf, scmax, scmin) {
