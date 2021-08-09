@@ -11,7 +11,7 @@ options(digits = 10)
 
 facts <- list(1:2, 3:4)
 units <- list(12, 4)
-levels <- list(4, 4, 4, 2)
+levels <- c(4, 4, 4, 2)
 etas <- list(1, 1)
 criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
 model <- "quadratic"    
@@ -78,3 +78,20 @@ print(score)
 ```
 
 
+### MSSearch 
+
+```{r}
+library(multiDoE)
+options(digits = 10)
+
+facts <- list(1:2, 3:4)
+units <- list(12, 4)
+levels <- c(4, 4, 4, 2)
+etas <- list(1, 1)
+criteria <- c('A')
+model <- "main" 
+
+msopt <- MSOpt(facts, units, levels, etas, criteria, model)
+mssearch <- MSSearch(msopt, 1, "Restarts", 100)
+mssearch
+```

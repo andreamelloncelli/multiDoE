@@ -79,3 +79,21 @@ print(c(0.822843249300000, 0.719189332100000, 0.087740799100000, 0.1768228086000
 print(score)
 ```
 
+
+### MSSearch 
+
+```{r}
+library(multiDoE)
+options(digits = 10)
+
+facts <- list(1:3, 4:6)
+units <- list(12, 4)
+levels <- 3
+etas <- list(1)
+criteria <- c('Id')
+model <- 'quadratic'
+
+msopt <- MSOpt(facts, units, levels, etas, criteria, model)
+mssearch <- MSSearch(msopt, 1, "Restarts", 100)
+mssearch
+```

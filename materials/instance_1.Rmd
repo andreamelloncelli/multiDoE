@@ -62,17 +62,18 @@ print(score)
 ### MSSearch 
 
 ```{r}
-set.seed(123)
-# y sta in 
-msopt <- MSOpt(facts, units, levels, etas, "D", model)
+library(multiDoE)
+options(digits = 10)
+
+facts <- list(1, 2:5)
+units <- list(6, 5)
+levels <- 3
+etas <- list(1)
+criteria <- c('Id')
+model <- "quadratic"
+
+msopt <- MSOpt(facts, units, levels, etas, criteria, model)
 mssearch <- MSSearch(msopt, 1, "Restarts", 100)
 mssearch
-
-# $optsc
-# [1] 0.0930225192
-
-# $feval
-# [1] 158978
-
 ```
 
