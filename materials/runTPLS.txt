@@ -1,0 +1,21 @@
+for i = 1:iters
+   [ar{i},stats{i}] = TPLSearch(facts,units,criteria,model,'Etas',etas,'Levels',levels,...
+      'Restarts',restarts,... % Numero totale di restart, incluse quelle iniziali
+      'RestInit',restInit,...   % Numero di restart iniziali per ogni criterio
+      'RngSeed',i);       % Stesso seed = stesso risultato casuale
+ 
+end 
+(2)
+anche la seguente parte deve essere inserita nella funzione TPLSearch.
+All'utente deve uscire solo il Pareto front finale
+megaAR = Archive( lCrit, iters * (restarts - lCrit * (restInit - 1 ) ) );
+% aggiungevo una soluzione i alla volta da ogni archivio con
+for i = 1:iters
+    i
+    for j = 1:(ar{i}.nsols)  
+      megaAR.Add(ar{i}.solutions{j},ar{i}.scores(j,:));
+   end
+end
+% e poi lanciavo
+megaAR.RemoveDuplicates % elimina le soluzioni duplicate
+megaAR.RemoveDominated % elimina le soluzioni non dominate
