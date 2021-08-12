@@ -146,7 +146,6 @@ sol <- matrix(c( 1,-1, 1,-1, 1,
                  0, 0, 0, -1, -1),
               ncol = 5, byrow = T)
 
-# per confronto matlab C:\Users\Francesca\Desktop\multiDoE_zip\i1.txt
 test_that("MSSearch works", {
   expect_equal(MSSearch(msopt, 1, "Restarts", 100),
                list("optsol" = sol,
