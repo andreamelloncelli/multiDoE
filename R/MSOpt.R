@@ -1,31 +1,46 @@
 #' MSOpt
 #'
-#' quihqdhwqushoAIZLadhoidhwqiod
+#' \code{MSOpt} initializes the framework for the implementation of several
+#' optimization criteria for a multistratum design.
 #'
-#' @param facts a list of elements representing the distribution of factors over strata.
-#' @param units a list of numbers specifying the number of units in each stratum.
-#' @param levels a list of numbers specifying the number of levels for each factor.
-#' @param etas a list containing ratios of error variance between subsequent strata
-#' @param criteria list of criteria to be optimized. It can contain any combination of:
+#' @param facts a list representing the distribution of factors over strata.
+#' @param units a list containing the number of units in each stratum.
+#' @param levels a vector containing number of levels for each factor.
+#' @param etas a list specifying ratios of error variance between subsequent
+#' strata. The length must be equal to number of strata minus one.
+#' @param criteria  the list of criteria to be optimized.
+#' @param model a string which indicates the model type, among "main",
+#' "interaction" and "quadratic".
 #'
-#' \itemize{\item 'I' - I-optimality
-#'          \item 'Id' - Id-optimality
-#'          \item 'D' - D-optimality
-#'          \item 'Ds' - Ds-optimality
-#'          \item 'As' - As-optimality}
+#'@details \code{criteria} can contain any combination of:
+#' \itemize{\item "I" - I-optimality
+#' \item "Id" - Id-optimality
+#' \item "D" - D-optimality
+#' \item "Ds" - Ds-optimality
+#' \item "A" - A-optimality
+#' \item "As" - As-optimality}
 #'
-#' \deqn{p(x) = \frac{\lambda^x e^{-\lambda}}{x!}}{%
-#' p(x) = \lambda^x exp(-\lambda)/x!}
-#' for \eqn{x = 0, 1, 2, \ldots}
+#' See Sambo et al. (2016) for information on the available criteria.
 #'
-#' @param model type of model, among "main", "interaction" or "quadratic"
-#'
-#' @return MSOpt
+#' @return \code{MSOpt} returns a list, whose elements are:
+#' \itemize{\item \code{facts} - a list representing the distribution of factors over strata.
+#' \item \code{nfacts} - number of factors.
+#' \item \code{nstrat} - number of strata.
+#' \item \code{units} - a list containing the number of units in each stratum.
+#' \item \code{runs} - number of runs.
+#' \item \code{etas} - a list specifying ratios of error variance between subsequent strata.
+#' \item \code{avlev} - a list showing the available levels for each factor.
+#' \item \code{levs} - a vector showing the number of levels for each factor.
+#' \item \code{Vinv} - the inverse of the covariance matrix of the responses.
+#' \item \code{model} - a string indicating the model type.
+#' \item \code{crit} - a vector containing the criteria to be optimize.
+#' \item \code{ncrit} - number of criteria.
+#' \item \code{M} - the matrix of moments of the cube. Only with I-optimality criteria.
+#' \item \code{M0} - the matrix of moments of the cube. Only with Id-optimality criteria.
+#' \item \code{W} - the diagonal matrix of weights. Only with As-optimality criteria.
+#' }
 #'
 #' @export
-#'
-#'
-#'
 
 MSOpt <- function(facts, units, levels, etas, criteria, model) {
 
@@ -39,7 +54,7 @@ MSOpt <- function(facts, units, levels, etas, criteria, model) {
   msopt$etas <- etas
   msopt$avlev <- as.list(rep(NA, msopt$nfact))
 
-  if (length(levels) == 1) {                      # NOTA: is.scalar()
+  if (length(levels) == 1) {
     msopt$levs <- rep(1, msopt$nfacts) * levels
     for (i in 1:msopt$nfacts) {
       msopt$avlev[[i]] <- (2 * 0:(levels - 1) / (levels - 1)) - 1
@@ -53,7 +68,11 @@ MSOpt <- function(facts, units, levels, etas, criteria, model) {
 
   V <- diag(msopt$runs)
   for (i in 1:(msopt$nstrat - 1)) {
-    ones_shape <- prod(unlist(units)[(i + 1):length(units)])
+    if (i + 1 > length(units)) {
+      ones_shape <- 1
+    } else {
+      ones_shape <- prod(unlist(units)[(i + 1):length(units)])
+    }
     V <- V + etas[[1]] * kronecker(diag(prod(unlist(units)[1:i])),
                                    matrix(1, ones_shape, ones_shape))
   }
@@ -153,16 +172,32 @@ MSOpt <- function(facts, units, levels, etas, criteria, model) {
 
 colprod <- function(X) {
 
-  n_row <- nrow(X)
-  n_col <- ncol(X)
-  out <- matrix(NA, n_row, n_col * (n_col - 1) / 2)
+  if (is.matrix(X)) {
+    n_row <- nrow(X)
+    n_col <- ncol(X)
+    out <- matrix(NA, n_row, n_col * (n_col - 1) / 2)
 
-  k <- 1
-  for (i in 1:(n_col - 1)) {
-    for (j in (i + 1):n_col) {
-      out[, k] <- X[, i] * X[, j]
-      k <- k + 1
+    k <- 1
+    for (i in 1:(n_col - 1)) {
+      for (j in (i + 1):n_col) {
+        out[, k] <- X[, i] * X[, j]
+        k <- k + 1
+      }
     }
+  } else if (is.vector(X) & length(X) > 1) {
+
+    n <- length(X)
+    out <- c()
+
+    k <- 1
+    for (i in 1:(n - 1)) {
+      for (j in (i + 1):n) {
+        out[k] <- X[i] * X[j]
+        k <- k + 1
+      }
+    }
+  } else {
+    out = NULL
   }
   return(out)
 }
@@ -170,12 +205,13 @@ colprod <- function(X) {
 
 #' Score
 #'
-#' description
+#' Scoring function for the given MSOpt list and design matrix. It contains the
+#' implementation of all the available criteria.
 #'
-#' @param msopt
-#' @param settings
+#' @param msopt a list, the output of MSOpt function.
+#' @param settings the design matrix for which criteria scores are calculated.
 #'
-#' @return
+#' @return Vector of optimization criteria values.
 #' @export
 
 Score <- function(msopt, settings) {
@@ -237,6 +273,8 @@ Score <- function(msopt, settings) {
 
     ind <- msopt$crit == "As"
     if (any(ind)) {
+      rws <- dim(Binv)[1]
+      cls <- dim(Binv)[2]
       # TODO remove round
       scores[ind] <- round(sum(diag(msopt$W %*% Binv[2:rws, 2:cls])), 10)
     }

@@ -3,4 +3,6 @@
 export(MSOpt)
 export(MSSearch)
 export(Score)
-export(colprod)
+export(optMultiCrit)
+export(optSingleCrit)
+export(runTPLS)

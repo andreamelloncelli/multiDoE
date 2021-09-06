@@ -1,47 +1,99 @@
+#' optMultiCrit
+#'
+#' \code{optMultiCrit} is used to select the best solution(s) from the optimal
+#' experimental designs belonging to the Pareto front. The selection is based on
+#' minimizing the Euclidean distance between the optimal solutions and an approximate
+#' utopian point. The latter is calculated by default as the vector of the minimum
+#' criteria values found during a multi-objective optimization algorithm (\code{runTPLS}
+#' function in the \code{MultiDoE} package). Alternatively, a different point can
+#' be chosen.
+#'
+#' @param ar a list. It is an archive object containing:
+#' \itemize
+#' \item an integer. The number of solutions.
+#' \item an integer. The number of criteria considered.
+#' \item a matrix. The score matrix associated with the solutions found.
+#' \item a list. The list of solutions (design matrices).
+#' @param ... optional argument (see below).
+#'
+#' @details
+#'
+#' @return \code{optMultiCrit} function returns a list. The first element is a list
+#' of design matrices, the second the is the matrix of the respective criteria scores.
+#' @export
 
-# bestMultiCrit: Set disegni ottimi, ottimizzazione multicriterio
-# Funzione che prende in input il risultato della funzione TPLSearch (un oggetto
-# di classe Archive) che contiene le soluzioni appartenente al fronte di Pareto
-# e le coordinate del punto utopico.
-# La funzione restituisce una lista che ha come primo elemento una matrice che contiene
-# nelle righe gli scores delle soluzioni ottime e come secondo elemento la lista delle
-# soluzioni (disegni ottimi)
+optMultiCrit <- function(ar, ...) {
 
-bestMultiCrit <- function(ar, point) {
+  varargin <- list(...)
+
+  if (nargs() == 1) {
+    bestPoint <- apply(ar$scores, 2, min)
+  } else {
+    bestPoint <- varargin[[1]]
+  }
+
   d <- c()
   for (i in 1:ar$nsols) {
-    d[i] <- dist(rbind(ar$scores[i, ], point))
+    d[i] <- dist(rbind(ar$scores[i, ], bestPoint))
   }
+
   ind <- which(d == min(d))
-  return(list("scores" = ar$score[ind, ], "solution" = ar$solutions[ind]))
+  return(list("solution" = ar$solutions[ind], "scores" = ar$score[ind, ]))
 }
 
-# esempio: y è oggetto Archive
-# y = list()
-# y$nsols = 4
-# y$scores = matrix(c(1,1,1,1,2,2,2,2,3,3,3,3, 1,1,1,1), nrow = 4, ncol = 4, byrow = T)
-# y$solutions = list(1,2,3)
-# bestDesignMC(y, c(1,1,1,1))
+#' optSingleCrit
+#'
+#' @param ar
+#'
+#' @return
+#' @export
+#'
+#' @examples
 
+optSingleCrit <- function(ar) {
 
-bestSingleCrit <- function(ar) {
   nCrit <- dim(ar$scores)[2]
   best <- vector("list", nCrit)
-  names(best) <- colnames(ar$scores)
   index <- apply(ar$scores, 2, which.min)
+
   for (i in 1:nCrit) {
     best[[i]] <- list(ar$scores[index[i],i], ar$solutions[[index[i]]])
   }
+
+  names(best) <- colnames(ar$scores)
   return(best)
 }
-#
-# plotPareto <- function(ar) {
-#   nCrit <- dim(ar$scores)[2]
-#   if (nCrit == 2) {
-#     df <- as.data.frame(ar$scores)
-#     ggplot(data = df, aes(x = colnames(ar$scores)[1],
-#                           y = colnames(ar$scores)[2]) + geom_point()
-#   } else {
-#
-#   }
-# }
+
+
+#' plotPareto
+#'
+#' @param ar
+#'
+#' @return
+#' @export
+#'
+
+plotPareto <- function(ar) {
+
+  if (ar$nsols == 1) {
+    nCrit <- length(ar$scores)
+    df <- as.data.frame(t(ar$scores))
+  } else {
+    nCrit <- dim(ar$scores)[2]
+    df <- as.data.frame(ar$scores)
+  }
+
+  if (nCrit == 2) {
+    ggplot(df, aes_string(x = colnames(df)[1],
+                    y = colnames(df)[2])) + geom_point()
+  } else if (nCrit == 3) {
+    print(df)
+    scatterplot3d(df[, 1], df[, 2], df[,3])
+    # rgl::scatter3d(df[, 1], df[, 2], df[,3])
+
+  } else {
+    stop("Number of criteria not valid")
+  }
+}
+
+

@@ -1,6 +1,41 @@
-#' @export
+#' MSSearch
 #'
-# function MSSearch ---------------------------
+#' \code{MSSearch} function is used to search for the optimal design, minimizing
+#' for the following scalarization between the criteria:
+#' \deqn{w = alpha * (Crit - CritTR) / CritSC}
+#' where \emph{alpha} is the vector of the relative weights between the criteria;
+#' \emph{Crit} is the vector of criteria values; \emph{CritTR} and \emph{CritSC}
+#' are optional normalization factors.
+#'
+#' @param msopt a list. The output of the MSOpt function.
+#' @param alpha a vector of weights. The elements must add up to one.
+#' @param ... optional arguments (see below)
+#'
+#' @details Additional arguments can be specified as follows:
+#' \itemize{
+#' \item \code{'Start', sol}: a string and a matrix, used in pair. They provide
+#' a starting solution (\code{sol}) to the algorithm. By default initial solution
+#' is randomly sampled.
+#' \item \code{'Restarts', r }: a string and an integer, used in pair. They restart
+#' the algorithm \code{r} times and finally the best solution is considered. By
+#' default \eqn{r = 1}.
+#' \item \code{'Normalize', c(CritTR, CritSC)}: a string and a vector. The second
+#' is the vector the optional normalization factors. \code{CritTR} and \code{CritSC}
+#' are vectors of length equal to the number of criteria, whose default elements
+#' are 0 and 1 respectively.
+#' }
+#'
+#' @return \code{MSSearch} returns a list, whose elements are:
+#' \itemize{
+#' \item \code{optsol} a design matrix. The best solution found.
+#' \item \code{optscore} a vector containing the criteria scores.
+#' \item \code{feval} an integer representing the number of score function
+#' evaluations.
+#' \item \code{trend} a vector of length \code{r} containing the minimum value of
+#' \emph{w} for each iteration.
+#' }
+#'
+#' @export
 
 MSSearch <- function(msopt, alpha, ...) {
   varargin <- list(...)
@@ -20,7 +55,7 @@ MSSearch <- function(msopt, alpha, ...) {
                 random_start <- 0;
               },
               "Normalize" = {
-                norms <- varargin[[i + 1]]
+                norms <- t(varargin[[i + 1]])
               },
               "Restarts" = {
                 restarts = varargin[[i + 1]]
@@ -49,28 +84,23 @@ MSSearch <- function(msopt, alpha, ...) {
   feval <- 0
   trend <- numeric(restarts)
 
-
   for (t in 1:restarts) {
     if (random_start) {       # generate initial random solution
 
       # sample for each stratum
       for (s in 1:msopt$nstrat) {
-      # print( "sono nel primo ciclo")
         for (i in 1:totUnits[s]) {
-       #  print("sono nel secondo ciclo")
           for (j in msopt$facts[[s]]) {
-        #   print( "sono nel terzo e ultimoooo")
-           sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
+          sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
             msopt$avlev[[j]][sample(1:msopt$levs[j], 1)]
           }
         }
       }
     } # if
 
-
     # score initial solution
     score <- Score(msopt, sol)
-    wscore <- as.matrix(alpha) %*% as.matrix((score - CritTR) / CritSC)
+    wscore <- as.numeric(as.vector(alpha) %*% as.vector((score - CritTR) / CritSC))
 
     if (is.nan(wscore) | is.na(wscore)){
       wscore = Inf
@@ -94,7 +124,7 @@ MSSearch <- function(msopt, alpha, ...) {
                 sol2[(sizUnits[s]*(i - 1) + 1):(i * sizUnits[s]), j] <- msopt$avlev[[j]][f]
                 score2 <- Score(msopt, sol2)
 
-                wscore2 <- as.matrix(alpha) %*% as.matrix((score2 - CritTR) / CritSC)
+                wscore2 <- as.numeric(as.vector(alpha) %*% as.vector((score2 - CritTR) / CritSC))
                 feval <- feval + 1
                 #print(wscore2)
                 if ((!is.nan(wscore2)) && (!is.na(wscore2)) && (wscore2 < wscore)){

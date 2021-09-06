@@ -25,12 +25,11 @@ PFront <- function(arch) {
 # arch$: nsols, dim, scores, solutions
 
 # Add_PF e AddNoNorm (quasi uguali) possono essere unite in un'unica funzione con un
-# argomento T/F opzionale ?
+# argomento T/F opzionale ? quando si usa l'una o l'altra?
 
 Add_PF <- function(pf, solPtr) {
 
   if (IsWeakDominated(pf, solPtr)) {
-    #print("entra nel 1")
     return(pf)
   }
 
@@ -40,13 +39,10 @@ Add_PF <- function(pf, solPtr) {
   # insert in the correct position
   if (length(pf$ptrs) == 0) {
     pf$ptrs <- solPtr
-    print("entra nel 2")
   } else if (rowleq(pf$arch$scores[pf$ptrs[length(pf$ptrs)], ],
                     pf$arch$scores[solPtr, ])) {
-    print("entra nel 3")
     pf$ptrs <- c(pf$ptrs, solPtr)
   } else {
-    print("entra nel 4")
     for (i in 1:length(pf$ptrs)) {
       if (rowleq(pf$arch$scores[solPtr, ], pf$arch$scores[pf$ptrs[i], ])) {
         if ( (i - 1) < 1 ) {
