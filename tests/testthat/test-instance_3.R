@@ -131,9 +131,13 @@ set.seed(13)
 criteria <- "D"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
 
-load("C:\\Users\\Francesca\\Desktop\\Rtesi\\multiDoE\\mssearch1_i3.RData")
+file_name <- here::here("tests/testthat/test-data/mssearch1_i3.Rds")
+# saveRDS(mssearch1, file = file_name)
+mssearch1 <- readRDS(file_name)
+
 
 test_that("MSSearch works", {
+  set.seed(13)
   expect_equal(MSSearch(msopt1, 1, "Restarts", 100),
                list("optsol" = mssearch1$optsol,
                     "optsc" = 0.07509465171,

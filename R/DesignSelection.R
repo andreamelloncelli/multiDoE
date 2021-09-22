@@ -48,7 +48,6 @@ optMultiCrit <- function(ar, ...) {
 #' @return
 #' @export
 #'
-#' @examples
 
 optSingleCrit <- function(ar) {
 
