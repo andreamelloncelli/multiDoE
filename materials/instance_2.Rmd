@@ -1,9 +1,9 @@
 ---
-title: "instance_2"
+title: "instance_2 (2013)"
 output: html_document
 ---
 
-### Test score: MSOpt e Score
+### MSOpt  
 
 ```{r}
 library(multiDoE)
@@ -14,7 +14,15 @@ units <- list(21, 2)
 levels <- 3
 etas <- list(1)
 criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
-model <- 'quadratic'
+model <- "quadratic"
+
+msopt <- MSOpt(facts, units, levels, etas, criteria, model)
+msopt
+```
+
+### Score  
+
+```{r}
 
 example <- matrix(c( 1,  1,  1,  0,  0,
                      1, -1, -1,  1, -1,
@@ -60,31 +68,54 @@ example <- matrix(c( 1,  1,  1,  0,  0,
                     -1, -1, -1, -1, -1),
                   ncol = 5, byrow = T)
 
-msopt <- MSOpt(facts, units, levels, etas, criteria, model)
 score <- Score(msopt, example)
-```
 
-### Expected result 
-
-```{r}
 print(c(0.395194502700000, 0.333949061700000, 0.083963412300000, 0.112928750900000, 0.084644937000000, 0.081678751000000))
 print(score)
 ```
 
-### MSSearch 
 
+### MSSearch (Single-criteria)
 ```{r}
 library(multiDoE)
+set.seed(13)
 options(digits = 10)
 
 facts <- list(1, 2:5)
 units <- list(21, 2)
 levels <- 3
 etas <- list(1)
-criteria <- c('I')
-model <- 'quadratic'
+criteria <- c('Id')
+model <- "quadratic"
 
-msopt <- MSOpt(facts, units, levels, etas, criteria, model)
-mssearch <- MSSearch(msopt, 1, "Restarts", 100)
-mssearch
+msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
+mssearch1 <- MSSearch(msopt1, 1, "Restarts", 100)
+mssearch1
+```
+
+### TPLSearch  
+
+```{r}
+library(multiDoE)
+set.seed(345)
+options(digits = 10)
+
+facts <- list(1, 2:5)
+units <- list(21, 2)
+levels <- 3
+etas <- list(1)
+# criteria <-  c('I', 'Id', 'D', 'A', 'Ds', 'As')
+criteria <-  c('I', 'Id', 'D')
+model <- "quadratic"
+
+lCrit <- length(criteria)
+iters <- 10 * lCrit
+restarts <- 100
+restInit <- 2
+i = 70
+
+tpls <- runTPLS(facts,units, criteria, model, iters, "Etas", etas,
+        "Levels", levels, "Restarts", restarts, "RestInit",
+        restInit, "RngSeed", i)
+
 ```

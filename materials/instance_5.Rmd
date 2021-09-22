@@ -68,30 +68,53 @@ example <- matrix(c(  1, -1,  1,  0,
 
 msopt <- MSOpt(facts, units, levels, etas, criteria, model)
 score <- Score(msopt, example)
-```
 
-### Expected result 
-
-```{r}
 print(c(1.205934492800000, 0.734833087100000, 0.108876783400000, 0.406282668000000, 0.109221258400000,   0.168837086100000))
 print(score)
 ```
 
-
-### MSSearch 
+### MSSearch (Single-criteria):
 
 ```{r}
 library(multiDoE)
+options(digits = 10)
+set.seed(1)
+
+facts <- list(1:2, 3:4)
+units <- list(12, 4)
+levels <- c(4, 4, 4, 2)
+etas <- list(1, 1)
+criteria <- c('As')
+model <- "quadratic"    
+
+msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
+mssearch1 <- MSSearch(msopt1, 1, "Restarts", 100)
+mssearch1
+```
+
+
+### TPLSearch  
+
+```{r}
+library(multiDoE)
+set.seed(345)
 options(digits = 10)
 
 facts <- list(1:2, 3:4)
 units <- list(12, 4)
 levels <- c(4, 4, 4, 2)
 etas <- list(1, 1)
-criteria <- c('A')
-model <- "main" 
+criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
+model <- "quadratic"
 
-msopt <- MSOpt(facts, units, levels, etas, criteria, model)
-mssearch <- MSSearch(msopt, 1, "Restarts", 100)
-mssearch
+lCrit <- length(criteria)
+iters <- 2 * lCrit
+restarts <- 100
+restInit <- 2
+i = 70
+
+tpls <- runTPLS(facts,units, criteria, model, iters, "Etas", etas,
+        "Levels", levels, "Restarts", restarts, "RestInit",
+        restInit, "RngSeed", i)
+
 ```
