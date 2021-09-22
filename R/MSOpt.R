@@ -224,7 +224,7 @@ Score <- function(msopt, settings) {
            X <- cbind(rep(1, msopt$runs), settings, colprod(settings))
            },
          "quadratic" = {
-           X <- cbind(rep(1, msopt$runs), settings, settings ** 2, colprod(settings))
+           X <- cbind(rep(1, msopt$runs), settings, settings ^ 2, colprod(settings))
            },
          )
 
