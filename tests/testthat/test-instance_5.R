@@ -1,4 +1,3 @@
-library(multiDoE)
 options(digits = 10)
 
 # setting
@@ -7,34 +6,45 @@ units <- list(12, 4)
 levels <- c(4, 4, 4, 2)
 etas <- list(1, 1)
 criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
-model <- "main"
+model <- "quadratic"
 
-# M
+# M ####
 k <- length(unlist(facts))
 k2 <- k * (k - 1) / 2
 Mq <- rbind(
-  cbind(1, t(integer(k))),
-  cbind(integer(k), diag(k) / 3)
+  cbind(1, t(integer(k)), t(rep(1, k)) / 3, t(integer(k2))),
+  cbind(integer(k), diag(k) / 3, matrix(0, k, k), matrix(0, k, k2)),
+  cbind(rep(1, k) / 3, matrix(0, k, k),
+        (4 * diag(k) + 5 * matrix(1, k, k)) / 45, matrix(0, k, k2)),
+  cbind(integer(k2), matrix(0, k2, k), matrix(0, k2, k), diag(k2) / 9)
 )
 
-# M0
+# M0 ####
 M0q <- rbind(
-  cbind(1, t(integer(k))),
-  cbind(integer(k), diag(k) / 3)
+  cbind(1, t(integer(k)), t(rep(1, k)) / 3, t(integer(k2))),
+  cbind(integer(k), diag(k) / 3, matrix(0, k, k), matrix(0, k, k2)),
+  cbind(rep(1, k) / 3, matrix(0, k, k),
+        (4 * diag(k) + 5 * matrix(1, k, k)) / 45, matrix(0, k, k2)),
+  cbind(integer(k2), matrix(0, k2, k), matrix(0, k2, k), diag(k2) / 9)
 )
 M0q[1, ] <- 0
 M0q[, 1] <- 0
 
-# W
-nfacts <-length(unlist(facts))
-w <- t(rep(1, nfacts))
+# W ####
+nfacts <- length(unlist(facts))
+w <- c(
+  rep(1, nfacts),
+  rep(1, nfacts) / 4,
+  rep(1, nfacts * (nfacts - 1) / 2)
+)
 a <- length(w / sum(w))
 Wq <- c(w / sum(w)) * diag(a)
 
-# msopt
+# msopt ####
 msopt <- MSOpt(facts, units, levels, etas, criteria, model)
 
-# example
+# example ####
+
 example <- matrix(c(  1, -1,  1,  0,
                       1, -1, -1,  1,
                       1, -1, -1,  1,
@@ -84,8 +94,8 @@ example <- matrix(c(  1, -1,  1,  0,
                       -1,  1, -1, -1,
                       -1,  1, -1,  1),
                   ncol = 4, byrow = T)
+#### test MSOpt e Score ####
 
-#### test ####
 test_that("MSOpt works", {
   expect_equal(MSOpt(facts, units, levels, etas, criteria, model),
                list("facts" = list(1:2, 3:4),
@@ -93,14 +103,14 @@ test_that("MSOpt works", {
                     "nstrat" = 2,
                     "units" = list(12, 4),
                     "runs" = 48,
-                    "etas" = list(1,1),
+                    "etas" = list(1, 1),
                     "avlev" = list(c(-1.0000000000, -0.3333333333, 0.3333333333, 1.0000000000),
                                    c(-1.0000000000, -0.3333333333, 0.3333333333, 1.0000000000),
                                    c(-1.0000000000, -0.3333333333, 0.3333333333, 1.0000000000),
                                    c(-1, 1)),
                     "levs" = c(4, 4, 4, 2),
                     "Vinv" = t(solve(diag(48) + 1 * kronecker(diag(12), matrix(1, 4, 4)))),
-                    "model"  = "main",
+                    "model"  = 'quadratic',
                     "crit" = c('I', 'Id', 'D', 'A', 'Ds', 'As'),
                     "ncrit" = 6,
                     "M" = Mq,
@@ -108,15 +118,51 @@ test_that("MSOpt works", {
                     "W" = Wq
                )
   )
+})
+
+test_that("Score works",{expect_equal(Score(msopt, example),
+                                      c(1.2059344928, 0.7348330871,
+                                        0.1088767834, 0.4062826680,
+                                        0.1092212584, 0.1688370861),
+                                      tolerance = 0.0000000001)
+  }
+  )
+
+#### test MSSearch Single Crit ####
+set.seed(13)
+criteria <- "As"
+msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
+
+test_that("MSSearch works", {
+  expect_equal(MSSearch(msopt1, 1, "Restarts", 100),
+               list("optsol" = matrix(0, 48, 4),
+                    "optsc" = as.matrix(Inf),
+                    "feval" = 26500,
+                    "trend" = rep(Inf, 100)
+               )
+  )
+})
+
+#### test TPLSearch ####
+set.seed(345)
+criteria <-  c('I', 'As')
+
+lCrit <- length(criteria)
+iters <- 7 * lCrit
+restarts <- 100
+restInit <- 2
+i = 70
+
+load("tpls2_i4.RData")
+ar <- tpls$ar
+stats <- tpls$stats
+megaAR <- tpls$megaAR
+
+test_that("runTPLSearch works", {
+  expect_equal(runTPLS(facts,units, criteria, model, iters, "Etas", etas,
+                       "Levels", levels, "Restarts", restarts, "RestInit",
+                       restInit, "RngSeed", i),
+               list("ar" = ar, "stats" = stats, "megaAR" = megaAR)
+  )
 }
 )
-
-test_that("Score works",
-          {expect_equal(Score(msopt, example),
-                        c(0.224788195600000, 0.114820240900000, 0.072016241900000,
-                          0.090885735500000, 0.065668315500000, 0.086115180700000),
-                          tolerance = 0.00001)
-          }
-)
-
-

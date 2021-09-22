@@ -1,5 +1,4 @@
 options(digits = 10)
-set.seed(123)
 
 # setting
 facts <- list(1, 2:5)
@@ -9,7 +8,7 @@ etas <- list(1)
 criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
 model <- "quadratic"
 
-# M
+# M ####
 k <- length(unlist(facts))
 k2 <- k * (k - 1) / 2
 Mq <- rbind(
@@ -20,7 +19,7 @@ Mq <- rbind(
   cbind(integer(k2), matrix(0, k2, k), matrix(0, k2, k), diag(k2) / 9)
 )
 
-# M0
+# M0 ####
 M0q <- rbind(
   cbind(1, t(integer(k)), t(rep(1, k)) / 3, t(integer(k2))),
   cbind(integer(k), diag(k) / 3, matrix(0, k, k), matrix(0, k, k2)),
@@ -31,8 +30,8 @@ M0q <- rbind(
 M0q[1, ] <- 0
 M0q[, 1] <- 0
 
-# W
-nfacts <-length(unlist(facts))
+# W ####
+nfacts <- length(unlist(facts))
 w <- c(
   rep(1, nfacts),
   rep(1, nfacts) / 4,
@@ -41,10 +40,10 @@ w <- c(
 a <- length(w / sum(w))
 Wq <- c(w / sum(w)) * diag(a)
 
-# msopt
+# msopt ####
 msopt <- MSOpt(facts, units, levels, etas, criteria, model)
 
-# example
+# example ####
 example <- matrix(c( 0,  1,  0,  0,  0,
                      0,  0,  0,  1,  1,
                      0,  0, -1, -1,  0,
@@ -78,6 +77,7 @@ example <- matrix(c( 0,  1,  0,  0,  0,
                   ncol = 5, byrow = T)
 
 #### test MSOpt e Score ####
+
 test_that("MSOpt works", {
   expect_equal(MSOpt(facts, units, levels, etas, criteria, model),
                list("facts" = list(1, 2:5),
@@ -97,69 +97,55 @@ test_that("MSOpt works", {
                     "M0" = M0q,
                     "W" = Wq
                )
+               )
+  })
+
+test_that("Score works",{expect_equal(Score(msopt, example),
+                        c(0.7476857097, 0.5437606070, 0.1016563124, 0.1826613447, 0.0982742118, 0.1046020401),
+                        tolerance = 0.0000000001
+                        )
+            })
+#
+#### test MSSearch Single Crit ####
+set.seed(13)
+criteria <- "I"
+msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
+
+load("C:\\Users\\Francesca\\Desktop\\Rtesi\\multiDoE\\mssearch1_i1.RData")
+
+test_that("MSSearch works", {
+  expect_equal(MSSearch(msopt1, 1, "Restarts", 100),
+               list("optsol" = mssearch1$optsol,
+                    "optsc" = 0.7628322532,
+                    "feval" = 171080,
+                    "trend" = mssearch1$trend
+                    )
+               )
+  })
+
+#### test TPLSearch ####
+set.seed(345)
+criteria <-  c('I', 'Id', 'D')
+
+lCrit <- length(criteria)
+iters <- 10 * lCrit
+restarts <- 100
+restInit <- 2
+i = 1
+
+load("C:\\Users\\Francesca\\Desktop\\Rtesi\\multiDoE\\tpls3_i1.RData")
+ar <- tpls$ar
+stats <- tpls$stats
+megaAR <- tpls$megaAR
+
+test_that("runTPLSearch works", {
+  expect_equal(runTPLS(facts,units, criteria, model, iters, "Etas", etas,
+                               "Levels", levels, "Restarts", restarts, "RestInit",
+                               restInit, "RngSeed", i),
+               list("ar" = ar, "stats" = stats, "megaAR" = megaAR)
   )
   }
 )
-
-test_that("Score works",
-          {expect_equal(Score(msopt, example),
-                        c(0.7476857097, 0.5437606070, 0.1016563124, 0.1826613447, 0.0982742118, 0.1046020401),
-                        tolerance = 0.00001
-                        )
-            }
-          )
-
-#### test MSSearch ####
-
-criteria <- "D"
-msopt <- MSOpt(facts, units, levels, etas, criteria, model)
-
-sol <- matrix(c( 1,-1, 1,-1, 1,
-                 1,-1, 1, 1,-1,
-                 1, 0,-1, 0, 1,
-                 1, 1, 0, 1, 0,
-                 1,-1,-1,-1,-1,
-                 1, 1,-1, 0,-1,
-                 1,-1, 1,-1, 0,
-                 1, 1, 0,-1, 1,
-                 1, 0, 1, 1,-1,
-                 1,-1,-1, 1, 1,
-                 -1, 1,-1,-1,-1,
-                 -1, 0, 1, 1, 1,
-                 -1,-1,-1, 1,-1,
-                 -1,-1, 1,-1,-1,
-                 -1,-1,-1,-1, 1,
-                 1, 1, 1, 1, 1,
-                 1, 0,-1,-1, 0,
-                 1, 1,-1, 1,-1,
-                 1,-1, 0, 0,-1,
-                 1, 1, 1,-1,-1,
-                 -1, 1,-1, 1, 1,
-                 -1, 1, 1, 1,-1,
-                 -1, 1, 1,-1, 1,
-                 -1,-1,-1,-1,-1,
-                 -1,-1, 1, 1, 0,
-                 0,-1, 1, 1, 1,
-                 0, 1, 1, 0, 0,
-                 0, 0,-1, 1,-1,
-                 0, 1,-1,-1, 1,
-                 0, 0, 0, -1, -1),
-              ncol = 5, byrow = T)
-
-test_that("MSSearch works", {
-  expect_equal(MSSearch(msopt, 1, "Restarts", 100),
-               list("optsol" = sol,
-                    "optsc" = 0.0930225192,
-                    "feval" = 158978,
-                    "trend" = c(rep(0.0962414051, 1),
-                                rep(0.0947119451, 11),
-                                rep(0.0943153326, 8),
-                                rep(0.0940756000, 1),
-                                rep(0.0934306839, 65),
-                                rep(0.0930225192, 14))
-               ))
-} )
-
 
 
 
