@@ -1,6 +1,3 @@
-library(pracma)
-library(mco)
-
 PFront <- function(arch) {
   pf <- vector(mode = "list")
 
