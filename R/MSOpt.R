@@ -12,7 +12,7 @@
 #' @param model a string which indicates the model type, among "main",
 #' "interaction" and "quadratic".
 #'
-#'@details \code{criteria} can contain any combination of:
+#' @details \code{criteria} can contain any combination of:
 #' \itemize{\item "I" - I-optimality
 #' \item "Id" - Id-optimality
 #' \item "D" - D-optimality
@@ -55,7 +55,7 @@ MSOpt <- function(facts, units, levels, etas, criteria, model) {
   msopt$avlev <- as.list(rep(NA, msopt$nfact))
 
   if (length(levels) == 1) {
-    msopt$levs <- rep(1, msopt$nfacts) * levels
+    msopt$levs <- rep(levels, msopt$nfacts)
     for (i in 1:msopt$nfacts) {
       msopt$avlev[[i]] <- (2 * 0:(levels - 1) / (levels - 1)) - 1
     }
@@ -224,7 +224,7 @@ Score <- function(msopt, settings) {
            X <- cbind(rep(1, msopt$runs), settings, colprod(settings))
            },
          "quadratic" = {
-           X <- cbind(rep(1, msopt$runs), settings, settings ^ 2, colprod(settings))
+           X <- cbind(rep(1, msopt$runs), settings, settings ** 2, colprod(settings))
            },
          )
 
@@ -237,8 +237,7 @@ Score <- function(msopt, settings) {
 
     ind <- msopt$crit == "D"             # true/false
     if (any(ind)) {
-       # TODO remove round
-       scores[ind] <- round(1 / determ ^ (1 / dim(X)[2]), 10)
+       scores[ind] <- 1 / determ ^ (1 / dim(X)[2])
     }
 
     if (any(c("I", "Id", "Ds", "A", "As") %in% msopt$crit)) {
@@ -247,36 +246,31 @@ Score <- function(msopt, settings) {
 
     ind <- msopt$crit == "I"
     if (any(ind)) {
-      # TODO remove round
-      scores[ind] <- round(sum(diag(Binv %*% msopt$M)), 10)
+      scores[ind] <- sum(diag(Binv %*% msopt$M))
     }
 
     ind <- msopt$crit == "Id"
     if (any(ind)) {
-      # TODO remove round
-      scores[ind] <- round(sum(diag(Binv %*% msopt$M0)), 10)
+      scores[ind] <- sum(diag(Binv %*% msopt$M0))
     }
 
     ind <- msopt$crit == "A"
     if (any(ind)) {
-      # TODO remove round
-      scores[ind] <- round(sum(diag(Binv)) / dim(X)[2], 10)
+      scores[ind] <- sum(diag(Binv)) / dim(X)[2]
     }
 
     ind <- msopt$crit == "Ds"
     if (any(ind)) {
       rws <- dim(Binv)[1]
       cls <- dim(Binv)[2]
-      # TODO remove round
-      scores[ind] <- round((det(Binv[2:rws, 2:cls])) ^ ( 1 / (dim(X)[2] - 1)), 10)
+      scores[ind] <- (det(Binv[2:rws, 2:cls])) ^ ( 1 / (dim(X)[2] - 1))
     }
 
     ind <- msopt$crit == "As"
     if (any(ind)) {
       rws <- dim(Binv)[1]
       cls <- dim(Binv)[2]
-      # TODO remove round
-      scores[ind] <- round(sum(diag(msopt$W %*% Binv[2:rws, 2:cls])), 10)
+      scores[ind] <- sum(diag(msopt$W %*% Binv[2:rws, 2:cls]))
     }
   }
   return(scores)
