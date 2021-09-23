@@ -43,14 +43,6 @@ Add <- function(ar, sol, score) {
 # es. repmat(matrix(c(0,0,1,2,3,3), 2,3, byrow = T),0,1) -- diverso da matlab
 # es. repmat(matrix(NA,0,3),2,1) -- NULL
 
-#' Title
-#'
-#' @param data
-#' @param num_rows
-#' @param num_cols
-#'
-#' @return
-#'
 #' @importFrom pracma repmat
 FixRepmat <- function(data, num_rows, num_cols) {
   if ((length(data) == 0 & is.matrix(data)) || (num_rows == 0 & is.matrix(data))) {
