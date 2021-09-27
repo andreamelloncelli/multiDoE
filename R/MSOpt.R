@@ -1,15 +1,33 @@
 #' MSOpt
 #'
-#' \code{MSOpt} initializes the framework for the implementation of several
-#' optimization criteria for a multistratum design.
+#' @description The \code{MSOpt} function creates a list object containing
+#' the main information on the experiment settings (e.g. number of factors,
+#' factor levels, number of runs, units per stratum) and the optimization
+#' criteria to be considered (number and names). According to the declared
+#' criteria, it also provides the basic matrices for their implementation.
 #'
-#' @param facts a list representing the distribution of factors over strata.
-#' @param units a list containing the number of units in each stratum.
-#' @param levels a vector containing number of levels for each factor.
-#' @param etas a list specifying ratios of error variance between subsequent
-#' strata. The length must be equal to number of strata minus one.
-#' @param criteria  the list of criteria to be optimized.
-#' @param model a string which indicates the model type, among "main",
+#' @param facts A list representing the distribution of factors across strata.
+#' The first item is the highest stratum of the multi-stratum structure of the
+#' experiment. Each item (or stratum) is a vector: blocking factors are denoted
+#' by empty vectors (\code{c()}); experimental factors are indicated by
+#' progressive integers starting from 1.
+#'
+#' @param units A list containing the number of units (e.g. whole plots and
+#' subplots) in each stratum. \code(length(units)) must be equal to
+#' \code(length(facts)).
+#'
+#' @param levels If the number of levels differs from factor to factor, it is
+#' a vector containing the number of levels for each experimental factor
+#' (blocking factors are excluded). Otherwise, \code(levels) is an integer.
+#'
+#' @param etas A list specifying ratios of error variance between subsequent
+#' strata. \code(length(etas)) must be equal to \code(length(facts) - 1).
+#'
+#' @param criteria A list containing the criteria to be optimized, one or more
+#' among: "I", "Id", "D", "A", "Ds" and "As". See the 'Details' section
+#' for more detailed information on the available criteria.
+#'
+#' @param model A string which indicates the type of model, among "main",
 #' "interaction" and "quadratic".
 #'
 #' @details \code{criteria} can contain any combination of:
@@ -20,24 +38,25 @@
 #' \item "A" - A-optimality
 #' \item "As" - As-optimality}
 #'
-#' See Sambo et al. (2016) for information on the available criteria.
 #'
 #' @return \code{MSOpt} returns a list, whose elements are:
-#' \itemize{\item \code{facts} - a list representing the distribution of factors over strata.
-#' \item \code{nfacts} - number of factors.
-#' \item \code{nstrat} - number of strata.
-#' \item \code{units} - a list containing the number of units in each stratum.
-#' \item \code{runs} - number of runs.
-#' \item \code{etas} - a list specifying ratios of error variance between subsequent strata.
-#' \item \code{avlev} - a list showing the available levels for each factor.
-#' \item \code{levs} - a vector showing the number of levels for each factor.
-#' \item \code{Vinv} - the inverse of the covariance matrix of the responses.
-#' \item \code{model} - a string indicating the model type.
-#' \item \code{crit} - a vector containing the criteria to be optimize.
-#' \item \code{ncrit} - number of criteria.
-#' \item \code{M} - the matrix of moments of the cube. Only with I-optimality criteria.
-#' \item \code{M0} - the matrix of moments of the cube. Only with Id-optimality criteria.
-#' \item \code{W} - the diagonal matrix of weights. Only with As-optimality criteria.
+#' \itemize{\item \code{facts} - The argument \code(facts).
+#' \item \code{nfacts} - An integer indicating the number of experimental factors.
+#' \item \code{nstrat} - An integer indicating the number of strata.
+#' \item \code{units} - The argument \code(units).
+#' \item \code{runs} - An integer representing the number of runs.
+#' \item \code{etas} - The argument \code{etas}.
+#' \item \code{avlev} - A list showing the available levels for each experimental
+#' factor.
+#' \item \code{levs} - A vector showing the number of levels for each experimental
+#' factor.
+#' \item \code{Vinv} - The inverse of the variance-covariance matrix of the responses.
+#' \item \code{model} - The argument \code{model}.
+#' \item \code{crit} - The argument \code{criteria}.
+#' \item \code{ncrit} - An integer indicating the number of criteria.
+#' \item \code{M} - The matrix of moments of the cube. Only with \textit{I-optimality} criteria.
+#' \item \code{M0} - The matrix of moments of the cube. Only with \textit{Id-optimality} criteria.
+#' \item \code{W} - The diagonal matrix of weights. Only with \textit{As-optimality} criteria.
 #' }
 #'
 #' @export
