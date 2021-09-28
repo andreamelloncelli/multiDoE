@@ -7,19 +7,21 @@
 #' criteria, it also provides the basic matrices for their implementation.
 #'
 #' @param facts A list of vectors representing the distribution of factors
-#' across strata. Each item is a stratum and the first item is the highest
-#' stratum of the multi-stratum structure of the experiment. Blocking factors
-#' are denoted by empty vectors (\code{c()}); within the vectors, experimental
-#' factors are indicated by progressive integer from 1 to the total number of
-#' experimental factors (\code{nfacts}), starting from the highest strata.
+#' across strata. Each item in the list represents a stratum and the first item
+#' is the highest stratum of the multi-stratum structure of the experiment.
+#' Blocking factors are denoted by empty vectors (\code{c()}); within the vectors,
+#' experimental factors are indicated by progressive integer from 1 to the total
+#' number of experimental factors (\code{nfacts}), starting from the highest
+#' strata.
 #'
-#' @param units A list containing the number of units (e.g. number of whole
-#' plots and subplots) in each stratum. \code{length(units)} must be equal to
-#' \code{length(facts)}.
+#' @param units A list containing the number of units in each stratum (e.g.
+#' number of \emph(whole plots) and \emph(subplots) per whole plot).
+#' \code{length(units)} must be equal to \code{length(facts)}.
 #'
-#' @param levels If the number of levels differs from factor to factor, it is
-#' a vector containing the number of levels for each experimental factor
-#' (blocking factors are excluded). Otherwise, \code{levels} is an integer.
+#' @param levels A vector or an integer. If the number of available levels
+#' differs from factor to factor, \code{levels} is a vector containing the
+#' number of levels for each experimental factor (blocking factors are excluded).
+#' If all the experimental factors, it is an integer.
 #'
 #' @param etas A list specifying ratios of error variance between subsequent
 #' strata. \code(length(etas)) must be equal to \code(length(facts) - 1).
