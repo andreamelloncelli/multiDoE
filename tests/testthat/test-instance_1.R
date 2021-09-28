@@ -79,7 +79,7 @@ example <- matrix(c( 0,  1,  0,  0,  0,
 #### test MSOpt e Score ####
 
 test_that("MSOpt works", {
-  expect_equal(MSOpt(facts, units, levels, etas, criteria, model),
+  expect_equal(MSOpt(),
                list("facts" = list(1, 2:5),
                     "nfacts" = 5,
                     "nstrat" = 2,
@@ -101,7 +101,8 @@ test_that("MSOpt works", {
   })
 
 test_that("Score works",{expect_equal(Score(msopt, example),
-                        c(0.7476857097, 0.5437606070, 0.1016563124, 0.1826613447, 0.0982742118, 0.1046020401),
+                        c(0.747685709663110, 0.543760607038438, 0.101656312421005,
+                          0.182661344673558, 0.098274211834103, 0.104602040115434),
                         tolerance = 0.0000000001
                         )
             })
