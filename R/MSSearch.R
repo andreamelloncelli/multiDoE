@@ -51,7 +51,7 @@ MSSearch <- function(msopt, alpha, ...) {
     for (i in seq(1, nargs() - 3, 2)) {
       switch (varargin[[i]],
               "Start" = {
-                sol <- varargin[[i + 1]][[1]]
+                sol <- varargin[[i + 1]]
                 random_start <- 0;
               },
               "Normalize" = {
@@ -91,7 +91,7 @@ MSSearch <- function(msopt, alpha, ...) {
       for (s in 1:msopt$nstrat) {
         for (i in 1:totUnits[s]) {
           for (j in msopt$facts[[s]]) {
-          sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
+          sol[(sizUnits[s] * (i - 1) + 1):(sizUnits[s] * i), j] <-
             msopt$avlev[[j]][sample(1:msopt$levs[j], 1)]
           }
         }
