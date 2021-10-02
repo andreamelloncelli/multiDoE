@@ -1,67 +1,81 @@
 #' MSOpt
 #'
 #' @description The \code{MSOpt} function creates a list object containing
-#' the main information on the experiment settings (e.g. number of factors,
-#' factor levels, number of runs, units per stratum) and the optimization
-#' criteria to be considered (number and names). According to the declared
-#' criteria, it also provides the basic matrices for their implementation.
+#' the main information on the experiment settings and the optimization
+#' criteria to be considered. According to the declared criteria, it also
+#' provides the basic matrices for their implementation. \code{MSOpt} returns
+#' input objects of the \code{\link[multiDoE]{Score}} and
+#' \code{\link[multiDoE]{MSSearch}} functions of the multiDoE package.
 #'
 #' @param facts A list of vectors representing the distribution of factors
 #' across strata. Each item in the list represents a stratum and the first item
 #' is the highest stratum of the multi-stratum structure of the experiment.
-#' Blocking factors are denoted by empty vectors (\code{c()}); within the vectors,
-#' experimental factors are indicated by progressive integer from 1 to the total
-#' number of experimental factors (\code{nfacts}), starting from the highest
-#' strata.
+#' Within the vectors, experimental factors are indicated by progressive integer
+#' from 1 to the total number of experimental factors, starting from the highest
+#' strata. Blocking factors are denoted by empty vectors.
 #'
-#' @param units A list containing the number of units in each stratum (e.g.
-#' number of \emph(whole plots) and \emph(subplots) per whole plot).
-#' \code{length(units)} must be equal to \code{length(facts)}.
+#' @param units A list containing the number of units in each stratum. For
+#' stratum i, the number of experimental units within each unit of the previous
+#' stratum (i-1) is indicated. \code{length(units)} must be equal to
+#' \code{length(facts)}.
 #'
-#' @param levels A vector or an integer. If the number of available levels
-#' differs from factor to factor, \code{levels} is a vector containing the
-#' number of levels for each experimental factor (blocking factors are excluded).
-#' If all the experimental factors, it is an integer.
+#' @param levels A vector containing the number of available levels for each
+#' experimental factor (blocking factors are excluded). If all the experimental
+#' factors share the number of levels, one integer is sufficient.
 #'
-#' @param etas A list specifying ratios of error variance between subsequent
-#' strata. \code(length(etas)) must be equal to \code(length(facts) - 1).
+#' @param etas A list specifying the ratios of error variance between subsequent
+#' strata. It follows that \code{length(etas)} must be equal to
+#' \code{length(facts) - 1}.
 #'
-#' @param criteria A list containing the criteria to be optimized, one or more
-#' among: "I", "Id", "D", "A", "Ds" and "As". See the 'Details' section
-#' for more detailed information on the available criteria.
+#' @param criteria A list containing the criteria to be optimized. It can
+#' contain any combination of:
+#' \itemize{
+#'   \item{"I" : I-optimality}
+#'   \item{"Id" : Id-optimality}
+#'   \item{"D" : D-optimality}
+#'   \item{"Ds" : Ds-optimality}
+#'   \item{"A" : A-optimality}
+#'   \item{"As" : As-optimality}
+#' }
+#' See the \strong{Details} section for more detailed information on the available
+#' criteria. \cr
+#' The details of model specification are given under 'Details'.
 #'
 #' @param model A string which indicates the type of model, among "main",
 #' "interaction" and "quadratic".
 #'
-#' @details \code{criteria} can contain any combination of:
-#' \itemize{\item "I" - I-optimality
-#' \item "Id" - Id-optimality
-#' \item "D" - D-optimality
-#' \item "Ds" - Ds-optimality
-#' \item "A" - A-optimality
-#' \item "As" - As-optimality}
+#' @details
+#' In order to... \cr
+#' The general form of the model:
+#' \deqn{}
 #'
+#' Generalized least square estimator:
+#' \deqn{\hat{\beta}_{\emph{GLS}} = (X'*V^{-1}*X)^{-1}*X'*V^{-1}*y}
 #'
-#' @return \code{MSOpt} returns a list, whose elements are:
-#' \itemize{\item \code{facts} - The argument \code(facts).
-#' \item \code{nfacts} - An integer indicating the number of experimental factors.
-#' \item \code{nstrat} - An integer indicating the number of strata.
-#' \item \code{units} - The argument \code(units).
-#' \item \code{runs} - An integer representing the number of runs.
-#' \item \code{etas} - The argument \code{etas}.
-#' \item \code{avlev} - A list showing the available levels for each experimental
-#' factor.
-#' \item \code{levs} - A vector showing the number of levels for each experimental
-#' factor.
-#' \item \code{Vinv} - The inverse of the variance-covariance matrix of the responses.
-#' \item \code{model} - The argument \code{model}.
-#' \item \code{crit} - The argument \code{criteria}.
-#' \item \code{ncrit} - An integer indicating the number of criteria.
-#' \item \code{M} - The matrix of moments of the cube. Only with \textit{I-optimality} criteria.
-#' \item \code{M0} - The matrix of moments of the cube. Only with \textit{Id-optimality} criteria.
-#' \item \code{W} - The diagonal matrix of weights. Only with \textit{As-optimality} criteria.
+#' \itemize{
+#'   \item \strong{\emph{D}-optimality.} The
+#'
+#'   \item {"Ds"} {Ds-optimality}
+#'   \item {"A"} {A-optimality}
+#'   \item {"As"} {As-optimality}
 #' }
 #'
+#' @return \code{MSOpt} returns a list containing the following components:
+#' \item{facts}{The argument \code{facts}.}
+#' \item{nfacts}{An integer, the number of expermental factors.}
+#' \item{nstrat}{An integer, the number of strata.}
+#' \item{units}{The argument \code{units}.}
+#' \item{runs}{An integer, the number of runs.}
+#' \item{etas}{The argument \code{etas}.}
+#' \item{avlev}{A list showing the available levels for each experimental factor.}
+#' \item{levs}{A vector showing the number of levels for each experimental factor.}
+#' \item{Vinv}{The inverse of the variance-covariance matrix of the responses.}
+#' \item{model}{The argument \code{model}.}
+#' \item{crit}{The argument \code{criteria}.}
+#' \item{ncrit}{An integer, the number of criteria.}
+#' \item{M}{The matrix of moments of the cube. Only with \emph{I-optimality} criteria.}
+#' \item{M0}{The matrix of moments of the cube. Only with \emph{Id-optimality} criteria.}
+#' \item{W}{The diagonal matrix of weights. Only with \emph{As-optimality} criteria.}
 #' @export
 
 MSOpt <- function(facts, units, levels, etas, criteria, model) {
