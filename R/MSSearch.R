@@ -57,7 +57,7 @@ MSSearch <- function(msopt, alpha, ...) {
     for (i in seq(1, nargs() - 3, 2)) {
       switch (varargin[[i]],
               "Start" = {
-                sol <- varargin[[i + 1]]
+                sol <- varargin[[i + 1]][[1]]
                 random_start <- 0;
               },
               "Normalize" = {
