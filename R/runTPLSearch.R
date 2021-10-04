@@ -1,28 +1,51 @@
 #' runTPLS
 #'
-#' @param facts a list representing the distribution of factors over strata.
-#' @param units a list containing the number of units in each stratum.
-#' @param criteria the list of criteria to be optimized.
-#' @param model a string which indicates the model type, among "main",
+#' @param facts A list of vectors representing the distribution of factors
+#' across strata. Each item in the list represents a stratum and the first item
+#' is the highest stratum of the multi-stratum structure of the experiment.
+#' Within the vectors, experimental factors are indicated by progressive integer
+#' from 1 to the total number of experimental factors, starting from the highest
+#' strata. Blocking factors are denoted by empty vectors.
+#'
+#' @param units A list containing the number of units in each stratum. For
+#' stratum i, the number of experimental units within each unit of the previous
+#' stratum (i-1) is indicated. \code{length(units)} must be equal to
+#' \code{length(facts)}.
+#'
+#' @param criteria A list specifying the criteria to be optimized. It can
+#' contain any combination of:
+#' \itemize{
+#'   \item{"I" : I-optimality}
+#'   \item{"Id" : Id-optimality}
+#'   \item{"D" : D-optimality}
+#'   \item{"A" : Ds-optimality}
+#'   \item{"Ds" : A-optimality}
+#'   \item{"As" : As-optimality}
+#' }
+#'
+#' @param model A string which indicates the type of model, among "main",
 #' "interaction" and "quadratic".
-#' @param iters an integer indicating the number of iterations.
-#' @param ... optional arguments (see below).
+#'
+#' @param iters An integer indicating the number of iterations of the MS-TPLS
+#' algorithm.
+#'
+#' @param ... optional arguments (see the 'Details' section).
 #'
 #' @details Additional arguments can be specified as follows:
-#' \itemize{
-#' \item \code{'Restarts', restarts}
-#' \item \code{'Levels', levels}
-#' \item \code{'Etas', etas}
-#' \item \code{'RngSeed', rngSeed}
-#' \item \code{'StartMode', startMode}
-#' \item \code{'AlphaMode', alphaMode}
-#' \item \code{'RestInit', restInit}
-#' \item \code{'Interactive', interact}
+#' \item{'Rest arts', restarts}{A string and an integer, used in pair.}
+#' \item{'Levels', levels}{Used in pair, the second parameter may be a
+#' vector or an integer.}
+#' \item{'Etas', etas}{Used in pair}
+#'
+#' \item{'RngSeed', rngSeed}{# ?}
+#' \item{'StartMode', startMode}
+#' \item{'AlphaMode', alphaMode}
+#' \item{'RestInit', restInit}
+#' \item{'Interactive', interact}
 #' }
 #'
 #' @return
 #' @export
-#'
 
 runTPLS <- function(facts, units, criteria, model, iters, ...) {
 
