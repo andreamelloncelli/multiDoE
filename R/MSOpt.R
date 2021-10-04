@@ -2,10 +2,11 @@
 #'
 #' @description The \code{MSOpt} function creates a list object containing
 #' the main information on the experiment settings and the optimization
-#' criteria to be considered. According to the declared criteria, it also
-#' provides the basic matrices for their implementation. \code{MSOpt} returns
-#' input objects of the \code{\link[multiDoE]{Score}} and
-#' \code{\link[multiDoE]{MSSearch}} functions of the multiDoE package.
+#' criteria to be considered for the construction of the optimal experimental
+#' design. According to the declared criteria, it also provides the basic
+#' matrices for their implementation. \code{MSOpt} returns input objects of
+#' the \code{\link[multiDoE]{Score}} and \code{\link[multiDoE]{MSSearch}}
+#' functions of the multiDoE package.
 #'
 #' @param facts A list of vectors representing the distribution of factors
 #' across strata. Each item in the list represents a stratum and the first item
@@ -27,30 +28,45 @@
 #' strata. It follows that \code{length(etas)} must be equal to
 #' \code{length(facts) - 1}.
 #'
-#' @param criteria A list containing the criteria to be optimized. It can
+#' @param criteria A list specifying the criteria to be optimized. It can
 #' contain any combination of:
 #' \itemize{
 #'   \item{"I" : I-optimality}
 #'   \item{"Id" : Id-optimality}
 #'   \item{"D" : D-optimality}
-#'   \item{"Ds" : Ds-optimality}
-#'   \item{"A" : A-optimality}
+#'   \item{"A" : Ds-optimality}
+#'   \item{"Ds" : A-optimality}
 #'   \item{"As" : As-optimality}
 #' }
-#' See the \strong{Details} section for more detailed information on the available
-#' criteria. \cr
-#' The details of model specification are given under 'Details'.
+#' More detailed information on the available criteria is given under 'Details'.
 #'
 #' @param model A string which indicates the type of model, among "main",
 #' "interaction" and "quadratic".
 #'
 #' @details
-#' In order to... \cr
-#' The general form of the model:
-#' \deqn{}
-#'
-#' Generalized least square estimator:
-#' \deqn{\hat{\beta}_{\emph{GLS}} = (X'*V^{-1}*X)^{-1}*X'*V^{-1}*y}
+#' A little notation is introduced in order to present the criteria that can
+#' be used in the multi-objective approach of the multiDoE package. \cr
+#' For an experiment with \eqn{N} runs and \eqn{s} strata, with stratum \eqn{i}
+#' having \eqn{n_i} units within each unit at previous stratum \eqn{(i-1)} and
+#' stratum 0 being defined as the entire experiment \eqn{(n_0 = 1)}, the
+#' general form of the model can be written as:
+#' \deqn{y = X\beta + \sum\limits_{i = 1}^{s} Z_i\varepsilon_i}
+#' where \eqn{y} is a \eqn{N}-dimensional vector of responses
+#' (\eqn{N = \prod_{j = 1}^{s}n_j}), \eqn{X} is an \eqn{N \times p} model matrix,
+#' \eqn{\beta} is a \eqn{p}-dimensional vector containing the \eqn{p} fixed model
+#' parameters, \eqn{Z_i} is an \eqn{N \times b_i} indicator matrix of zero and
+#' ones for the units in stratum \eqn{i} and \eqn{b_i = \prod_{j = 1}^{i}n_j}.
+#' Finally, the vector \eqn{\varepsilon_i \sim N(0,\sigma_i^2I_{b_i})} is a
+#' \eqn{b_i}-dimensional vector containing the random effects, which are all
+#' incorrelated. The variance components \eqn{\sigma^{2}_{i} (i = 1, \dots, s)}
+#' have to be estimated and this is usually done by using the REML method.
+#' The best linear unbiased estimator for the parameter vector \eqn{\beta} is
+#' the generalized least square estimator:
+#' \deqn{\hat{\beta}_{\emph{GLS}} = (X'*V^{-1}*X)^{-1}*X'*V^{-1}*y}.
+#' This estimator has covariance matrix:
+#' \deqn{Var(\hat{\beta}_{\emph{GLS}) = \sigma^{2}(X'V^{-1}X)^{-1}},
+#' where \eqn{V = \sum\limits_{i = 1}^{s}\eta_i Z_i'Zi},
+#' \eqn{\eta_i = \frac{\sigma_i^{2}}{\sigma^{2}}} and \eqn{\sigma^{2} = \sigma^{2}_{s}}.
 #'
 #' \itemize{
 #'   \item \strong{\emph{D}-optimality.} The
@@ -62,17 +78,17 @@
 #'
 #' @return \code{MSOpt} returns a list containing the following components:
 #' \item{facts}{The argument \code{facts}.}
-#' \item{nfacts}{An integer, the number of expermental factors.}
-#' \item{nstrat}{An integer, the number of strata.}
+#' \item{nfacts}{An integer. The number of expermental factors.}
+#' \item{nstrat}{An integer. The number of strata.}
 #' \item{units}{The argument \code{units}.}
-#' \item{runs}{An integer, the number of runs.}
+#' \item{runs}{An integer. The number of runs.}
 #' \item{etas}{The argument \code{etas}.}
 #' \item{avlev}{A list showing the available levels for each experimental factor.}
-#' \item{levs}{A vector showing the number of levels for each experimental factor.}
+#' \item{levs}{A vector showing the number of available levels for each experimental factor.}
 #' \item{Vinv}{The inverse of the variance-covariance matrix of the responses.}
 #' \item{model}{The argument \code{model}.}
 #' \item{crit}{The argument \code{criteria}.}
-#' \item{ncrit}{An integer, the number of criteria.}
+#' \item{ncrit}{An integer. The number of criteria.}
 #' \item{M}{The matrix of moments of the cube. Only with \emph{I-optimality} criteria.}
 #' \item{M0}{The matrix of moments of the cube. Only with \emph{Id-optimality} criteria.}
 #' \item{W}{The diagonal matrix of weights. Only with \emph{As-optimality} criteria.}
@@ -241,10 +257,10 @@ colprod <- function(X) {
 
 #' Score
 #'
-#' Scoring function for the given MSOpt list and design matrix. It contains the
-#' implementation of all the available criteria.
+#' The \code{Score} function returns the optimization criteria values for the
+#' given \code{MSOpt} object and design matrix.
 #'
-#' @param msopt a list, the output of MSOpt function.
+#' @param msopt a list, output of \code{MSOpt} function.
 #' @param settings the design matrix for which criteria scores are calculated.
 #'
 #' @return Vector of optimization criteria values.
