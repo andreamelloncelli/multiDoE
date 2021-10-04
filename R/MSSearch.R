@@ -1,17 +1,11 @@
 #' MSSearch
 #'
-#' @description The \code{MSSearch} function implement the single-objective
-#' local search component of the MS-TPLS algorithm.
-#'
-#'  is used to search for the optimal design, minimizing
+#' \code{MSSearch} function is used to search for the optimal design, minimizing
 #' for the following scalarization between the criteria:
 #' \deqn{w = alpha * (Crit - CritTR) / CritSC}
 #' where \emph{alpha} is the vector of the relative weights between the criteria;
 #' \emph{Crit} is the vector of criteria values; \emph{CritTR} and \emph{CritSC}
 #' are optional normalization factors.
-#'
-#' @usage MSSearch(msopt, alpha, "Start", sol, "Restarts", r, "Normalize",
-#' c(CritTR, CritSC))
 #'
 #' @param msopt a list. The output of the MSOpt function.
 #' @param alpha a vector of weights. The elements must add up to one.
@@ -97,8 +91,8 @@ MSSearch <- function(msopt, alpha, ...) {
       for (s in 1:msopt$nstrat) {
         for (i in 1:totUnits[s]) {
           for (j in msopt$facts[[s]]) {
-            sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
-              msopt$avlev[[j]][sample(1:msopt$levs[j], 1)]
+          sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
+            msopt$avlev[[j]][sample(1:msopt$levs[j], 1)]
           }
         }
       }
@@ -157,4 +151,5 @@ MSSearch <- function(msopt, alpha, ...) {
   } # for t
   return(list("optsol" = optsol, "optsc" = optsc, "feval" = feval, "trend" = trend))
 }
+
 
