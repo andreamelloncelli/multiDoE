@@ -43,6 +43,7 @@
 #'
 #' @export
 
+
 MSSearch <- function(msopt, alpha, ...) {
   varargin <- list(...)
 
@@ -97,8 +98,8 @@ MSSearch <- function(msopt, alpha, ...) {
       for (s in 1:msopt$nstrat) {
         for (i in 1:totUnits[s]) {
           for (j in msopt$facts[[s]]) {
-          sol[(sizUnits[s] * (i - 1) + 1):(sizUnits[s] * i), j] <-
-            msopt$avlev[[j]][sample(1:msopt$levs[j], 1)]
+            sol[(sizUnits[s]*(i - 1) + 1):(sizUnits[s]*i), j] <-
+              msopt$avlev[[j]][sample(1:msopt$levs[j], 1)]
           }
         }
       }
@@ -157,5 +158,6 @@ MSSearch <- function(msopt, alpha, ...) {
   } # for t
   return(list("optsol" = optsol, "optsc" = optsc, "feval" = feval, "trend" = trend))
 }
+
 
 
