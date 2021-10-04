@@ -107,7 +107,7 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
     alpha <- cbind(r, 1 - sum(r))
     start <- pf$arch$solutions[pf$ptrs[sample(1, 1:length(pf$ptrs))]]
 
-    newMssearch <- MSSearch(mso, alpha, "Start", start, "Normalize", norms)
+    newMssearch <- MSSearch(mso, alpha, "Start", start[[1]], "Normalize", norms)
     newSol <- newMssearch$optsol
     newScore <- newMssearch$optsc
     newFeval <- newMssearch$feval
