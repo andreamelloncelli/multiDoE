@@ -43,7 +43,6 @@
 #'
 #' @export
 
-
 MSSearch <- function(msopt, alpha, ...) {
   varargin <- list(...)
 
@@ -158,6 +157,4 @@ MSSearch <- function(msopt, alpha, ...) {
   } # for t
   return(list("optsol" = optsol, "optsc" = optsc, "feval" = feval, "trend" = trend))
 }
-
-
 
