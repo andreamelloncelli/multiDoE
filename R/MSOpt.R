@@ -2,11 +2,13 @@
 #'
 #' @description The \code{MSOpt} function creates a list object containing
 #' the main information on the experiment settings and the optimization
-#' criteria to be considered for the construction of the optimal experimental
-#' design. According to the declared criteria, it also provides the basic
-#' matrices for their implementation. \code{MSOpt} returns input objects of
-#' the \code{\link[multiDoE]{Score}} and \code{\link[multiDoE]{MSSearch}}
-#' functions of the multiDoE package.
+#' criteria to be considered for the optimal design construction.
+#' According to the declared criteria, it also provides the basic matrices for
+#' their implementation. \code{MSOpt} returns input objects of the
+#' \code{\link[multiDoE]{Score}} and \code{\link[multiDoE]{MSSearch}} functions
+#' of the multiDoE package.
+#'
+#' @usage MSOpt(facts, units, levels, etas, criteria, model)
 #'
 #' @param facts A list of vectors representing the distribution of factors
 #' across strata. Each item in the list represents a stratum and the first item
@@ -43,9 +45,8 @@
 #' @param model A string which indicates the type of model, among "main",
 #' "interaction" and "quadratic".
 #'
-#' @details
-#' A little notation is introduced in order to present the criteria that can
-#' be used in the multi-objective approach of the multiDoE package. \cr
+#' @details A little notation is introduced to present the criteria
+#' that can be used in the multi-objective approach of the multiDoE package. \cr
 #' For an experiment with \eqn{N} runs and \eqn{s} strata, with stratum \eqn{i}
 #' having \eqn{n_i} units within each unit at previous stratum \eqn{(i-1)} and
 #' stratum 0 being defined as the entire experiment \eqn{(n_0 = 1)}, the
@@ -63,17 +64,20 @@
 #' The best linear unbiased estimator for the parameter vector \eqn{\beta} is
 #' the generalized least square estimator:
 #' \deqn{\hat{\beta}_{\emph{GLS}} = (X'*V^{-1}*X)^{-1}*X'*V^{-1}*y}.
-#' This estimator has covariance matrix:
-#' \deqn{Var(\hat{\beta}_{\emph{GLS}) = \sigma^{2}(X'V^{-1}X)^{-1}},
+#' This estimator has variance-covariance matrix:
+#' \deqn{Var(\hat{\beta}_{\emph{GLS}) = \sigma^{2}(X'V^{-1}X)^{-1}}},
 #' where \eqn{V = \sum\limits_{i = 1}^{s}\eta_i Z_i'Zi},
-#' \eqn{\eta_i = \frac{\sigma_i^{2}}{\sigma^{2}}} and \eqn{\sigma^{2} = \sigma^{2}_{s}}.
+#' \eqn{\eta_i = \frac{\sigma_i^{2}}{\sigma^{2}}} and \eqn{\sigma^{2} =
+#' \sigma^{2}_{s}}.
+#' The variance components have to be estimated
 #'
 #' \itemize{
-#'   \item \strong{\emph{D}-optimality.} The
-#'
-#'   \item {"Ds"} {Ds-optimality}
-#'   \item {"A"} {A-optimality}
-#'   \item {"As"} {As-optimality}
+#'   \item \strong{\emph{I}-optimality.}
+#'   \item \strong{\emph{Id}-optimality.}
+#'   \item \strong{\emph{A}-optimality.}
+#'   \item \strong{\emph{D}-optimality.}
+#'   \item \strong{\emph{As}-optimality.}
+#'   \item \strong{\emph{Ds}-optimality.}
 #' }
 #'
 #' @return \code{MSOpt} returns a list containing the following components:
