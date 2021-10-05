@@ -81,7 +81,7 @@ print(score)
 ```{r}
 library(multiDoE)
 set.seed(13)
-options(digits = 10)
+options(digits = 15)
 
 facts <- list(1:2, 3:4)
 units <- list(10, 5)
@@ -91,18 +91,16 @@ criteria <- c('A')
 model <- "quadratic"
 
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-mssearch1 <- MSSearch(msopt1, 1, "Restarts", 100)
+mssearch1 <- MSSearch(msopt1, 1, "Restarts", 100, "Start", example)
 mssearch1
 ```
-
-
 
 
 ### TPLSearch  
 
 ```{r}
 library(multiDoE)
-set.seed(345)
+set.seed(12)
 options(digits = 10)
 
 facts <- list(1:2, 3:4)
@@ -117,7 +115,7 @@ lCrit <- length(criteria)
 iters <- 10 * lCrit
 restarts <- 100
 restInit <- 2
-i = 70
+i = 21
 
 tpls <- runTPLS(facts,units, criteria, model, iters, "Etas", etas,
         "Levels", levels, "Restarts", restarts, "RestInit",

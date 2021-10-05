@@ -90,7 +90,7 @@ criteria <- c('D')
 model <- "quadratic"
 
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-mssearch1 <- MSSearch(msopt1, 1, "Restarts", 100)
+mssearch1 <- MSSearch(msopt1, 1, "Restarts", 50, "Start", example)
 mssearch1
 ```
 
@@ -132,7 +132,7 @@ criteria <-  c('A', 'Ds')
 model <- "quadratic"
 
 lCrit <- length(criteria)
-iters <- 7 * lCrit
+iters <- 10 * lCrit
 restarts <- 100
 restInit <- 2
 i = 70

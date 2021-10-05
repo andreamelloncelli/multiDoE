@@ -97,18 +97,18 @@ mssearch1
 
 ```{r}
 library(multiDoE)
-set.seed(345)
+set.seed(3455)
 options(digits = 10)
 
 facts <- list(1:2, 3:4)
 units <- list(12, 4)
 levels <- c(4, 4, 4, 2)
 etas <- list(1, 1)
-criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
-model <- "quadratic"
+criteria <- c('D', 'A')
+model <- "main"
 
 lCrit <- length(criteria)
-iters <- 2 * lCrit
+iters <- 10 * lCrit
 restarts <- 100
 restInit <- 2
 i = 70

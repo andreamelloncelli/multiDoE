@@ -69,12 +69,15 @@ facts <- list(c(), 1:3)
 units <- list(7, 4)
 levels <- 3
 etas <- list(1)
-criteria <- c('Ds')
+criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
 model <- "quadratic"
 
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-mssearch1 <- MSSearch(msopt1, 1, "Restarts", 100)
+mssearch1 <- MSSearch(msopt1, rep(1/6, 6), "Restarts", 100, "Start", example,
+                      "Normalize", c(rep(0.2,6), rep(0.5,6)))
 mssearch1
+# file_name <- here::here("tests/testthat/test_data/mssM_i6.Rds")
+# saveRDS(mssearch1, file = file_name)
 ```
 
 ### TPLSearch  
@@ -84,17 +87,16 @@ library(multiDoE)
 set.seed(345)
 options(digits = 10)
 
-facts <- list(1, 2:5)
-units <- list(6, 5)
+facts <- list(c(), 1:3)
+units <- list(7, 4)
 levels <- 3
 etas <- list(1)
-# criteria <-  c('I', 'Id', 'D', 'A', 'Ds', 'As')
-criteria <-  c('I', 'Id', 'D')
-model <- "quadratic"
+criteria <- c('I', 'Id')
+model <- 'main'
 
 lCrit <- length(criteria)
 iters <- 10 * lCrit
-restarts <- 1
+restarts <- 100
 restInit <- 2
 i = 70
 

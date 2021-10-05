@@ -98,7 +98,6 @@ example <- matrix(c( -1,  1, -1, -1,
                   ncol = 4 , byrow = T)
 
 #### test MSOpt e Score ####
-
 test_that("MSOpt works", {
   expect_equal(MSOpt(facts, units, levels, etas, criteria, model),
                list("facts" = list(1:2, 3:4),
@@ -128,24 +127,24 @@ test_that("Score works",{expect_equal(Score(msopt, example),
                                       tolerance = 0.0000000001)
 })
 
-#### test MSSearch Single Crit: OK ####
-set.seed(13)
-criteria <- "A"
-msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-file_name <- here::here("tests/testthat/test_data/mss1_i4.Rds")
-mssearch1 <- readRDS(file = file_name)
-
-test_that("MSSearch works", {
-  expect_equal(MSSearch(msopt1, 1, "Restarts", 100),
-               list("optsol" = mssearch1$optsol,
-                    "optsc" = 0.1796713797,
-                    "feval" = 116848,
-                    "trend" = mssearch1$trend
-               )
-  )
-})
-
-#### test MSSearch Single Crit ("A") + Restarts + Start: OK ####
+# #### test MSSearch Single Crit: OK ####
+# set.seed(13)
+# criteria <- "A"
+# msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
+# file_name <- here::here("tests/testthat/test_data/mss1_i4.Rds")
+# mssearch1 <- readRDS(file = file_name)
+#
+# test_that("MSSearch works", {
+#   expect_equal(MSSearch(msopt1, 1, "Restarts", 100),
+#                list("optsol" = mssearch1$optsol,
+#                     "optsc" = 0.1796713797,
+#                     "feval" = 116848,
+#                     "trend" = mssearch1$trend
+#                )
+#   )
+# })
+#
+# #### test MSSearch Single Crit ("A") + Restarts + Start: OK ####
 set.seed(13)
 criteria <- "A"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
@@ -166,16 +165,24 @@ test_that("MSSearch works", {
 
 
 #### test TPLSearch ####
-set.seed(345)
+set.seed(12)
+
+facts <- list(1:2, 3:4)
+units <- list(10, 5)
+levels <- 3
+etas <- list(1)
 criteria <-  c('I', 'D')
+model <- "quadratic"
 
 lCrit <- length(criteria)
 iters <- 10 * lCrit
 restarts <- 100
 restInit <- 2
-i = 70
+i = 21
 
-load("tpls2_i4.RData")
+file_name <- here::here("tests/testthat/test_data/tpls_i4.Rds")
+
+tpls <- readRDS(file = file_name)
 ar <- tpls$ar
 stats <- tpls$stats
 megaAR <- tpls$megaAR

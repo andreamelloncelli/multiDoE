@@ -7,14 +7,14 @@ output: html_document
 
 ```{r}
 library(multiDoE)
-options(digits = 10)
+options(digits = 15)
 
 facts <- list(1, 2:5)
 units <- list(21, 2)
 levels <- 3
 etas <- list(1)
 criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
-model <- "quadratic"
+model <- "interaction"
 
 msopt <- MSOpt(facts, units, levels, etas, criteria, model)
 msopt
@@ -79,7 +79,7 @@ print(score)
 ```{r}
 library(multiDoE)
 set.seed(13)
-options(digits = 10)
+options(digits = 15)
 
 facts <- list(1, 2:5)
 units <- list(21, 2)
@@ -89,8 +89,10 @@ criteria <- c('Id')
 model <- "quadratic"
 
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-mssearch1 <- MSSearch(msopt1, 1, "Restarts", 100)
+mssearch1 <- MSSearch(msopt1, 1, "Restarts", 100, "Start", example)
 mssearch1
+# file_name <- here::here("tests/testthat/test_data/mss1_i3.Rds")
+# saveRDS(mssearch1, file = file_name)
 ```
 
 ### TPLSearch  
@@ -105,17 +107,15 @@ units <- list(21, 2)
 levels <- 3
 etas <- list(1)
 # criteria <-  c('I', 'Id', 'D', 'A', 'Ds', 'As')
-criteria <-  c('I', 'Id', 'D')
-model <- "quadratic"
+criteria <-  c('A', 'Ds', 'As')
+model <- "main"
 
 lCrit <- length(criteria)
-iters <- 10 * lCrit
+iters <- 5 * lCrit
 restarts <- 100
 restInit <- 2
 i = 70
 
-tpls <- runTPLS(facts,units, criteria, model, iters, "Etas", etas,
-        "Levels", levels, "Restarts", restarts, "RestInit",
-        restInit, "RngSeed", i)
+tpls <- runTPLS(facts,units, criteria, model, iters, "Restarts", restarts)
 
 ```

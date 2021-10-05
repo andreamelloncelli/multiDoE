@@ -298,28 +298,28 @@ test_that("MSSearch works", {
 })
 
 #### test TPLSearch ####
-set.seed(345)
-criteria <-  c('I', 'Id', 'D')
-
-lCrit <- length(criteria)
-iters <- 10 * lCrit
-restarts <- 100
-restInit <- 2
-i = 1
-
-load("tpls3_i2.RData")
-ar <- tpls$ar
-stats <- tpls$stats
-megaAR <- tpls$megaAR
-
-test_that("runTPLSearch works", {
-  expect_equal(runTPLS(facts,units, criteria, model, iters, "Etas", etas,
-                       "Levels", levels, "Restarts", restarts, "RestInit",
-                       restInit, "RngSeed", i),
-               list("ar" = ar, "stats" = stats, "megaAR" = megaAR)
-  )
-}
-)
+# set.seed(345)
+# criteria <-  c('I', 'Id', 'D')
+#
+# lCrit <- length(criteria)
+# iters <- 10 * lCrit
+# restarts <- 100
+# restInit <- 2
+# i = 1
+#
+# load("tpls3_i2.RData")
+# ar <- tpls$ar
+# stats <- tpls$stats
+# megaAR <- tpls$megaAR
+#
+# test_that("runTPLSearch works", {
+#   expect_equal(runTPLS(facts,units, criteria, model, iters, "Etas", etas,
+#                        "Levels", levels, "Restarts", restarts, "RestInit",
+#                        restInit, "RngSeed", i),
+#                list("ar" = ar, "stats" = stats, "megaAR" = megaAR)
+#   )
+# }
+# )
 
 
 

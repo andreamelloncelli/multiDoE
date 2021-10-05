@@ -65,8 +65,8 @@ print(score)
 
 ```{r}
 library(multiDoE)
-set.seed(13)
-options(digits = 10)
+set.seed(1)
+options(digits = 15)
 
 facts <- list(1, 2:5)
 units <- list(6, 5)
@@ -76,8 +76,11 @@ criteria <- c('I')
 model <- "quadratic"
 
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-mssearch1 <- MSSearch(msopt1, 1, "Restarts", 100)
+mssearch1 <- MSSearch(msopt1, 1, "Restarts", 100, "Start", example,
+                     "Normalize", c(0.1, 2))
 mssearch1
+# file_name <- here::here("tests/testthat/test_data/mssMsol_i1.Rds")
+# saveRDS(mssearch1, file = file_name)
 ``` 
 
 ### MSSearch (Multi-criteria)  
@@ -95,15 +98,18 @@ criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
 model <- "quadratic"
 
 msopt <- MSOpt(facts, units, levels, etas, criteria, model)
-mssearchM <- MSSearch(msopt, rep(1/6, 6) , "Restarts", 100)
+mssearchM <- MSSearch(msopt, rep(1/6, 6), "Restarts", 100,
+                      "Start", example)
 mssearchM
+#file_name <- here::here("tests/testthat/test_data/mssMsol_i1.Rds")
+#saveRDS(mssearchM, file = file_name)
 ```
 
 ### TPLSearch  
 
 ```{r}
 library(multiDoE)
-set.seed(345)
+set.seed(36)
 options(digits = 10)
 
 facts <- list(1, 2:5)
@@ -116,13 +122,16 @@ model <- "quadratic"
 
 lCrit <- length(criteria)
 iters <- 10 * lCrit
-restarts <- 1
+restarts <- 100
 restInit <- 2
 i = 70
 
-tpls <- runTPLS(facts,units, criteria, model, iters, "Etas", etas,
-        "Levels", levels, "Restarts", restarts, "RestInit",
-        restInit, "RngSeed", i)
+tpls <- runTPLS(facts, units, criteria, model, iters, 
+                "Etas", etas,
+                "Levels", levels, 
+                "Restarts", restarts, 
+                "RestInit", restInit,
+                "RngSeed", i)
 
 ```
 

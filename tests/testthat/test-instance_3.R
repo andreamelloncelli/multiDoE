@@ -166,15 +166,22 @@ test_that("MSSearch works", {
 
 #### test TPLSearch ####
 set.seed(345)
+options(digits = 10)
+
+facts <- list(1:3, 4:6)
+units <- list(12, 4)
+levels <- 3
+etas <- list(1)
 criteria <-  c('A', 'Ds')
+model <- "quadratic"
 
 lCrit <- length(criteria)
-iters <- 7 * lCrit
+iters <- 10 * lCrit
 restarts <- 100
 restInit <- 2
 i = 70
 
-load("tpls2_i3.RData")
+tpls <- readRDS(here::here("tests/testthat/test_data/tpls_i3.Rds"))
 ar <- tpls$ar
 stats <- tpls$stats
 megaAR <- tpls$megaAR

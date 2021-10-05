@@ -170,33 +170,37 @@ test_that("MSSearch works", {
   )
 })
 
-
-
 #### test TPLSearch ####
-# set.seed(345)
-# criteria <-  c('I', 'Id', 'D')
-#
-# lCrit <- length(criteria)
-# iters <- 10 * lCrit
-# restarts <- 100
-# restInit <- 2
-# i = 1
-#
-# load("C:\\Users\\Francesca\\Desktop\\Rtesi\\multiDoE\\tpls3_i1.RData")
-# ar <- tpls$ar
-# stats <- tpls$stats
-# megaAR <- tpls$megaAR
-#
-# test_that("runTPLSearch works", {
-#   expect_equal(runTPLS(facts,units, criteria, model, iters, "Etas", etas,
-#                                "Levels", levels, "Restarts", restarts, "RestInit",
-#                                restInit, "RngSeed", i),
-#                list("ar" = ar, "stats" = stats, "megaAR" = megaAR)
-#   )
-#   }
-# )
-#
-#
-#
-#
-#
+set.seed(36)
+
+facts <- list(1, 2:5)
+units <- list(6, 5)
+levels <- 3
+etas <- list(1)
+criteria <-  c('I', 'Id', 'D')
+model <- "quadratic"
+
+lCrit <- length(criteria)
+iters <- 10 * lCrit
+restarts <- 100
+restInit <- 2
+i = 70
+
+tpls <- readRDS(here::here("tests/testthat/test_data/tpls_i1.Rds"))
+
+test_that("runTPLSearch works", {
+  expect_equal(runTPLS(facts, units, criteria, model, iters,
+                       "Etas", etas,
+                       "Levels", levels,
+                       "Restarts", restarts,
+                       "RestInit", restInit,
+                       "RngSeed", i),
+               list("ar" = tpls$ar, "stats" = tpls$stats, "megaAR" = tpls$megaAR)
+  )
+  }
+)
+
+
+
+
+

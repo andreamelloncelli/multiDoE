@@ -1,21 +1,30 @@
 #' MSSearch
 #'
-#' \code{MSSearch} function is used to search for the optimal design, minimizing
-#' for the following scalarization between the criteria:
-#' \deqn{w = alpha * (Crit - CritTR) / CritSC}
-#' where \emph{alpha} is the vector of the relative weights between the criteria;
-#' \emph{Crit} is the vector of criteria values; \emph{CritTR} and \emph{CritSC}
+#' @description The \code{MSSearch} function implements a procedure for finding
+#' the optimal experimental design based on minimizing the following
+#' scalarization between criteria:
+#' \deqn{w = alpha * (Crit - CritTR) / CritSC}.
+#' \emph{alpha} is the vector of the relative weights between the criteria;
+#' \emph{Crit} is the vector of criteria values and \emph{CritTR} and \emph{CritSC}
 #' are optional normalization factors.
 #'
-#' @param msopt a list. The output of the MSOpt function.
-#' @param alpha a vector of weights. The elements must add up to one.
+#' The \code{MSSearch} function implements the single-objective local search
+#' component of the MS-TPLS algorithm, for the construction of optimal experimental
+#' designs with a multi-objective approach.
+#'
+#' @usage MSSearch(msopt, alpha, "Start", sol, "Restarts", r, "Normalize",
+#' c(CritTR, CritSC )))
+#'
+#' @param msopt A \code{\link[multiDoE]{MSOpt}} object.
+#' @param alpha A vector of weights, whose elements must add up to one.
+#' \code{length(\alpha)} must be equal to the number of criteria considered.
 #' @param ... optional arguments (see below)
 #'
 #' @details Additional arguments can be specified as follows:
 #' \itemize{
 #' \item \code{'Start', sol}: a string and a matrix, used in pair. They provide
-#' a starting solution (\code{sol}) to the algorithm. By default initial solution
-#' is randomly sampled.
+#' a starting solution (\code{sol}), or initial design, to the algorithm. By
+#' default the initial solution is generate at random .
 #' \item \code{'Restarts', r }: a string and an integer, used in pair. They restart
 #' the algorithm \code{r} times and finally the best solution is considered. By
 #' default \eqn{r = 1}.

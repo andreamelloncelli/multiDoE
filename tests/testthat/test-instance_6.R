@@ -181,3 +181,35 @@ test_that("MSSearch works", {
 
 
 
+
+
+set.seed(345)
+options(digits = 10)
+
+facts <- list(c(), 1:3)
+units <- list(7, 4)
+levels <- 3
+etas <- list(1)
+criteria <- c('I', 'Id')
+model <- 'main'
+
+lCrit <- length(criteria)
+iters <- 10 * lCrit
+restarts <- 100
+restInit <- 2
+i = 70
+
+file_name <- here::here("tests/testthat/test_data/tpls_i6.Rds")
+tpls <- readRDS(file = file_name)
+ar <- tpls$ar
+stats <- tpls$stats
+megaAR <- tpls$megaAR
+
+test_that("runTPLSearch works", {
+  expect_equal(runTPLS(facts,units, criteria, model, iters, "Etas", etas,
+                       "Levels", levels, "Restarts", restarts, "RestInit",
+                       restInit, "RngSeed", i),
+               list("ar" = ar, "stats" = stats, "megaAR" = megaAR)
+  )
+}
+)
