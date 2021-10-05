@@ -121,12 +121,11 @@ test_that("MSOpt works", {
 })
 
 test_that("Score works",{expect_equal(Score(msopt, example),
-                                      c(1.2059344928, 0.7348330871,
-                                        0.1088767834, 0.4062826680,
-                                        0.1092212584, 0.1688370861),
-                                      tolerance = 0.0000000001)
-  }
-  )
+                                      c(1.205934492791982, 0.734833087126215,
+                                        0.108876783413959, 0.406282668029913,
+                                        0.109221258351505, 0.168837086116107),
+                                      tolerance = 0.0000000001)}
+          )
 
 #### test MSSearch Single Crit ####
 set.seed(13)
@@ -142,6 +141,8 @@ test_that("MSSearch works", {
                )
   )
 })
+
+
 
 #### test TPLSearch ####
 set.seed(345)

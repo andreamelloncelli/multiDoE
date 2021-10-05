@@ -1,6 +1,147 @@
-options(digits = 10)
+options(digits = 15)
 
-# setting
+####################################################################
+# setting interaction ####
+facts <- list(1, 2:5)
+units <- list(21, 2)
+levels <- 3
+etas <- list(1)
+criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
+model <- "interaction"
+
+# M ####
+k <- length(unlist(facts))
+k2 <- k * (k - 1) / 2
+Mi <- rbind(
+  cbind(1, t(integer(k)), t(integer(k2))),
+  cbind(integer(k), diag(k) / 3, matrix(0, k, k2)),
+  cbind(integer(k2), matrix(0, k2, k), diag(k2) / 9)
+)
+
+# M0 ####
+M0i <- rbind(
+  cbind(1, t(integer(k)), t(integer(k2))),
+  cbind(integer(k), diag(k) / 3, matrix(0, k, k2)),
+  cbind(integer(k2), matrix(0, k2, k), diag(k2) / 9)
+)
+M0i[1, ] <- 0
+M0i[, 1] <- 0
+
+# W ####
+nfacts <- length(unlist(facts))
+w <- t(rep(1, nfacts + nfacts * (nfacts - 1) / 2))
+a <- length(w / sum(w))
+Wi <- c(w / sum(w)) * diag(a)
+
+# msopt ####
+msopt <- MSOpt(facts, units, levels, etas, criteria, model)
+
+### test MSOpt e Score interaction: OK ####
+test_that("MSOpt works", {
+  expect_equal(MSOpt(facts, units, levels, etas, criteria, model),
+               list("facts" = list(1, 2:5),
+                    "nfacts" = 5,
+                    "nstrat" = 2,
+                    "units" = list(21, 2),
+                    "runs" = 42,
+                    "etas" = list(1),
+                    "avlev" = list(c(-1, 0 , 1), c(-1, 0, 1), c(-1, 0, 1),
+                                   c(-1, 0, 1), c(-1, 0, 1)),
+                    "levs" = c(3, 3, 3, 3, 3),
+                    "Vinv" = t(solve(diag(42) + 1 * kronecker(diag(21), matrix(1, 2, 2)))),
+                    "model"  = 'interaction',
+                    "crit" = c('I', 'Id', 'D', 'A', 'Ds', 'As'),
+                    "ncrit" = 6,
+                    "M" = Mi,
+                    "M0" = M0i,
+                    "W" = Wi
+               )
+  )
+})
+
+test_that("Score works",{expect_equal(Score(msopt, example),
+                                      c(0.257854563945983, 0.185759114983032,
+                                        0.065379595918449, 0.069753041857244,
+                                        0.064995045171766, 0.069596881383530),
+                                      tolerance = 0.0000000001
+)
+})
+
+
+
+
+####################################################################
+# setting main ####
+facts <- list(1, 2:5)
+units <- list(21, 2)
+levels <- 3
+etas <- list(1)
+criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
+model <- "main"
+
+# M ####
+k <- length(unlist(facts))
+k2 <- k * (k - 1) / 2
+Mm <- rbind(
+  cbind(1, t(integer(k))),
+  cbind(integer(k), diag(k) / 3)
+)
+
+# M0 ####
+M0m <- rbind(
+  cbind(1, t(integer(k))),
+  cbind(integer(k), diag(k) / 3)
+)
+M0m[1, ] <- 0
+M0m[, 1] <- 0
+
+# W ####
+nfacts <- length(unlist(facts))
+w <- t(rep(1, msopt$nfacts))
+a <- length(w / sum(w))
+Wm <- c(w / sum(w)) * diag(a)
+
+# msopt ####
+msopt <- MSOpt(facts, units, levels, etas, criteria, model)
+
+### test MSOpt e Score main: OK ####
+test_that("MSOpt works", {
+  expect_equal(MSOpt(facts, units, levels, etas, criteria, model),
+               list("facts" = list(1, 2:5),
+                    "nfacts" = 5,
+                    "nstrat" = 2,
+                    "units" = list(21, 2),
+                    "runs" = 42,
+                    "etas" = list(1),
+                    "avlev" = list(c(-1, 0 , 1), c(-1, 0, 1), c(-1, 0, 1),
+                                   c(-1, 0, 1), c(-1, 0, 1)),
+                    "levs" = c(3, 3, 3, 3, 3),
+                    "Vinv" = t(solve(diag(42) + 1 * kronecker(diag(21), matrix(1, 2, 2)))),
+                    "model"  = 'main',
+                    "crit" = c('I', 'Id', 'D', 'A', 'Ds', 'As'),
+                    "ncrit" = 6,
+                    "M" = Mm,
+                    "M0" = M0m,
+                    "W" = Wm
+               )
+  )
+})
+
+test_that("Score works",{expect_equal(Score(msopt, example),
+                                      c(0.173111218905576, 0.101633636740146,
+                                        0.057209958841188, 0.062729748730978,
+                                        0.054725730766041, 0.060980182044087),
+                                      tolerance = 0.0000000001
+)
+})
+
+
+
+
+
+
+####################################################################
+# setting quadratic ####
 facts <- list(1, 2:5)
 units <- list(21, 2)
 levels <- 3
@@ -60,34 +201,34 @@ example <- matrix(c(1,  1,  1,  0,  0,
                     0, -1,  0, -1,  0,
                     0,  1, -1, -1,  1,
                     0,  0,  0,  0,  0,
-                   -1,  0,  0,  1,  0,
-                   -1,  1,  1, -1, -1,
+                    -1,  0,  0,  1,  0,
+                    -1,  1,  1, -1, -1,
                     1, -1,  1,  1,  1,
                     1,  1, -1,  1, -1,
                     0,  0,  0,  0,  0,
                     0, -1,  1, -1,  1,
-                   -1, -1,  1, -1,  1,
-                   -1,  1, -1,  1, -1,
+                    -1, -1,  1, -1,  1,
+                    -1,  1, -1,  1, -1,
                     0,  1, -1, -1, -1,
                     0,  0,  0,  0,  0,
-                   -1,  0,  0,  0, -1,
-                   -1,  1,  1,  1,  1,
+                    -1,  0,  0,  0, -1,
+                    -1,  1,  1,  1,  1,
                     0, -1, -1,  1,  0,
                     0,  0,  0,  0, -1,
-                   -1, -1,  1,  1, -1,
-                   -1,  0, -1, -1,  1,
+                    -1, -1,  1,  1, -1,
+                    -1,  0, -1, -1,  1,
                     0,  0, -1, -1, -1,
                     0,  1,  0,  0,  1,
-                   -1, -1, -1,  1,  1,
-                   -1,  1,  0, -1,  0,
+                    -1, -1, -1,  1,  1,
+                    -1,  1,  0, -1,  0,
                     1, -1,  1, -1, -1,
                     1,  0,  0,  1,  0,
                     1,  1,  0, -1, -1,
                     1,  1, -1,  1,  1,
-                   -1,  0,  1,  0,  0,
-                   -1, -1, -1, -1, -1),
-                   ncol = 5, byrow = T)
-#### test MSOpt e Score ####
+                    -1,  0,  1,  0,  0,
+                    -1, -1, -1, -1, -1),
+                  ncol = 5, byrow = T)
+#### test MSOpt e Score quadratic: OK ####
 
 test_that("MSOpt works", {
   expect_equal(MSOpt(facts, units, levels, etas, criteria, model),
@@ -119,18 +260,38 @@ test_that("Score works",{expect_equal(Score(msopt, example),
 )
 })
 
-#### test MSSearch Single Crit ####
+
+
+####################################################################
+#### test MSSearch Single Crit ("Id") + Restarts: OK ####
 set.seed(13)
 criteria <- "Id"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-
-load("C:\\Users\\Francesca\\Desktop\\Rtesi\\multiDoE\\mssearch1_i2.RData")
+file_name <- here::here("tests/testthat/test_data/mss1_i2.Rds")
+mssearch1 <- readRDS(file = file_name)
 
 test_that("MSSearch works", {
   expect_equal(MSSearch(msopt1, 1, "Restarts", 100),
                list("optsol" = mssearch1$optsol,
-                    "optsc" = 0.3310033528,
+                    "optsc" = 0.331003352814033,
                     "feval" = 271923,
+                    "trend" = mssearch1$trend
+               )
+  )
+})
+
+#### test MSSearch Single Crit ("Id") + Restarts + Start: OK ####
+set.seed(13)
+criteria <- "Id"
+msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
+file_name <- here::here("tests/testthat/test_data/mss1sol_i2.Rds")
+mssearch1 <- readRDS(file = file_name)
+
+test_that("MSSearch works", {
+  expect_equal(MSSearch(msopt1, 1, "Restarts", 100, "Start", example),
+               list("optsol" = mssearch1$optsol,
+                    "optsc" = 0.331977510344595,
+                    "feval" =  38659,
                     "trend" = mssearch1$trend
                )
   )

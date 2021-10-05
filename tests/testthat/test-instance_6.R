@@ -99,20 +99,23 @@ test_that("MSOpt works", {
 })
 
 test_that("Score works",{expect_equal(Score(msopt, example),
-                                      c(0.34616380426, 0.17752769379,
-                                        0.10306494417, 0.12878794799,
-                                        0.09695911414, 0.08664470562),
+                                      c(0.346163804255849,
+                                        0.177527693785788,
+                                        0.103064944168469,
+                                        0.128787947994373,
+                                        0.096959114137211,
+                                        0.086644705619155),
                                       tolerance = 0.0000000001)
 }
 )
 
 
-#### test MSSearch Single Crit ####
+#### test MSSearch Single Crit ("Ds") + Restarts ####
 set.seed(13)
 criteria <- "Ds"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-
-load("C:\\Users\\Francesca\\Desktop\\Rtesi\\multiDoE\\mssearch1_i6.RData")
+file_name <- here::here("tests/testthat/test_data/mss1_i6.Rds")
+mssearch1 <- readRDS(file = file_name)
 
 test_that("MSSearch works", {
   expect_equal(MSSearch(msopt1, 1, "Restarts", 100),
@@ -123,6 +126,58 @@ test_that("MSSearch works", {
                )
   )
 })
+
+
+
+
+#### test MSSearch Single Crit ("Ds") + Restarts + Start ####
+set.seed(13)
+
+criteria <- "Ds"
+msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
+file_name <- here::here("tests/testthat/test_data/mss1sol_i6.Rds")
+mssearch1 <- readRDS(file = file_name)
+
+test_that("MSSearch works", {
+  expect_equal(MSSearch(msopt1, 1, "Restarts", 100, "Start", example),
+               list("optsol" = mssearch1$optsol,
+                    "optsc" = 0.08780585259,
+                    "feval" =  17245,
+                    "trend" = rep(0.08780585259, 100)
+               )
+  )
+})
+
+
+
+
+
+#### test MSSearch Multi Crit ####
+set.seed(13)
+facts <- list(c(), 1:3)
+units <- list(7, 4)
+levels <- 3
+etas <- list(1)
+criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
+model <- "quadratic"
+
+msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
+file_name <- here::here("tests/testthat/test_data/mssM_i6.Rds")
+mssearchm <- readRDS(file = file_name)
+
+test_that("MSSearch works", {
+  expect_equal(MSSearch(msopt1, rep(1/6, 6), "Restarts", 100, "Start", example,
+                        "Normalize", c(rep(0.2,6), rep(0.5,6))),
+               list("optsol" = mssearchm$optsol,
+                    "optsc" = c(0.346163804255849, 0.177527693785788,
+                                0.103064944168469, 0.128787947994373,
+                                0.096959114137211, 0.086644705619155),
+                    "feval" =  16900,
+                    "trend" = mssearchm$trend
+               ), tolerance = 0.0000000001
+  )
+})
+
 
 
 

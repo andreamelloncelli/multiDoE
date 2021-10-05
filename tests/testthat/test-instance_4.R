@@ -122,19 +122,18 @@ test_that("MSOpt works", {
 })
 
 test_that("Score works",{expect_equal(Score(msopt, example),
-                                      c(0.5117611117, 0.4260468260,
-                                        0.0977064850, 0.1796354869,
-                                        0.0962826042, 0.1185332895),
-                                      tolerance = 0.0000000001
-)
+                                      c(0.511761111700404, 0.426046825986118,
+                                        0.097706484969153, 0.179635486851658,
+                                        0.096282604232556, 0.118533289486711),
+                                      tolerance = 0.0000000001)
 })
 
-#### test MSSearch Single Crit ####
+#### test MSSearch Single Crit: OK ####
 set.seed(13)
 criteria <- "A"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-
-load("C:\\Users\\Francesca\\Desktop\\Rtesi\\multiDoE\\mssearch1_i4.RData")
+file_name <- here::here("tests/testthat/test_data/mss1_i4.Rds")
+mssearch1 <- readRDS(file = file_name)
 
 test_that("MSSearch works", {
   expect_equal(MSSearch(msopt1, 1, "Restarts", 100),
@@ -145,6 +144,26 @@ test_that("MSSearch works", {
                )
   )
 })
+
+#### test MSSearch Single Crit ("A") + Restarts + Start: OK ####
+set.seed(13)
+criteria <- "A"
+msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
+file_name <- here::here("tests/testthat/test_data/mss1sol_i4.Rds")
+mssearch1 <- readRDS(file = file_name)
+
+test_that("MSSearch works", {
+  expect_equal(MSSearch(msopt1, 1, "Restarts", 100, "Start", example),
+               list("optsol" = mssearch1$optsol,
+                    "optsc" = mssearch1$optsc,
+                    "feval" = mssearch1$feval,
+                    "trend" = mssearch1$trend
+               )
+  )
+})
+
+
+
 
 #### test TPLSearch ####
 set.seed(345)

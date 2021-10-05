@@ -76,10 +76,10 @@ example <- matrix(c( 0,  1,  0,  0,  0,
                      1,  0,  0,  1,  0),
                   ncol = 5, byrow = T)
 
-#### test MSOpt e Score ####
+#### test MSOpt e Score: OK ####
 
 test_that("MSOpt works", {
-  expect_equal(MSOpt(),
+  expect_equal(MSOpt(facts, units, levels, etas, criteria, model),
                list("facts" = list(1, 2:5),
                     "nfacts" = 5,
                     "nstrat" = 2,
@@ -107,48 +107,96 @@ test_that("Score works",{expect_equal(Score(msopt, example),
                         )
             })
 #
-#### test MSSearch Single Crit ####
-set.seed(13)
+#### test MSSearch Single Crit ("I") + Restarts: OK ####
+set.seed(1)
 criteria <- "I"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-
-load("C:\\Users\\Francesca\\Desktop\\Rtesi\\multiDoE\\mssearch1_i1.RData")
+file_name <- here::here("tests/testthat/test_data/mss1_i1.Rds")
+mssearch1 <- readRDS(file_name)
 
 test_that("MSSearch works", {
   expect_equal(MSSearch(msopt1, 1, "Restarts", 100),
                list("optsol" = mssearch1$optsol,
-                    "optsc" = 0.7628322532,
-                    "feval" = 171080,
+                    "optsc" = 0.7602652588,
+                    "feval" = 176361,
                     "trend" = mssearch1$trend
                     )
                )
   })
 
-#### test TPLSearch ####
-set.seed(345)
-criteria <-  c('I', 'Id', 'D')
+#### test MSSearch Single Crit ("I") + Restarts + Start: oK ####
+file_name <- here::here("tests/testthat/test_data/mss1sol_i1.Rds")
+mssearch1 <- readRDS(file_name)
 
-lCrit <- length(criteria)
-iters <- 10 * lCrit
-restarts <- 100
-restInit <- 2
-i = 1
-
-load("C:\\Users\\Francesca\\Desktop\\Rtesi\\multiDoE\\tpls3_i1.RData")
-ar <- tpls$ar
-stats <- tpls$stats
-megaAR <- tpls$megaAR
-
-test_that("runTPLSearch works", {
-  expect_equal(runTPLS(facts,units, criteria, model, iters, "Etas", etas,
-                               "Levels", levels, "Restarts", restarts, "RestInit",
-                               restInit, "RngSeed", i),
-               list("ar" = ar, "stats" = stats, "megaAR" = megaAR)
+test_that("MSSearch works", {
+  expect_equal(MSSearch(msopt1, 1, "Restarts", 100, "Start", example),
+               list("optsol" = mssearch1$optsol,
+                    "optsc" = mssearch1$optsc,
+                    "feval" = mssearch1$feval,
+                    "trend" = mssearch1$trend
+               )
   )
-  }
-)
+})
+
+#### test MSSearch Single Crit ("I") + Restarts + Start + Normalize: OK ####
+file_name <- here::here("tests/testthat/test_data/mss1norm_i1.Rds")
+mssearch1 <- readRDS(file_name)
+
+test_that("MSSearch works", {
+  expect_equal(MSSearch(msopt1, 1, "Restarts", 100, "Start", example,
+                        "Normalize", c(0.1, 2)),
+               list("optsol" = mssearch1$optsol,
+                    "optsc" = mssearch1$optsc,
+                    "feval" = mssearch1$feval,
+                    "trend" = mssearch1$trend
+               )
+  )
+})
 
 
 
 
+#### test MSSearch Multi Crit (tutti) + Restarts + Start: OK ####
+file_name <- here::here("tests/testthat/test_data/mssMsol_i1.Rds")
+mssearch1 <- readRDS(file_name)
 
+test_that("MSSearch works", {
+  expect_equal(MSSearch(msopt, rep(1/6, 6), "Restarts", 100, "Start", example),
+               list("optsol" = mssearch1$optsol,
+                    "optsc" = mssearch1$optsc,
+                    "feval" = mssearch1$feval,
+                    "trend" = mssearch1$trend
+               )
+  )
+})
+
+
+
+#### test TPLSearch ####
+# set.seed(345)
+# criteria <-  c('I', 'Id', 'D')
+#
+# lCrit <- length(criteria)
+# iters <- 10 * lCrit
+# restarts <- 100
+# restInit <- 2
+# i = 1
+#
+# load("C:\\Users\\Francesca\\Desktop\\Rtesi\\multiDoE\\tpls3_i1.RData")
+# ar <- tpls$ar
+# stats <- tpls$stats
+# megaAR <- tpls$megaAR
+#
+# test_that("runTPLSearch works", {
+#   expect_equal(runTPLS(facts,units, criteria, model, iters, "Etas", etas,
+#                                "Levels", levels, "Restarts", restarts, "RestInit",
+#                                restInit, "RngSeed", i),
+#                list("ar" = ar, "stats" = stats, "megaAR" = megaAR)
+#   )
+#   }
+# )
+#
+#
+#
+#
+#
