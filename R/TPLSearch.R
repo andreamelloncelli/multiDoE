@@ -54,7 +54,7 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
 
   scalarizations <- restarts - (restInit * nCrit)
   mso <- MSOpt(facts, units, levels, etas, criteria, model)
-  set.seed(rngSeed)
+  # set.seed(rngSeed)
 
   # good quality solutions for the single objectives
   initSol <- vector(mode = "list", length = nCrit)    # lista di lunghezza 6 con 6 soluzioni iniziali [[i]] matrice

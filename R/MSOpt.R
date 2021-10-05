@@ -2,11 +2,10 @@
 #'
 #' @description The \code{MSOpt} function creates a list object containing
 #' the main information on the experiment settings and the optimization
-#' criteria to be considered for the optimal design construction.
-#' According to the declared criteria, it also provides the basic matrices for
-#' their implementation. \code{MSOpt} returns input objects of the
-#' \code{\link[multiDoE]{Score}} and \code{\link[multiDoE]{MSSearch}} functions
-#' of the multiDoE package.
+#' criteria to be considered. According to the declared criteria, it also
+#' provides the basic matrices for their implementation, such as moment matrices.
+#' \code{MSOpt} returns input objects of the \code{\link[multiDoE]{Score}} and
+#' \code{\link[multiDoE]{MSSearch}} functions of the multiDoE package.
 #'
 #' @usage MSOpt(facts, units, levels, etas, criteria, model)
 #'
@@ -69,33 +68,69 @@
 #' where \eqn{V = \sum\limits_{i = 1}^{s}\eta_i Z_i'Zi},
 #' \eqn{\eta_i = \frac{\sigma_i^{2}}{\sigma^{2}}} and \eqn{\sigma^{2} =
 #' \sigma^{2}_{s}}.
-#' The variance components have to be estimated
+#' The variance components \eqn{\sigma^2_i (i = 1, \dots, s)} have to be
+#' estimated and this can be done by using the REML method. Finally, let
+#' \eqn{M = X'V^{-1}X} be the information matrix of \eqn{\hat{\beta}} when
+#' the GLS estimator is used to estimate model parameters in a multi-stratum
+#' experiment.
 #'
-#' \itemize{
-#'   \item \strong{\emph{I}-optimality.}
-#'   \item \strong{\emph{Id}-optimality.}
-#'   \item \strong{\emph{A}-optimality.}
-#'   \item \strong{\emph{D}-optimality.}
-#'   \item \strong{\emph{As}-optimality.}
-#'   \item \strong{\emph{Ds}-optimality.}
-#' }
+#' \item \strong{\emph{D}-optimality.} The \emph{D}-optimality criterion is based on
+#' minimizing the generalized variance of the parameter estimates. This can be
+#' done either by minimizing the determinant of the variance-covariance matrix
+#' of \eqn{\hat{\beta}} or by maximizing the determinant of M. \cr
+#' The objective function to be minimized is:
+#' \deqn{f_{\emph{D}}(d; \eta) = \left(\frac{1}{\det(M)}\right)^{1/p}},
+#' where \eqn{d} is the design with information matrix \eqn{M} and \eqn{p} is the
+#' number of model parameters.
+#'
+#' \item \strong{\emph{A}-optimality.} This criterion is based on
+#' minimizing the average variance of the estimates of the regression coefficient.
+#' The sum of the variances of the parameter estimates (elements of
+#' \eqn{\hat{\beta}}) is taken as a measure, which is equivalent to the trace of
+#' \eqn{M^{-1}}. \cr
+#' The objective function to be minimized is:
+#' \deqn{f_{\emph{A}}(d; \eta) = \texttt{tr}(M^{-1})},
+#' where \eqn{d} is the design with information matrix \eqn{M}
+#'
+#' \item \strong{\emph{I}-optimality.} The \emph{I}-optimality criterion seeks to
+#' minimize the average prediction variance. The objective function to be
+#' minimized is:
+#' \deqn{f_{\emph{I}}(d; \eta) = \frac{\int_{\chi} f'(x)(X'V^{-1}X)^{-1}f(x)
+#' \,dx }{\int_{\chi} \,dx}},
+#' where \eqn{\chi} represents the design region. \cr
+#' When there are \eqn{k} treatment factors and the experimental region is
+#' \eqn{[-1, +1]^{k}}, the objective function can also be written as:
+#' \deqn{f_{\emph{I}}(d; \eta) = \texttt{tr} \left[(X'V^{-1}X)^{-1} B\right]},
+#' where \eqn{B = 2^{-k} \int_{\chi}f'(x)f(x) \,dx }}, is the moment matrix
+#'
+
+#'
+#'
+#' \item \strong{\emph{Id}-optimality.}
+#' \item \strong{\emph{As}-optimality.}
+#' \item \strong{\emph{Ds}-optimality.}
 #'
 #' @return \code{MSOpt} returns a list containing the following components:
 #' \item{facts}{The argument \code{facts}.}
-#' \item{nfacts}{An integer. The number of expermental factors.}
+#' \item{nfacts}{An integer. The number of expermental factors (bloking factors
+#' are excluded from the count).}
 #' \item{nstrat}{An integer. The number of strata.}
 #' \item{units}{The argument \code{units}.}
 #' \item{runs}{An integer. The number of runs.}
 #' \item{etas}{The argument \code{etas}.}
 #' \item{avlev}{A list showing the available levels for each experimental factor.}
-#' \item{levs}{A vector showing the number of available levels for each experimental factor.}
+#' \item{levs}{A vector showing the number of available levels for each
+#' experimental factor.}
 #' \item{Vinv}{The inverse of the variance-covariance matrix of the responses.}
 #' \item{model}{The argument \code{model}.}
 #' \item{crit}{The argument \code{criteria}.}
 #' \item{ncrit}{An integer. The number of criteria.}
-#' \item{M}{The matrix of moments of the cube. Only with \emph{I-optimality} criteria.}
-#' \item{M0}{The matrix of moments of the cube. Only with \emph{Id-optimality} criteria.}
-#' \item{W}{The diagonal matrix of weights. Only with \emph{As-optimality} criteria.}
+#' \item{M}{The moment matrix. Only with \emph{I-optimality} criteria; .}
+#' \item{M0}{The moment matrix. Only with \emph{Id-optimality} criteria.}
+#' \item{W}{The diagonal matrix of weights. Only with \emph{As-optimality} criteria.} \cr
+#'
+#' More information on M, M0 and W can be found in the descriptions of the
+#' respective criteria under 'Details'.
 #' @export
 
 MSOpt <- function(facts, units, levels, etas, criteria, model) {
