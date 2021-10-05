@@ -6,6 +6,9 @@ Archive <- function(dim, capacity) {
   }
   ar$nsols <- 0
   ar$dim <- dim
+  if (capacity < 0) {
+    capacity = 0
+  }
   ar$scores <- matrix(0, capacity, dim)
   ar$solutions <- vector("list", capacity)
   return(ar)
@@ -28,7 +31,11 @@ Add <- function(ar, sol, score) {
 
   # add solution and scores
   ar$solutions[[ar$nsols]] <- sol
-  ar$scores[ar$nsols, ] <- score
+  if (nrow(ar$scores) == 0) {
+    ar$scores <- rbind(ar$scores, score)
+  } else {
+    ar$scores[ar$nsols, ] <- score
+  }
   return(ar)
 }
 
