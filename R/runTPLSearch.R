@@ -42,7 +42,6 @@
 #' \item{'AlphaMode', alphaMode}
 #' \item{'RestInit', restInit}
 #' \item{'Interactive', interact}
-#' }
 #'
 #' @return
 #' @export
