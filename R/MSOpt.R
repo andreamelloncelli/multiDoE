@@ -50,7 +50,7 @@
 #' having \eqn{n_i} units within each unit at previous stratum \eqn{(i-1)} and
 #' stratum 0 being defined as the entire experiment \eqn{(n_0 = 1)}, the
 #' general form of the model can be written as:
-#' \deqn{y = X\beta + \sum\limits_{i = 1}^{s} Z_i\varepsilon_i}
+#' \deqn{y = X\beta + \sum\limits_{i = 1}^{s} Z_i\varepsilon_i}{y = X\beta + \sum_{i=1}^s Z_i \epsilon_i}
 #' where \eqn{y} is a \eqn{N}-dimensional vector of responses
 #' (\eqn{N = \prod_{j = 1}^{s}n_j}), \eqn{X} is an \eqn{N \times p} model matrix,
 #' \eqn{\beta} is a \eqn{p}-dimensional vector containing the \eqn{p} fixed model
@@ -101,7 +101,7 @@
 #' When there are \eqn{k} treatment factors and the experimental region is
 #' \eqn{[-1, +1]^{k}}, the objective function can also be written as:
 #' \deqn{f_{\emph{I}}(d; \eta) = \texttt{tr} \left[(X'V^{-1}X)^{-1} B\right]},
-#' where \eqn{B = 2^{-k} \int_{\chi}f'(x)f(x) \,dx }}, is the moment matrix
+#' where \eqn{B = 2^{-k} \int_{\chi}f'(x)f(x) \,dx }, is the moment matrix
 #'
 
 #'
