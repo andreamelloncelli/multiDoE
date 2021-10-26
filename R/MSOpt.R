@@ -73,26 +73,26 @@
 #' \eqn{M = X'V^{-1}X} be the information matrix of \eqn{\hat{\beta}} when
 #' the GLS estimator is used to estimate model parameters in a multi-stratum
 #' experiment.
-#'
-#' \item \strong{\emph{D}-optimality.} The \emph{D}-optimality criterion is based on
+#' \itemize{
+#' \item{ \strong{\emph{D}-optimality.} The \emph{D}-optimality criterion is based on
 #' minimizing the generalized variance of the parameter estimates. This can be
 #' done either by minimizing the determinant of the variance-covariance matrix
 #' of \eqn{\hat{\beta}} or by maximizing the determinant of M. \cr
 #' The objective function to be minimized is:
 #' \deqn{f_{\emph{D}}(d; \eta) = \left(\frac{1}{\det(M)}\right)^{1/p}},
 #' where \eqn{d} is the design with information matrix \eqn{M} and \eqn{p} is the
-#' number of model parameters.
+#' number of model parameters.}
 #'
-#' \item \strong{\emph{A}-optimality.} This criterion is based on
+#' \item{ \strong{\emph{A}-optimality.} This criterion is based on
 #' minimizing the average variance of the estimates of the regression coefficient.
 #' The sum of the variances of the parameter estimates (elements of
 #' \eqn{\hat{\beta}}) is taken as a measure, which is equivalent to the trace of
 #' \eqn{M^{-1}}. \cr
 #' The objective function to be minimized is:
 #' \deqn{f_{\emph{A}}(d; \eta) = \texttt{tr}(M^{-1})},
-#' where \eqn{d} is the design with information matrix \eqn{M}
+#' where \eqn{d} is the design with information matrix \eqn{M}}
 #'
-#' \item \strong{\emph{I}-optimality.} The \emph{I}-optimality criterion seeks to
+#' \item{ \strong{\emph{I}-optimality.} The \emph{I}-optimality criterion seeks to
 #' minimize the average prediction variance. The objective function to be
 #' minimized is:
 #' \deqn{f_{\emph{I}}(d; \eta) = \frac{\int_{\chi} f'(x)(X'V^{-1}X)^{-1}f(x)
@@ -102,9 +102,6 @@
 #' \eqn{[-1, +1]^{k}}, the objective function can also be written as:
 #' \deqn{f_{\emph{I}}(d; \eta) = \texttt{tr} \left[(X'V^{-1}X)^{-1} B\right]},
 #' where \eqn{B = 2^{-k} \int_{\chi}f'(x)f(x) \,dx }, is the moment matrix
-#'
-
-#'
 #'
 #' \item \strong{\emph{Id}-optimality.}
 #' \item \strong{\emph{As}-optimality.}

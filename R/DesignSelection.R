@@ -9,11 +9,12 @@
 #' be chosen.
 #'
 #' @param ar a list. It is an archive object containing:
-#' \itemize
+#' \itemize{
 #' \item an integer. The number of solutions.
 #' \item an integer. The number of criteria considered.
 #' \item a matrix. The score matrix associated with the solutions found.
 #' \item a list. The list of solutions (design matrices).
+#' }
 #' @param ... optional argument (see below).
 #'
 #' @details

@@ -32,17 +32,16 @@
 #' @param ... optional arguments (see the 'Details' section).
 #'
 #' @details Additional arguments can be specified as follows:
-#' \item{'Rest arts', restarts}{A string and an integer, used in pair.}
-#' \item{'Levels', levels}{Used in pair, the second parameter may be a
-#' vector or an integer.}
-#' \item{'Etas', etas}{Used in pair}
-#'
-#' \item{'RngSeed', rngSeed}{# ?}
-#' \item{'StartMode', startMode}
-#' \item{'AlphaMode', alphaMode}
-#' \item{'RestInit', restInit}
-#' \item{'Interactive', interact}
-#'
+#' \itemize{
+#' \item{'Rest arts', restarts: A string and an integer, used in pair.}
+#' \item{'Levels', levels: Used in pair, the second parameter may be a vector or an integer.}
+#' \item{'Etas', etas: Used in pair}
+#' \item{'RngSeed', rngSeed: ?}
+#' \item{'StartMode', startMode: ?}
+#' \item{'AlphaMode', alphaMode: ?}
+#' \item{'RestInit', restInit: ?}
+#' \item{'Interactive', interact: ?}
+#' }
 #' @return
 #' @export
 
