@@ -101,7 +101,7 @@
 #' When there are \eqn{k} treatment factors and the experimental region is
 #' \eqn{[-1, +1]^{k}}, the objective function can also be written as:
 #' \deqn{f_{\emph{I}}(d; \eta) = \texttt{tr} \left[(X'V^{-1}X)^{-1} B\right]},
-#' where \eqn{B = 2^{-k} \int_{\chi}f'(x)f(x) \,dx }, is the moment matrix
+#' where \eqn{B = 2^{-k} \int_{\chi}f'(x)f(x) \,dx }, is the moment matrix}
 #'
 #' \item \strong{\emph{Id}-optimality.}
 #' \item \strong{\emph{As}-optimality.}
