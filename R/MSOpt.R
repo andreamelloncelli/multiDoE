@@ -64,7 +64,7 @@
 #' the generalized least square estimator:
 #' \deqn{\hat{\beta}_{\emph{GLS}} = (X'*V^{-1}*X)^{-1}*X'*V^{-1}*y}.
 #' This estimator has variance-covariance matrix:
-#' \deqn{Var(\hat{\beta}_{\emph{GLS}) = \sigma^{2}(X'V^{-1}X)^{-1}}},
+#' \deqn{Var(\hat{\beta}_{\emph{GLS}}) = \sigma^{2}(X'V^{-1}X)^{-1}},
 #' where \eqn{V = \sum\limits_{i = 1}^{s}\eta_i Z_i'Zi},
 #' \eqn{\eta_i = \frac{\sigma_i^{2}}{\sigma^{2}}} and \eqn{\sigma^{2} =
 #' \sigma^{2}_{s}}.
