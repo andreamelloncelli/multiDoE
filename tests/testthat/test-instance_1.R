@@ -111,7 +111,8 @@ test_that("Score works",{expect_equal(Score(msopt, example),
 set.seed(1)
 criteria <- "I"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-file_name <- here::here("tests/testthat/test_data/mss1_i1.Rds")
+
+file_name <- here::here(file.path("tests", "testthat","test_data", "mss1_i1.Rds"))
 mssearch1 <- readRDS(file_name)
 
 test_that("MSSearch works", {
@@ -125,7 +126,10 @@ test_that("MSSearch works", {
   })
 
 #### test MSSearch Single Crit ("I") + Restarts + Start: oK ####
-file_name <- here::here("tests/testthat/test_data/mss1sol_i1.Rds")
+
+#file_name <- here::here("tests/testthat/test_data/mss1sol_i1.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "mss1sol_i1.Rds"))
+
 mssearch1 <- readRDS(file_name)
 
 test_that("MSSearch works", {
@@ -139,7 +143,9 @@ test_that("MSSearch works", {
 })
 
 #### test MSSearch Single Crit ("I") + Restarts + Start + Normalize: OK ####
-file_name <- here::here("tests/testthat/test_data/mss1norm_i1.Rds")
+
+#file_name <- here::here("tests/testthat/test_data/mss1norm_i1.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "mss1norm_i1.Rds"))
 mssearch1 <- readRDS(file_name)
 
 test_that("MSSearch works", {
@@ -157,7 +163,9 @@ test_that("MSSearch works", {
 
 
 #### test MSSearch Multi Crit (tutti) + Restarts + Start: OK ####
-file_name <- here::here("tests/testthat/test_data/mssMsol_i1.Rds")
+
+# file_name <- here::here("tests/testthat/test_data/mssMsol_i1.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "mssMsol_i1.Rds"))
 mssearch1 <- readRDS(file_name)
 
 test_that("MSSearch works", {
@@ -186,7 +194,10 @@ restarts <- 100
 restInit <- 2
 i = 70
 
-tpls <- readRDS(here::here("tests/testthat/test_data/tpls_i1.Rds"))
+
+#tpls <- readRDS(here::here("tests/testthat/test_data/tpls_i1.Rds"))
+file_name<- here::here(file.path("tests", "testthat","test_data", "tpls_i1.Rds"))
+tpls <- readRDS(file_name)
 
 test_that("runTPLSearch works", {
   expect_equal(runTPLS(facts, units, criteria, model, iters,

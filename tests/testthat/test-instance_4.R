@@ -127,7 +127,7 @@ test_that("Score works",{expect_equal(Score(msopt, example),
                                       tolerance = 0.0000000001)
 })
 
-# #### test MSSearch Single Crit: OK ####
+# #### test MSSearch Single Crit: file sovrascritto ####
 # set.seed(13)
 # criteria <- "A"
 # msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
@@ -148,7 +148,9 @@ test_that("Score works",{expect_equal(Score(msopt, example),
 set.seed(13)
 criteria <- "A"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-file_name <- here::here("tests/testthat/test_data/mss1sol_i4.Rds")
+
+# file_name <- here::here("tests/testthat/test_data/mss1sol_i4.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "mss1sol_i4.Rds"))
 mssearch1 <- readRDS(file = file_name)
 
 test_that("MSSearch works", {
@@ -180,8 +182,8 @@ restarts <- 100
 restInit <- 2
 i = 21
 
-file_name <- here::here("tests/testthat/test_data/tpls_i4.Rds")
-
+# file_name <- here::here("tests/testthat/test_data/tpls_i4.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "tpls_i4.Rds"))
 tpls <- readRDS(file = file_name)
 ar <- tpls$ar
 stats <- tpls$stats

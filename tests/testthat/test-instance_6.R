@@ -114,7 +114,9 @@ test_that("Score works",{expect_equal(Score(msopt, example),
 set.seed(13)
 criteria <- "Ds"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-file_name <- here::here("tests/testthat/test_data/mss1_i6.Rds")
+
+# file_name <- here::here("tests/testthat/test_data/mss1_i6.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "mss1_i6.Rds"))
 mssearch1 <- readRDS(file = file_name)
 
 test_that("MSSearch works", {
@@ -135,7 +137,8 @@ set.seed(13)
 
 criteria <- "Ds"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-file_name <- here::here("tests/testthat/test_data/mss1sol_i6.Rds")
+# file_name <- here::here("tests/testthat/test_data/mss1sol_i6.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "mss1sol_i6.Rds"))
 mssearch1 <- readRDS(file = file_name)
 
 test_that("MSSearch works", {
@@ -199,7 +202,8 @@ restarts <- 100
 restInit <- 2
 i = 70
 
-file_name <- here::here("tests/testthat/test_data/tpls_i6.Rds")
+#file_name <- here::here("tests/testthat/test_data/tpls_i6.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "tpls_i6.Rds"))
 tpls <- readRDS(file = file_name)
 ar <- tpls$ar
 stats <- tpls$stats

@@ -130,7 +130,8 @@ set.seed(13)
 criteria <- "D"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
 
-file_name <- here::here("tests\\testthat\\test_data\\mss1_i3.Rds")
+# file_name <- here::here("tests\\testthat\\test_data\\mss1_i3.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "mss1_i3.Rds"))
 mssearch1 <- readRDS(file_name)
 
 test_that("MSSearch works", {
@@ -148,7 +149,8 @@ test_that("MSSearch works", {
 criteria <- "D"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
 
-file_name <- here::here("tests/testthat/test_data/mss1sol_i3.Rds")
+#file_name <- here::here("tests/testthat/test_data/mss1sol_i3.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "mss1sol_i3.Rds"))
 mssearch1 <- readRDS(file_name)
 
 test_that("MSSearch works", {
@@ -181,7 +183,8 @@ restarts <- 100
 restInit <- 2
 i = 70
 
-tpls <- readRDS(here::here("tests/testthat/test_data/tpls_i3.Rds"))
+
+tpls <- readRDS(here::here(file.path("tests", "testthat","test_data", "tpls_i3.Rds")))
 ar <- tpls$ar
 stats <- tpls$stats
 megaAR <- tpls$megaAR

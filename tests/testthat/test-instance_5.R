@@ -162,7 +162,9 @@ restarts <- 100
 restInit <- 2
 i = 70
 
-file_name <- here::here("tests/testthat/test_data/tpls_i5.Rds")
+
+#file_name <- here::here("tests/testthat/test_data/tpls_i5.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "tpls_i5.Rds"))
 tpls <- readRDS(file = file_name)
 ar <- tpls$ar
 stats <- tpls$stats

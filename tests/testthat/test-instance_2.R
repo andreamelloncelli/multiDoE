@@ -267,7 +267,10 @@ test_that("Score works",{expect_equal(Score(msopt, example),
 set.seed(13)
 criteria <- "Id"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-file_name <- here::here("tests/testthat/test_data/mss1_i2.Rds")
+
+
+# file_name <- here::here("tests/testthat/test_data/mss1_i2.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "mss1_i2.Rds"))
 mssearch1 <- readRDS(file = file_name)
 
 test_that("MSSearch works", {
@@ -284,7 +287,9 @@ test_that("MSSearch works", {
 set.seed(13)
 criteria <- "Id"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-file_name <- here::here("tests/testthat/test_data/mss1sol_i2.Rds")
+
+# file_name <- here::here("tests/testthat/test_data/mss1sol_i2.Rds")
+file_name <- here::here(file.path("tests", "testthat","test_data", "mss1sol_i2.Rds"))
 mssearch1 <- readRDS(file = file_name)
 
 test_that("MSSearch works", {
@@ -296,6 +301,7 @@ test_that("MSSearch works", {
                )
   )
 })
+
 
 #### test TPLSearch ####
 # set.seed(345)
