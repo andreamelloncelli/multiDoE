@@ -43,15 +43,4 @@ SetMinMaxSc <- function(pf, scmax, scmin) {
 
 
 
-# TEST dominatedHypervolume ####
-options(digits = 10)
-n = 200
-theta = seq( - 3 * pi / 2, - pi, length.out = n)
-FP = cbind(1 + cos(theta), 1 - sin(theta))
-
-test_that("dominatedHypervolume works",
-          {expect_equal(dominatedHypervolume(FP, c(1, 1)) , 0.783416635050702)
-          }
-)
-
 
