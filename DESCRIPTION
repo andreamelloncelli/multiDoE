@@ -13,7 +13,8 @@ Suggests:
     testthat (>= 3.0.0),
     usethis,
     devtools,
-    markdown
+    markdown, 
+    here
 Config/testthat/edition: 3
 Imports:
     pracma,
