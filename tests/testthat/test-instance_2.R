@@ -1,3 +1,5 @@
+setwd("C:/Users/Francesca/Desktop/new1/multiDoE")
+
 options(digits = 15)
 
 ####################################################################
