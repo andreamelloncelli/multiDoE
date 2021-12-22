@@ -57,7 +57,7 @@ optSingleCrit <- function(ar, criteria) {
   index <- apply(ar$scores, 2, which.min)
 
   for (i in 1:nCrit) {
-    best[[i]] <- list(ar$scores[index[i],i], ar$solutions[[index[i]]])
+    best[[i]] <- list(ar$scores[index[i], ], ar$solutions[[index[i]]])
   }
   return(best)
 }
