@@ -49,17 +49,16 @@ optMultiCrit <- function(ar, ...) {
 #' @export
 #'
 
-optSingleCrit <- function(ar) {
+optSingleCrit <- function(ar, criteria) {
 
   nCrit <- dim(ar$scores)[2]
   best <- vector("list", nCrit)
+  names(best) <- criteria
   index <- apply(ar$scores, 2, which.min)
 
   for (i in 1:nCrit) {
     best[[i]] <- list(ar$scores[index[i],i], ar$solutions[[index[i]]])
   }
-
-  names(best) <- colnames(ar$scores)
   return(best)
 }
 

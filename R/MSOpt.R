@@ -2,7 +2,7 @@
 #'
 #' @description The \code{MSOpt} function creates a list object containing
 #' the main information on the experiment settings and the optimization
-#' criteria to be considered. According to the declared criteria, it also
+#' criteria to be considered. According to the declared criteria and model, it also
 #' provides the basic matrices for their implementation, such as moment matrices.
 #' \code{MSOpt} returns input objects of the \code{\link[multiDoE]{Score}} and
 #' \code{\link[multiDoE]{MSSearch}} functions of the multiDoE package.
