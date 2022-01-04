@@ -13,28 +13,22 @@ ar = Add(ar, "sol 9", c(2, 3, 3))
 ar = Add(ar, "sol 10", c(2, 3, 3))
 
 #ar = RemoveDominated(ar)
-
 pf = PFront(ar)
 
 addpf = Add_PF(pf, ar$nsols)
 
-test_that("PFront works",
-          {expect_equal(PFront(ar), list("arch" = ar,
-                                         "gaps" = list(),
-                                         "scmax" = c(2, 1, 1),
-                                         "scmin" = c(2, 1, 1),
-                                         "ptrs" = 8
-                            )
-                        )
-          }
-)
-
-
+test_that("PFront works", {
+  expect_equal(PFront(ar), list("arch" = ar,
+                                "gaps" = list(),
+                                "scmax" = c(2, 1, 1),
+                                "scmin" = c(2, 1, 1),
+                                "ptrs" = 8
+  )
+  )
+})
 
 
 # ####
-
-
 SetMinMaxSc <- function(pf, scmax, scmin) {
   pf$scmax <- scmax
   pf$scmin <- scmin

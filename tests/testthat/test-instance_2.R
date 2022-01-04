@@ -1,4 +1,4 @@
-setwd("C:/Users/Francesca/Desktop/new1/multiDoE")
+setwd(here::here())
 
 options(digits = 15)
 
@@ -61,12 +61,14 @@ test_that("MSOpt works", {
   )
 })
 
-test_that("Score works",{expect_equal(Score(msopt, example),
-                                      c(0.257854563945983, 0.185759114983032,
-                                        0.065379595918449, 0.069753041857244,
-                                        0.064995045171766, 0.069596881383530),
-                                      tolerance = 0.0000000001
-)
+test_that("Score works", {
+  # TODO the function Score does not work properly
+  expect_equal(Score(msopt, example),
+               c(0.257854563945983, 0.185759114983032,
+                 0.065379595918449, 0.069753041857244,
+                 0.064995045171766, 0.069596881383530),
+               tolerance = 0.0000000001
+  )
 })
 
 
@@ -129,12 +131,14 @@ test_that("MSOpt works", {
   )
 })
 
-test_that("Score works",{expect_equal(Score(msopt, example),
-                                      c(0.173111218905576, 0.101633636740146,
-                                        0.057209958841188, 0.062729748730978,
-                                        0.054725730766041, 0.060980182044087),
-                                      tolerance = 0.0000000001
-)
+test_that("Score works",{
+  # TODO fix Score
+  expect_equal(Score(msopt, example),
+               c(0.173111218905576, 0.101633636740146,
+                 0.057209958841188, 0.062729748730978,
+                 0.054725730766041, 0.060980182044087),
+               tolerance = 0.0000000001
+  )
 })
 
 
@@ -254,12 +258,13 @@ test_that("MSOpt works", {
   )
 })
 
-test_that("Score works",{expect_equal(Score(msopt, example),
-                                      c(0.395194502748104, 0.333949061712227,
-                                        0.083963412344681, 0.112928750871800,
-                                        0.084644937016109, 0.081678751029379),
-                                      tolerance = 0.0000000001
-)
+test_that("Score works",{
+  expect_equal(Score(msopt, example),
+               c(0.395194502748104, 0.333949061712227,
+                 0.083963412344681, 0.112928750871800,
+                 0.084644937016109, 0.081678751029379),
+               tolerance = 0.0000000001
+  )
 })
 
 

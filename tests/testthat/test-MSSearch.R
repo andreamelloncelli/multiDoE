@@ -12,7 +12,7 @@ criteria <- c('I', 'Id', 'D', 'A', 'Ds', 'As')
 model <- "quadratic"
 
 msopt <- MSOpt(facts, units, levels, etas, criteria, model)
-load("C:\\Users\\Francesca\\Desktop\\Rtesi\\multiDoE\\mssearchM_i1.RData")
+load(here::here("mssearchM_i1.RData"))
 
 test_that("MSSearch works", {
   expect_equal(MSSearch(msopt, rep(1/6, 6), "Restarts", 100),
@@ -28,7 +28,7 @@ test_that("MSSearch works", {
 ### test MSSearch multicrit - model = "interaction" ####
 set.seed(12)
 msopt <- MSOpt(facts, units, levels, etas, criteria, "interaction")
-load("C:\\Users\\Francesca\\Desktop\\Rtesi\\multiDoE\\mss_int.RData")
+load(here::here("mss_int.RData"))
 
 test_that("MSSearch works", {
   expect_equal(MSSearch(msopt, rep(1/6, 6), "Restarts", 100),

@@ -1,4 +1,4 @@
-setwd("C:/Users/Francesca/Desktop/new1/multiDoE")
+setwd(here::here())
 options(digits = 10)
 
 # setting
@@ -131,7 +131,7 @@ set.seed(13)
 criteria <- "D"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
 
-file_name <- here::here("tests\\testthat\\test_data\\mss1_i3.Rds")
+file_name <- here::here("tests/testthat/test_data/mss1_i3.Rds")
 mssearch1 <- readRDS(file_name)
 
 test_that("MSSearch works", {
@@ -182,6 +182,7 @@ restarts <- 100
 restInit <- 2
 i = 70
 
+# TODO fix impossible to read this file: unknown input format
 tpls <- readRDS(here::here("tests/testthat/test_data/tpls_i3.Rds"))
 ar <- tpls$ar
 stats <- tpls$stats
@@ -193,7 +194,6 @@ test_that("runTPLSearch works", {
                        restInit, "RngSeed", i),
                list("ar" = ar, "stats" = stats, "megaAR" = megaAR)
   )
-}
-)
+})
 
 

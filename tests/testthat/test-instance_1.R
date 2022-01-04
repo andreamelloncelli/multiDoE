@@ -1,4 +1,4 @@
-setwd("C:/Users/Francesca/Desktop/new1/multiDoE")
+setwd(here::here())
 options(digits = 10)
 
 # setting
@@ -112,7 +112,7 @@ test_that("Score works",{expect_equal(Score(msopt, example),
 set.seed(1)
 criteria <- "I"
 msopt1 <- MSOpt(facts, units, levels, etas, criteria, model)
-file_name <- here::here("tests/testthat/test_data/mss1_i1.RDs")
+file_name <- here::here("tests/testthat/test_data/mss1_i1.Rds")
 mssearch1 <- readRDS(file_name)
 
 test_that("MSSearch works", {
@@ -126,7 +126,7 @@ test_that("MSSearch works", {
   })
 
 #### test MSSearch Single Crit ("I") + Restarts + Start: oK ####
-file_name <- here::here("tests/testthat/test_data/mss1sol_i1.RDs")
+file_name <- here::here("tests/testthat/test_data/mss1sol_i1.Rds")
 mssearch1 <- readRDS(file_name)
 
 test_that("MSSearch works", {

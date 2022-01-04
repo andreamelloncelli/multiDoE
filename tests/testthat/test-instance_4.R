@@ -1,4 +1,4 @@
-setwd("C:/Users/Francesca/Desktop/new1/multiDoE")
+setwd(here::here())
 options(digits = 10)
 
 # setting
@@ -121,11 +121,12 @@ test_that("MSOpt works", {
   )
 })
 
-test_that("Score works",{expect_equal(Score(msopt, example),
-                                      c(0.511761111700404, 0.426046825986118,
-                                        0.097706484969153, 0.179635486851658,
-                                        0.096282604232556, 0.118533289486711),
-                                      tolerance = 0.0000000001)
+test_that("Score works",{
+  expect_equal(Score(msopt, example),
+               c(0.511761111700404, 0.426046825986118,
+                 0.097706484969153, 0.179635486851658,
+                 0.096282604232556, 0.118533289486711),
+               tolerance = 0.0000000001)
 })
 
 # #### test MSSearch Single Crit: OK ####
@@ -194,5 +195,5 @@ test_that("runTPLSearch works", {
                        restInit, "RngSeed", i),
                list("ar" = ar, "stats" = stats, "megaAR" = megaAR)
   )
-}
-)
+})
+

@@ -1,4 +1,4 @@
-setwd("C:/Users/Francesca/Desktop/new1/multiDoE")
+setwd(here::here())
 options(digits = 10)
 
 # setting
