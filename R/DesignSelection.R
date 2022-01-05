@@ -128,8 +128,8 @@ plotPareto2 <- function(ar, x, y, z = NULL, mode = T){
   } else if (is.null(z) == F & mode == F) { # 2d + color
     ggplot(data = df, mapping = aes_string(x = x, y = y)) +
       geom_point(aes_string(colour = z), shape = 19) +
-      scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
-      scale_y_continuous(breaks = scales::pretty_breaks(n = 10))
+      scale_x_continuous(breaks = scales::pretty_breaks(n = 6)) +
+      scale_y_continuous(breaks = scales::pretty_breaks(n = 8))
   } else {
     stop("Number of criteria not valid")
   }
