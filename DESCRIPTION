@@ -13,11 +13,13 @@ Suggests:
     testthat (>= 3.0.0),
     usethis,
     devtools,
-    markdown, 
-    here
+    markdown,
+    here,
+    rmarkdown
 Config/testthat/edition: 3
 Imports:
     pracma,
     logr,
-    rgl
+    rgl,
+    assertthat
 RoxygenNote: 7.1.2

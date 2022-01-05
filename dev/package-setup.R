@@ -51,6 +51,8 @@ usethis::use_readme_md( open = FALSE )
 
 ## Add a package
 usethis::use_package( "usethis" )
+usethis::use_package( "assertthat" )
+usethis::use_package( "rmarkdown", type = "Suggests" )
 # remeber to add it to ROXYGEN or NAMESPACE:
 #' @import dplyr  # ROXYGEN
 #' import(dplyr)  # NAMESPACE

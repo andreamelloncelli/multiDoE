@@ -58,7 +58,7 @@
 #' ones for the units in stratum \eqn{i} and \eqn{b_i = \prod_{j = 1}^{i}n_j}.
 #' Finally, the vector \eqn{\varepsilon_i \sim N(0,\sigma_i^2I_{b_i})} is a
 #' \eqn{b_i}-dimensional vector containing the random effects, which are all
-#' incorrelated. The variance components \eqn{\sigma^{2}_{i} (i = 1, \dots, s)}
+#' uncorrelated. The variance components \eqn{\sigma^{2}_{i} (i = 1, \dots, s)}
 #' have to be estimated and this is usually done by using the REML method.
 #' The best linear unbiased estimator for the parameter vector \eqn{\beta} is
 #' the generalized least square estimator:
@@ -109,7 +109,7 @@
 #'
 #' @return \code{MSOpt} returns a list containing the following components:
 #' \item{facts}{The argument \code{facts}.}
-#' \item{nfacts}{An integer. The number of expermental factors (bloking factors
+#' \item{nfacts}{An integer. The number of experimental factors (blocking factors
 #' are excluded from the count).}
 #' \item{nstrat}{An integer. The number of strata.}
 #' \item{units}{The argument \code{units}.}
@@ -304,6 +304,10 @@ colprod <- function(X) {
 
 Score <- function(msopt, settings) {
 
+  assertthat::assert_that(
+    msopt$nfacts == ncol(settings)
+  )
+
   switch(msopt$model,
          "main" = {
            X <- cbind(rep(1, msopt$runs), settings)
@@ -316,10 +320,12 @@ Score <- function(msopt, settings) {
            },
          )
 
+  # X: design matrix, dim: (N, p)
+  # B: beta information matrix
+  # p = dim(X)[2] : number of parameters
   B <- t(X) %*% msopt$Vinv %*% X
   determ <- det(B)
   scores <- as.vector(matrix(Inf, length(msopt$crit)))
-
 
   if (rcond(B) > 1e-5 & determ > 0) {
 

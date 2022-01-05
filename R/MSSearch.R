@@ -45,10 +45,13 @@
 #' }
 #'
 #' @export
-
-
 MSSearch <- function(msopt, alpha, ...) {
   varargin <- list(...)
+
+  assertthat::assert_that(
+    length(alpha) == msopt$ncrit,
+    msg = "Vector 'alpha' must have as many elements as the 'number of criteria' considered"
+  )
 
   # default parameters
   restarts <- 1
