@@ -1,16 +1,13 @@
 #' MSOpt
 #'
 #' @description The \code{MSOpt} function allows the user to define the
-#' structure of experiment, the set of optimization criteria and the a priori
-#' model to be considered. The output
-#'
-#'
-#' creates a list object containing
-#' the main information on the experiment settings and the optimization
-#' criteria to be considered. According to the declared criteria, it also
-#' provides the basic matrices for their implementation, such as moment matrices.
-#' \code{MSOpt} returns input objects of the \code{\link[multiDoE]{Score}} and
-#' \code{\link[multiDoE]{MSSearch}} functions of the multiDoE package.
+#' structure of the experiment, the set of optimization criteria and the a priori
+#' model to be considered. The output is a list containing all information about
+#' the settings of the experiment. According to the declared criteria, the list
+#' also contains the basic matrices for their implementation, such as
+#' information matrix, matrix of moments and matrix of weights. This function
+#' returns the \code{msopt} argument of the \code{\link[MultiDoE]{Score}} and
+#' \code{\link[MultiDoE]{MSSearch}} functions of the \code{MultiDoE} package.
 #'
 #' @usage MSOpt(facts, units, levels, etas, criteria, model)
 #'
@@ -18,13 +15,14 @@
 #' across strata. Each item in the list represents a stratum and the first item
 #' is the highest stratum of the multi-stratum structure of the experiment.
 #' Within the vectors, experimental factors are indicated by progressive integer
-#' from 1 to the total number of experimental factors, starting from the highest
-#' strata. Blocking factors are denoted by empty vectors.
+#' from 1 (the first factor of the first stratum) to the total number of
+#' experimental factors (the last factor of the last stratum), starting from the
+#' highest strata. Blocking factors are differently denoted by empty vectors.
 #'
-#' @param units A list containing the number of units in each stratum. For
-#' stratum i, the number of experimental units within each unit of the previous
-#' stratum (i-1) is indicated. \code{length(units)} must be equal to
-#' \code{length(facts)}.
+#' @param units A list. The i-th element (\eqn{n_i}) is the number of experimental
+#' units within each unit of the previous stratum (i-1), starting with the
+#' highest stratum and omitting the \eqn{0} stratum defined as the entire
+#' experiment (\eqn{n_0 = 1}).
 #'
 #' @param levels A vector containing the number of available levels for each
 #' experimental factor (blocking factors are excluded). If all the experimental
