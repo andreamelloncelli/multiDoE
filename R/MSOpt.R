@@ -19,10 +19,10 @@
 #' experimental factors (the last factor of the last stratum), starting from the
 #' highest strata. Blocking factors are differently denoted by empty vectors.
 #'
-#' @param units A list. The i-th element (\eqn{n_i}) is the number of experimental
-#' units within each unit of the previous stratum (i-1), starting with the
+#' @param units A list. The i-th element (\eqn{n_i}{n_i}) is the number of experimental
+#' units within each unit of the previous stratum \eqn{(i-1)}, starting with the
 #' highest stratum and omitting the \eqn{0} stratum defined as the entire
-#' experiment (\eqn{n_0 = 1}).
+#' experiment (\eqn{n_0 = 1}{n_0 = 1}).
 #'
 #' @param levels A vector containing the number of available levels for each
 #' experimental factor (blocking factors are excluded). If all the experimental
