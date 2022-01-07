@@ -1,6 +1,11 @@
 #' MSOpt
 #'
-#' @description The \code{MSOpt} function creates a list object containing
+#' @description The \code{MSOpt} function allows the user to define the
+#' structure of experiment, the set of optimization criteria and the a priori
+#' model to be considered. The output
+#'
+#'
+#' creates a list object containing
 #' the main information on the experiment settings and the optimization
 #' criteria to be considered. According to the declared criteria, it also
 #' provides the basic matrices for their implementation, such as moment matrices.
