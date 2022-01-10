@@ -1,33 +1,43 @@
 #' MSSearch
 #'
-#' @description The \code{MSSearch} function implements a procedure for finding
-#' the optimal experimental design based on minimizing the following
-#' scalarization between criteria:
-#' \deqn{w = alpha * (Crit - CritTR) / CritSC}.
-#' \emph{alpha} is the vector of the relative weights between the criteria;
-#' \emph{Crit} is the vector of criteria values and \emph{CritTR} and \emph{CritSC}
-#' are optional normalization factors.
-#'
-#' The \code{MSSearch} function implements the single-objective local search
-#' component of the MS-TPLS algorithm, for the construction of optimal experimental
-#' designs with a multi-objective approach.
+#' @description The \code{MSSearch} function implements the extension of the
+#' coordinate-exchange procedure proposed by Sambo, Borrotti, Mylona e Gilmour (2016)
+#' called MS-Opt. This function can be used for the construction of optimal
+#' multi-stratum experimental design considering one or more criteria (at most 6
+#' criteria simultaneously).
+#' The implemented algorithm seeks to minimize the following scalarization between criteria:
+#' \deqn{f_W = \sum_{c \in C}{\alpha_cf_c(d; \eta)=\overline{\alpha} \cdot \overline{f}}, \quad \sum_{c \in C}\alpha_c = 1}{%
+#' fW = \sum{c in C}{\alpha_c f_c(d;\eta)=\overline{\alpha} \cdot \overline{f}}, \sum{c in C}\alpha_c = 1,}
+#' where \eqn{c} is the set of criteria to be minimized, \eqn{f_c} is the objective function
+#' for the \eqn{c} criterion and \eqn{\overline{\alpha}} is the vector that controls
+#' the relative weights of the objective functions. When there's a single criterion
+#' of interest the function \code{MSSearch} corresponds to the single-objective local
+#' search component of the MS-TPLS algorithm.
 #'
 #' @usage MSSearch(msopt, alpha, "Start", sol, "Restarts", r, "Normalize",
 #' c(CritTR, CritSC )))
 #'
-#' @param msopt A \code{\link[multiDoE]{MSOpt}} object.
+#' @param msopt A list as returned by the \code{\link[multiDoE]{MSOpt}} function.
 #' @param alpha A vector of weights, whose elements must add up to one.
-#' \code{length(\alpha)} must be equal to the number of criteria considered.
-#' @param ... optional arguments (see below)
+#' \code{length(\eqn{\alpha})} must be equal to the number of criteria considered.
+#' @param ... optional arguments (see below).
 #'
 #' @details Additional arguments can be specified as follows:
 #' \itemize{
 #' \item \code{'Start', sol}: a string and a matrix, used in pair. They provide
-#' a starting solution (\code{sol}), or initial design, to the algorithm. By
-#' default the initial solution is generate at random .
-#' \item \code{'Restarts', r }: a string and an integer, used in pair. They restart
-#' the algorithm \code{r} times and finally the best solution is considered. By
-#' default \eqn{r = 1}.
+#' a starting solution (\code{sol}) or initial design to the algorithm. By
+#' default the initial solution is randomly generated following the SampleDesign()
+#' procedure described in Sambo, Borrotti, Mylona and Gilmour (2016).
+#'
+#' \item \code{'Restarts', r }: a string and an integer, used in pair. When \code{r=1},
+#' the default value, the procedure implemented in \code{MSSearch} is a local search
+#' algorithm optimizing the objective function \eqn{f_W} starting from one initial
+#' design in the design space. This parameter allows to restart the algorithm \code{r} times.
+#' If no initial design is passed, for each iteration, a different starting solution
+#' is generated, letting the probability to find a global minimum be higher.
+#' The design returned by the algorithm is the one that minimizes \eqn{f_W} across
+#' all the iterations.
+#'
 #' \item \code{'Normalize', c(CritTR, CritSC)}: a string and a vector. The second
 #' is the vector the optional normalization factors. \code{CritTR} and \code{CritSC}
 #' are vectors of length equal to the number of criteria, whose default elements
