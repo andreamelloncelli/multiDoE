@@ -104,8 +104,10 @@ optSingleCrit <- function(ar) {
 #' @return The Pareto front chart.
 #' @export
 
-plotPareto <- function(ar) {
 
+plotPareto <- function(ar, x, y, z = NULL, mode = T){
+
+  # data.frame
   if (ar$nsols == 1) {
     nCrit <- length(ar$scores)
     df <- as.data.frame(t(ar$scores))
@@ -114,17 +116,34 @@ plotPareto <- function(ar) {
     df <- as.data.frame(ar$scores)
   }
 
-  if (nCrit == 2) {
-    ggplot(df, aes_string(x = colnames(df)[1],
-                    y = colnames(df)[2])) + geom_point()
-  } else if (nCrit == 3) {
-    print(df)
-    scatterplot3d(df[, 1], df[, 2], df[,3])
-    # rgl::scatter3d(df[, 1], df[, 2], df[,3])
+  # 2d
+  if (is.null(z)) {
+    ggplot(df, aes_string(x = x, y = y)) + geom_point() +
+      scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
+      scale_y_continuous(breaks = scales::pretty_breaks(n = 10))
+  } else if (is.null(z) == F & mode == T) {   # 3d interactive
 
+    fig <- plot_ly(data = df, type="scatter3d",mode='markers',x = ~ df[[x]],
+                   y = ~ df[[y]], z = ~ df[[z]],hoverinfo = 'text',
+                   marker = list(size = 5),
+                   text = ~paste(" ",x,": ", round(df[[x]], 6), '<br>', y, ": ",
+                                 round(df[[y]], 6), '<br>', z, ": ", round(df[[z]], 6)))
+    fig <- fig %>% layout(scene = list(xaxis = list(title = x),
+                                       yaxis = list(title = y),
+                                       zaxis = list(title = z)))
+    fig
+
+  } else if (is.null(z) == F & mode == F) {   # 3d = 2d + color
+    ggplot(data = df, mapping = aes_string(x = x, y = y)) +
+      geom_point(aes_string(colour = z), shape = 19) +
+      scale_x_continuous(breaks = scales::pretty_breaks(n = 6)) +
+      scale_y_continuous(breaks = scales::pretty_breaks(n = 8))
   } else {
     stop("Number of criteria not valid")
   }
 }
+
+
+
 
 
