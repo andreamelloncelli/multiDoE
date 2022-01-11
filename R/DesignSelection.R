@@ -23,9 +23,6 @@
 #' }
 #
 #' @export
-
-
-
 optMultiCrit <- function(ar, ...) {
 
   varargin <- list(...)
@@ -103,8 +100,6 @@ optSingleCrit <- function(ar) {
 #'
 #' @return The Pareto front chart.
 #' @export
-
-
 plotPareto <- function(ar, x, y, z = NULL, mode = T){
 
   # data.frame
