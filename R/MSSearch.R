@@ -1,58 +1,76 @@
 #' MSSearch
 #'
-#' @description The \code{MSSearch} function implements the extension of the
-#' coordinate-exchange procedure proposed by Sambo, Borrotti, Mylona e Gilmour (2016)
-#' called MS-Opt. This function can be used for the construction of optimal
-#' multi-stratum experimental design considering one or more criteria (at most 6
-#' criteria simultaneously).
-#' The implemented algorithm seeks to minimize the following scalarization between criteria:
-#' \deqn{f_W = \sum_{c \in C}{\alpha_cf_c(d; \eta)=\overline{\alpha} \cdot \overline{f}}, \quad \sum_{c \in C}\alpha_c = 1}{%
-#' fW = \sum{c in C}{\alpha_c f_c(d;\eta)=\overline{\alpha} \cdot \overline{f}}, \sum{c in C}\alpha_c = 1,}
+#' @description The \code{MSSearch} function can be used to obtain an optimal
+#' multi-stratum experimental design considering one or more optimization criteria,
+#' up to a maximum of six criteria simultaneously. \cr
+#' This function implements the procedure MS-Opt proposed by Sambo, Borrotti,
+#' Mylona e Gilmour (2017) as an extension of the Coordinate-Exchange Algorithm
+#' for constructing exact optimal experimental designs. This innovative procedure,
+#' instead of minimizing a single objective function as in the CE algorithm,
+#' seeks to minimize the following scalarization of the objective functions for
+#' all criteria under consideration:
+#' \deqn{f_W = \sum_{c \in C}{\alpha_cf_c(d; \eta)=\overline{\alpha} \cdot \overline{f}},}{%
+#' f_W = \sum{c in C}(\alpha_c*f_c(d;\eta)) = \overline{\alpha} \overline{f}}
+#' with
+#' \deqn{\sum_{c\inC}(\alpha_c) = 1}{\sum{c in C}(\alpha_c) = 1,}
 #' where \eqn{c} is the set of criteria to be minimized, \eqn{f_c} is the objective function
 #' for the \eqn{c} criterion and \eqn{\overline{\alpha}} is the vector that controls
-#' the relative weights of the objective functions. When there's a single criterion
-#' of interest the function \code{MSSearch} corresponds to the single-objective local
-#' search component of the MS-TPLS algorithm.
+#' the relative weights of the objective functions.
 #'
-#' @usage MSSearch(msopt, alpha, "Start", sol, "Restarts", r, "Normalize",
+#' @usage MSSearch(msopt, alpha, ...)
+#'
+#' MSSearch(msopt, alpha, "Start", sol, "Restarts", r, "Normalize",
 #' c(CritTR, CritSC )))
 #'
 #' @param msopt A list as returned by the \code{\link[multiDoE]{MSOpt}} function.
-#' @param alpha A vector of weights, whose elements must add up to one.
-#' \code{length(\eqn{\alpha})} must be equal to the number of criteria considered.
+#' @param alpha A vector of weights, whose elements must sum to one.
+#' \code{length(alpha)} must be equal to the number of criteria considered, that
+#' is, it must be equal to the length of the \code{criteria} element of the
+#' \code{msopt} argument.
 #' @param ... optional arguments (see below).
 #'
-#' @details Additional arguments can be specified as follows:
+#' @details INSERIRE PARTE SULLA NORMALIZZAZIONE.
+#'
+#' Additional arguments can be specified as follows:
 #' \itemize{
-#' \item \code{'Start', sol}: a string and a matrix, used in pair. They provide
+#' \item \code{'Start', sol}: A string and a matrix, used in pair. They provide
 #' a starting solution (\code{sol}) or initial design to the algorithm. By
-#' default the initial solution is randomly generated following the SampleDesign()
-#' procedure described in Sambo, Borrotti, Mylona and Gilmour (2016).
+#' default the initial solution is randomly generated following the
+#' \emph{SampleDesign} procedure described in Sambo, Borrotti, Mylona and Gilmour
+#' (2017).
 #'
-#' \item \code{'Restarts', r }: a string and an integer, used in pair. When \code{r=1},
-#' the default value, the procedure implemented in \code{MSSearch} is a local search
-#' algorithm optimizing the objective function \eqn{f_W} starting from one initial
-#' design in the design space. This parameter allows to restart the algorithm \code{r} times.
-#' If no initial design is passed, for each iteration, a different starting solution
-#' is generated, letting the probability to find a global minimum be higher.
-#' The design returned by the algorithm is the one that minimizes \eqn{f_W} across
-#' all the iterations.
+#' \item \code{'Restarts', r }: A string and an integer, used in pair. When
+#' \code{r=1}, the default value, the procedure implemented in \code{MSSearch}
+#' results in a local search algorithm that optimizes the objective function
+#' \eqn{f_W} starting from one initial design in the design space. These
+#' parameters allows to restart the algorithm \code{r} times. If no initial design
+#' is passed a different starting solution is generated for each iteration, letting
+#' the probability to find a global minimum be higher. \code{Mssearch} returns
+#' the solution that minimizes \eqn{f_W} across all the \code{r} iterations.
 #'
-#' \item \code{'Normalize', c(CritTR, CritSC)}: a string and a vector. The second
-#' is the vector the optional normalization factors. \code{CritTR} and \code{CritSC}
-#' are vectors of length equal to the number of criteria, whose default elements
-#' are 0 and 1 respectively.
+#' \item \code{'Normalize', c(CritTR, CritSC)}: A string and a vector, used in
+#' pair. By specifying the \code{CritTR} and \code{CritSC} vectors, the user can
+#' establish the normalization factors to be applied to each objective function
+#' before evaluating \eqn{f_W}. \code{CritTR} and \code{CritSC} are vectors of
+#' length equal to the number of criteria, whose default elements are 0 and 1
+#' respectively.
 #' }
 #'
 #' @return \code{MSSearch} returns a list, whose elements are:
 #' \itemize{
-#' \item \code{optsol} a design matrix. The best solution found.
-#' \item \code{optscore} a vector containing the criteria scores.
-#' \item \code{feval} an integer representing the number of score function
-#' evaluations.
-#' \item \code{trend} a vector of length \code{r} containing the minimum value of
-#' \emph{w} for each iteration.
+#' \item{\code{optsol}: A design matrix. The best solution found.}
+#' \item{\code{optscore}: A vector containing the criteria scores for
+#' \code{optsol}.}
+#' \item{\code{feval}: An integer representing the number of score function
+#' evaluations (number of \eqn{f_W} evaluations over all iterations).}
+#' \item{\code{trend}: A vector of length \code{r}. The \eqn{i}-th element is
+#' the value that minimizes \eqn{f_W} for the \eqn{i}-th iteration.}
 #' }
+#'
+#' @references
+#' M. Borrotti and F. Sambo and K. Mylona and S. Gilmour. A multi-objective
+#' coordinate-exchange two-phase local search algorithm for multi-stratum
+#' experiments. Statistics & Computing, 2017.
 #'
 #' @export
 

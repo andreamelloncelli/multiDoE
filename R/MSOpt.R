@@ -45,7 +45,9 @@
 #'   \item{"Ds" : A-optimality}
 #'   \item{"As" : As-optimality}
 #' }
-#' More detailed information on the available criteria is given under \strong{Details}.
+#' These criteria are well explained in Borrotti, Sambo, Mylona and Gilmour (2017).
+#' More detailed information on the available criteria is also given under
+#' \strong{Details}.
 #'
 #' @param model A string which indicates the type of model, among ``main",
 #' ``interaction" and ``quadratic".
@@ -54,132 +56,147 @@
 #' used in the multi-objective approach of the \code{MultiDoE} package. \cr
 #'
 #' For an experiment with \eqn{N} runs and \eqn{s} strata, with stratum \eqn{i}
-#' having \eqn{n_i}{ni} units within each unit at previous stratum (\eqn{i-1})
-#' and stratum 0 being defined as the entire experiment (\eqn{n_0 = 1}{n0 = 1}),
-#' the general form of the model can be written as:
-#' \deqn{y = X\beta + \sum\limits_{i = 1}^{s} Z_i\varepsilon_i}{y = X\beta +
-#' \sum{i=1}^s Zi \epsiloni}
+#' having \eqn{n_i}{ni} units within each unit at stratum (\eqn{i-1}) and
+#' stratum 0 being defined as the entire experiment (\eqn{n_0 = 1}{n0 = 1}), the
+#' general form of the model can be written as:
 #'
-#' where \eqn{y} is a \eqn{N}-dimensional vector of responses
-#' (\eqn{N = \prod_{j = 1}^{s}n_j}{N = \prod{j = 1}^{s}nj}), \eqn{X} is the
-#' \eqn{N by p} model matrix,\eqn{\beta} is a \eqn{p}-dimensional vector
-#' containing the \eqn{p} fixed model parameters,
-#' \eqn{Z_i}{Zi} is an \eqn{N by b_i}{N by bi} indicator matrix of zero and
-#' ones for the units in stratum \eqn{i} (i.e. the (\eqn{k,l})th element
-#' of \eqn{Z_i}{Zi} is one if the \eqn{k}th run belongs to the \eqn{l}{l}th block in
-#' stratum \eqn{i} and zero otherwise) and
+#' \deqn{y = X\beta + \sum\limits_{i = 1}^{s} Z_i\varepsilon_i}{y = X\beta +
+#' \sum{i=1}^{s} Zi \epsiloni}
+#'
+#' where
+#' \eqn{y} is an \eqn{N}-dimensional vector of responses (\eqn{N = \prod_{j = 1}^{s}n_j}{N = \prod{j = 1}^{s}nj}),
+#' \eqn{X} is an \eqn{N} by \eqn{p} model matrix,
+#' \eqn{\beta} is a \eqn{p}-dimensional vector containing the \eqn{p} fixed model parameters,
+#' \eqn{Z_i}{Zi} is an \eqn{N} by \eqn{b_i}{bi} indicator matrix of \eqn{0} and
+#'     \eqn{1} for the units in stratum \eqn{i} (i.e. the (\eqn{k,l})th element
+#'     of \eqn{Z_i}{Zi} is \eqn{1} if the \eqn{k}th run belongs to the \eqn{l}th
+#'     block in stratum \eqn{i} and \eqn{0} otherwise) and
 #' \eqn{b_i = \prod_{j = 1}^{i}n_j}{bi = \prod{j = 1}^{i}nj}.
-#' Finally, the vector
-#' \eqn{\varepsilon_i \sim N(0,\sigma_i^2I_{b_i})}{\epsiloni ~ N(0, \sigmai^2 I{bi})} is a
-#' \eqn{b_i}{bi}-dimensional vector containing the random effects, which are all
-#' uncorrelated. The variance components \eqn{\sigma^{2}_{i} (i = 1, \dots, s)}{\sigma^{2}{i} (i = 1, \dots, s)}
-#' have to be estimated and this is usually done by using the REML method.
+#' Finally, the vector \eqn{\varepsilon_i \sim N(0,\sigma_i^2I_{b_i})}{%
+#' \epsiloni ~ N(0, \sigmai^{2} I_{bi})} is a \eqn{b_i}{bi}-dimensional vector
+#' containing the random effects, which are all uncorrelated. The variance
+#' components \eqn{\sigma^{2}_{i} (i = 1, \dots, s)}{\sigmai^{2}
+#' (i = 1, \dots, s)} have to be estimated and this is usually done using
+#' the REML (\emph{REstricted Maximum Likelihood}) method.
 #'
 #' The best linear unbiased estimator for the parameter vector \eqn{\beta} is
 #' the generalized least square estimator:
-#' \deqn{\hat{\beta}_{GLS} = (X'V^{-1}X)^{-1}X'V^{-1}y}{\hat{\beta}{GLS} = (X'V^{-1}X)^{-1}X'V^{-1}y.}
-#' This estimator has variance-covariance matrix:
-#' \deqn{Var(\hat{\beta}_{\emph{GLS}}) = \sigma^{2}(X'V^{-1}X)^{-1}}{Var(\hat{\beta}{GLS}) = \sigma^{2}(X'V^{-1}X)^{-1},}
-#' where \eqn{V = \sum\limits_{i = 1}^{s}\eta_i Z_i'Zi}{V = \sum{i = 1}^{s}\etai Zi'Zi},
-#' \eqn{\eta_i = \frac{\sigma_i^{2}}{\sigma^{2}}}{\etai = \sigmai^{2}/\sigma^{2}} and
-#' \eqn{\sigma^{2} = \sigma^{2}_{s}}{\sigma^{2} = \sigma^{2}s}.
-#' The variance components \eqn{\sigma^{2}_i (i = 1, \dots, s)}{\sigma^{2}i (i = 1, \dots, s)} have to be
-#' estimated. Finally, let
-#' \eqn{M = X'V^{-1}X} be the information matrix of \eqn{\hat{\beta}} when
-#' the GLS estimator is used to estimate model parameters in a multi-stratum
-#' experiment.
+#' \deqn{ \hat{\beta}_{GLS} = (X'V^{-1}X)^{-1}X'V^{-1}y}{%
+#'        hat{\beta}_{GLS} = (X' V^{-1} X)^{-1} X' V^{-1} y.}
 #'
+#' This estimator has variance-covariance matrix:
+#' \deqn{Var(\hat{\beta}_{\emph{GLS}}) = \sigma^{2}(X'V^{-1}X)^{-1}}{%
+#'       Var(hat{\beta}_{GLS}) = \sigma^{2} (X' V^{-1} X)^{-1}, }
+#'
+#' where
+#' \eqn{V = \sum\limits_{i = 1}^{s}\eta_i Z_i'Zi}{V = \sum{i = 1}^{s} (\etai Zi'Zi)},
+#' \eqn{\eta_i = \frac{\sigma_i^{2}}{\sigma^{2}}}{\etai = \sigmai^{2} / \sigma^{2}} and
+#' \eqn{\sigma^{2} = \sigma^{2}_{s}}{\sigma^{2} = \sigmas^{2}}.
+#'
+#' Let \eqn{M = (X' V^{-1} X)} be the information matrix of \eqn{\hat{\beta}}{%
+#' hat{\beta}}.
 #'
 #' \itemize{
-#' \item{ \strong{\emph{D}-optimality.} The \emph{D}-optimality criterion is based on
-#' minimizing the generalized variance of the parameter estimates. This can be
-#' done either by minimizing the determinant of the variance-covariance matrix
-#' of \eqn{\hat{\beta}} or by maximizing the determinant of M. \cr
+#' \item{ \strong{\emph{D}-optimality.} It is based on minimizing the generalized
+#' variance of the parameter estimates. This can be done either by minimizing the
+#' determinant of the variance-covariance matrix of the factor effects' estimates
+#' or by maximizing the determinant of \eqn{M}. \cr
 #' The objective function to be minimized is:
-#' \deqn{f_{D}(d; \eta) = \left(\frac{1}{\det(M)}\right)^{1/p}}{f_D(d; \eta) = (1 / |M|)^{1/p},}
+#' \deqn{f_{D}(d; \eta) = \left(\frac{1}{\det(M)}\right)^{1/p}}{%
+#'       f_D(d; \eta) = (1 / det(M))^{1/p},}
 #' where \eqn{d} is the design with information matrix \eqn{M} and \eqn{p} is the
 #' number of model parameters.}
 #'
 #' \item{ \strong{\emph{A}-optimality.} This criterion is based on
 #' minimizing the average variance of the estimates of the regression coefficients.
 #' The sum of the variances of the parameter estimates (elements of
-#' \eqn{\hat{\beta}}) is taken as a measure, which is equivalent to the trace of
-#' \eqn{M^{-1}}. \cr
+#' \eqn{\hat{\beta}}{hat{\beta}}) is taken as a measure, which is equivalent to
+#' considering the trace of \eqn{M^{-1}}. \cr
 #' The objective function to be minimized is:
 #' \deqn{f_{A}(d; \eta) = \texttt{tr}(M^{-1})}{f_A(d; \eta) = trace(M^{-1}),}
 #' where \eqn{d} is the design with information matrix \eqn{M}}.
 #'
-#' \item{ \strong{\emph{I}-optimality.} The \emph{I}-optimality criterion seeks to
-#' minimize the average prediction variance. The objective function to be
-#' minimized is:
-#' \deqn{f_{I}(d; \eta) = \frac{\int_{\chi} f'(x)(X'V^{-1}X)^{-1}f(x)
-#' \,dx }{\int_{\chi} \,dx}}{f_I(d; \eta) = {integral_{\chi} f'(x)(X'V^{-1}X)^{-1}f(x)
-#' dx } / {integral_{\chi} dx},}
-#'
-#' where \eqn{\chi} represents the design region. \cr
-#'
-#' When there are \eqn{k} treatment factors and the experimental region is
-#' \eqn{[-1, +1]^{k}}, the objective function can also be written as:
-#' \deqn{f_{I}(d; \eta) = \texttt{tr} \left[(X'V^{-1}X)^{-1} B\right]}{f_I(d; \eta) = trace[(X'V^{-1}X)^{-1} B],}
-#' where \eqn{B = 2^{-k} \int_{\chi}f'(x)f(x) \,dx }{B = 2^{-k} integral_{\chi} f'(x)f(x) dx} is the moment matrix.}
-#' The matrix \eqn{B} has a very specific structure for a full quadratic model, as shown
-#' in Hardin and Sloane (1991).
-#'
-#' \item \strong{\emph{Id}-optimality.}
-#' This criterion seeks to minimize the average prediction variance excluding the
-#' intercept from the set of parameters of interest.
-#' The objective function to be minimized is the same as the
-#' \emph{I}-optimality criterion, where the first row and columns of the B matrix
-#' are deleted.
-#'
-#' \item \strong{\emph{Ds}-optimality.}
-#' The \emph{Ds}-optimality criterion, as the \emph{D}-optimality criterion, seeks
-#' to minimize the generalized variance of the parameter estimates excluding the
-#' intercept from the set of parameters of interest.
+#' \item{ \strong{\emph{I}-optimality.} It seeks to minimize the average
+#' prediction variance. \cr
 #' The objective function to be minimized is:
-#' \deqn{f_{D_s}(d; \eta) = |(M_i^{-1})_{22}|}{f_Ds(d; \eta) = |(Mi^{-1})_{22}|.}
+#' \deqn{f_{I}(d; \eta) = \frac{\int_{\chi} f'(x)(M)^{-1}f(x)\,dx }{\int_{\chi} \,dx}}{%
+#'       f_I(d; \eta) = (integral_{\chi} f'(x)(M)^{-1}f(x) dx) / (integral_{\chi} dx), }
+#' where \eqn{d} is the design with information matrix \eqn{M} and \eqn{\chi}
+#' represents the design region. \cr
+#' It can be proved that when there are \eqn{k} treatment factors each with two
+#' levels, so that the experimental region is of the form \eqn{[-1, +1]^{k}},
+#' the objective function can also be written as:
+#' \deqn{f_{I}(d; \eta) = \text{trace} \left[(M)^{-1} B\right]}{%
+#'       f_I(d; \eta) = trace[(M)^{-1} B],}
+#' where \eqn{d} is the design with information matrix \eqn{M} and
+#' \eqn{B = 2^{-k} \int_{\chi}f'(x)f(x) \,dx }{%
+#'      B = 2^{-k} (integral_{\chi} f'(x)f(x) dx)} is the moments matrix.
+#' To know the implemented expression for calculating the moments matrix for a
+#' cuboidal design region see Hardin and Sloane (1991).}
 #'
-#'
-#' \item \strong{\emph{As}-optimality.}
-#' This criterion, as the \emph{A}-optimality criterion, is based on minimizing
-#' the average variance of the estimates of the regression coefficients excluding the
-#' intercept from the set of parameters of interest.
+#' \item{ \strong{\emph{Ds}-optimality.} Its aim is to minimize the generalized
+#' variance of the parameter estimates by excluding the intercept from the set
+#' of parameters of interest. Let \eqn{\beta_i}{\betai} be the model parameter
+#' vector of dimension (\eqn{p_i - 1}{pi-1}) to be estimated in stratum \eqn{i}.
+#' Let \eqn{X_i}{Xi} be the associated model matrix \eqn{m_i}{mi} by \eqn{(p_i-1)}{%
+#' (pi-1)}, where \eqn{m_i}{mi} is the number of units in stratum \eqn{i}.
+#' The partition of interest of the matrix of variances and covariances of
+#' \eqn{\hat{\beta}_i}{hat{\betai}} is
+#' \deqn{(M_i^{-1})_{22} = [X'_i (I - \frac{1}{m_i} 11^{'})X_i]^{-1}}{%
+#' (Mi^{-1})_{22} = [Xi' (I - (1 / mi) 11') Xi]^{-1}.} \cr
 #' The objective function to be minimized is:
-#' \deqn{f_{A_s}(d; \eta) = \texttt{tr}(W_i(M_i^{-1})_{22})}{f_As(d; \eta) = trace(Wi(Mi^{-1})_{22}),}
+#' \deqn{f_{D_s}(d; \eta) = |(M_i^{-1})_{22}|}{f_Ds(d; \eta) = |(Mi^{-1})_{22}|.}}
+#'
+#' \item{\strong{\emph{As}-optimality.} This criterion is based on minimizing
+#' the average variance of the estimates of the regression coefficients excluding
+#' the intercept from the set of parameters of interest. \cr
+#' With reference to the notation introduced for the previous criterion, the
+#' objective function to be minimized is:
+#' \deqn{f_{A_s}(d; \eta) = \texttt{tr}(W_i(M_i^{-1})_{22})}{%
+#'       f_As(d; \eta) = trace(Wi (Mi^{-1})_{22}),}
 #' where \eqn{W_i}{Wi} is a diagonal matrix of weights, with the weights scaled so that
-#' the trace of \eqn{W_i}{Wi} is equal to 1.
-#' }
+#' the trace of \eqn{W_i}{Wi} is equal to 1.}
+#'
+#' \item{ \strong{\emph{Id}-optimality.} It seeks to minimize the average
+#' prediction variance excluding the intercept from the set of parameters of
+#' interest. \cr
+#' The objective function to be minimized is the same as the
+#' \emph{I}-optimality criterion where the first row and columns of the \eqn{B}
+#' matrix are deleted.}
+#'}
 #'
 #'
 #'
 #' @return \code{MSOpt} returns a list containing the following components:
 #' \itemize{
 #' \item{\code{facts}: The argument \code{facts}.}
-#' \item{\code{nfacts}: An integer. The number of experimental factors (blocking
-#' factors are excluded from the count).}
+#' \item{\code{nfacts}: An integer. The number of experimental factors (blocking factors are excluded from the count).}
 #' \item{\code{nstrat}: An integer. The number of strata.}
 #' \item{\code{units}: The argument \code{units}.}
 #' \item{\code{runs}: An integer. The number of runs.}
 #' \item{\code{etas}: The argument \code{etas}.}
 #' \item{\code{avlev}: A list showing the available levels for each experimental factor.}
-#' \item{\code{levs}: A vector showing the number of available levels for each
-#' experimental factor.}
+#' \item{\code{levs}: A vector showing the number of available levels for each experimental factor.}
 #' \item{\code{Vinv}: The inverse of the variance-covariance matrix of the responses.}
 #' \item{\code{model}: The argument \code{model}.}
 #' \item{\code{crit}: The argument \code{criteria}.}
 #' \item{\code{ncrit}: An integer. The number of criteria.}
-#' \item{\code{M}: The moment matrix. Only with \emph{I-optimality} criteria.}
-#' \item{\code{M0}: The moment matrix. Only with \emph{Id-optimality} criteria.}
-#' \item{\code{W}: The diagonal matrix of weights. Only with \emph{As-optimality} criteria.} \cr
+#' \item{\code{M}: The moment matrix. Only with \emph{I}-optimality criteria.}
+#' \item{\code{M0}: The moment matrix. Only with \emph{Id}-optimality criteria.}
+#' \item{\code{W}: The diagonal matrix of weights. Only with \emph{As}-optimality criteria.
+#' This matrix assigns to each main effect and each interaction effect an absolute
+#' weight equal to 1, while to the quadratic effects it assigns an absolute weight
+#' equal to 1/4.}
 #' }
-#' More information on M, M0 and W can be found in the descriptions of the
-#' respective criteria in the \strong{Details} section.
+#'
 #'
 #' @references
-#'
 #' R. H. Hardin and N. J. A. Sloane. Computer generated minimal (and larger)
 #' response-surface designs: (II) The cube. Technical report, 1991.
 #'
+#' M. Borrotti and F. Sambo and K. Mylona and S. Gilmour. A multi-objective
+#' coordinate-exchange two-phase local search algorithm for multi-stratum
+#' experiments. Statistics & Computing, 2017.
 #'
 #' @export
 
@@ -346,13 +363,13 @@ colprod <- function(X) {
 
 #' Score
 #'
-#' The \code{Score} function returns the optimization criteria values for the
+#' The \code{Score} function returns the optimization criteria values for a
 #' given \code{\link[MultiDoE]{MSOpt}} list and design matrix.
 #'
 #' @param msopt A list as returned by the function \link[multiDoE]{MSOpt}.
 #' @param settings The design matrix for which criteria scores have to be calculated.
 #'
-#' @return Vector of optimization criteria values.
+#' @return The vector of scores.
 #' @export
 
 Score <- function(msopt, settings) {

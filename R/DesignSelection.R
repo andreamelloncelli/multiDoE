@@ -1,27 +1,30 @@
 #' optMultiCrit
 #'
-#' \code{optMultiCrit} is used to select the best solution(s) from the optimal
-#' experimental designs belonging to the Pareto front. The selection is based on
-#' minimizing the Euclidean distance between the optimal solutions and an approximate
-#' utopian point. The latter is calculated by default as the vector of the minimum
-#' criteria values found during a multi-objective optimization algorithm (\code{runTPLS}
-#' function in the \code{MultiDoE} package). Alternatively, a different point can
-#' be chosen.
+#' @description The \code{optMultiCrit} function suggests an objective criterion
+#' for the selection of the best experimental design among all Pareto front solutions.
+#' The selection is based on minimizing the euclidean distance in the criteria space
+#' between all the Pareto front designs and an approximate utopian point. By default
+#' the utopian point coordinates are the minimum value reached by every criteria
+#' during an optimization procedure (\code{\link[multiDoE]{runTPLS}}); otherwise
+#' it can be set to a specific value by the user.
 #'
-#' @param ar a list. It is an archive object containing:
-#' \itemize{
-#' \item an integer. The number of solutions.
-#' \item an integer. The number of criteria considered.
-#' \item a matrix. The score matrix associated with the solutions found.
-#' \item a list. The list of solutions (design matrices).
-#' }
+#' @param ar A list as the \code{megaAR} returned by the \code{runTPLS} function.
 #' @param ... optional argument (see below).
 #'
-#' @details
+#' @details Additional arguments can be specified as follows:
+#' \itemize{
+#' \item \code{myUtopianPoint}: A vector containing the utopian point coordinates.
+#' }
 #'
-#' @return \code{optMultiCrit} function returns a list. The first element is a list
-#' of design matrices, the second the is the matrix of the respective criteria scores.
+#' @return The \code{optMultiCrit} function returns a list whose elements are:
+#' \itemize{
+#' \item \code{solution}: The selected optimal design matrix.
+#' \item \code{score}: A vector containing the criteria scores for \code{solution}.
+#' }
+#
 #' @export
+
+
 
 optMultiCrit <- function(ar, ...) {
 
@@ -44,12 +47,20 @@ optMultiCrit <- function(ar, ...) {
 
 #' optSingleCrit
 #'
-#' @param ar
+#' @description The \code{optSingleCrit} function selects the Pareto front designs
+#' that optimizes the individually considered criteria.
 #'
-#' @return
+#' @param ar A list as the \code{megaAR} returned by the \code{runTPLS} function.
+#' @param criteria The criteria vector as the input of \code{runTPLS} function.
+#'
+#' @return A list whose \eqn{i}-th element corresponds to the solution that optimizes
+#' the \eqn{i}-th criterion in \code{criteria}. The solution is a list of two elements:
+#' \itemize{
+#' \item \code{score}: A vector containing the scores for every element in \code{criteria}.
+#' \item \code{solution}: The design matrix.
+#' }
 #' @export
 #'
-
 optSingleCrit <- function(ar) {
 
   nCrit <- dim(ar$scores)[2]
@@ -67,11 +78,31 @@ optSingleCrit <- function(ar) {
 
 #' plotPareto
 #'
-#' @param ar
+#' @description The \code{plotPareto} function returns a graphical representation
+#' (at most 3D) of the Pareto front.
 #'
-#' @return
+#' @usage plotPareto(ar, x, y)
+#'
+#' plotPareto(ar, x, y, z, mode = True)
+#'
+#' @param ar A list as the \code{megaAR} returned by the \code{runTPLS} function.
+#' @param x The criterion on the x axis. It can be one of the following: \code{"I",
+#' "Id", "D", "Ds", "A"} and \code{"As"}.
+#' @param y The criterion on the y axis. It can be one of the following: \code{"I",
+#' "Id", "D", "Ds", "A"} and \code{"As"}.
+#' @param ... optional argument (see below).
+#'
+#' @details If three criteria are considered:
+#' \itemize{
+#' \item \code{z}: The criterion on the z axis. It can be one of the following:
+#' \code{"I", "Id", "D", "Ds", "A"} and \code{"As"}.
+#' \item \code{mode}: When \code{mode=True} the function returns a 3D interactive
+#' chart. When \code{mode=False} it returns a 2D chart in which the \code{z} criteria
+#' values are represented by a color scale.
+#' }
+#'
+#' @return The Pareto front chart.
 #' @export
-#'
 
 plotPareto <- function(ar) {
 
