@@ -53,7 +53,7 @@
 #' ``interaction" and ``quadratic".
 #'
 #' @details A little notation is introduced to show the criteria that can be
-#' used in the multi-objective approach of the \code{MultiDoE} package. \cr
+#' used in the multi-objective approach of the \code{multiDoE} package. \cr
 #'
 #' For an experiment with \eqn{N} runs and \eqn{s} strata, with stratum \eqn{i}
 #' having \eqn{n_i}{ni} units within each unit at stratum (\eqn{i-1}) and
@@ -364,7 +364,7 @@ colprod <- function(X) {
 #' Score
 #'
 #' The \code{Score} function returns the optimization criteria values for a
-#' given \code{\link[MultiDoE]{MSOpt}} list and design matrix.
+#' given \code{\link[multiDoE]{MSOpt}} list and design matrix.
 #'
 #' @param msopt A list as returned by the function \link[multiDoE]{MSOpt}.
 #' @param settings The design matrix for which criteria scores have to be calculated.
