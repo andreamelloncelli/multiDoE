@@ -19,9 +19,6 @@
 #'
 #' @usage MSSearch(msopt, alpha, ...)
 #'
-#' MSSearch(msopt, alpha, "Start", sol, "Restarts", r, "Normalize",
-#' c(CritTR, CritSC )))
-#'
 #' @param msopt A list as returned by the \code{\link[multiDoE]{MSOpt}} function.
 #' @param alpha A vector of weights, whose elements must sum to one.
 #' \code{length(alpha)} must be equal to the number of criteria considered, that

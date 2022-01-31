@@ -48,7 +48,6 @@ optMultiCrit <- function(ar, ...) {
 #' that optimizes the individually considered criteria.
 #'
 #' @param ar A list as the \code{megaAR} returned by the \code{runTPLS} function.
-#' @param criteria The criteria vector as the input of \code{runTPLS} function.
 #'
 #' @return A list whose \eqn{i}-th element corresponds to the solution that optimizes
 #' the \eqn{i}-th criterion in \code{criteria}. The solution is a list of two elements:
@@ -78,25 +77,18 @@ optSingleCrit <- function(ar) {
 #' @description The \code{plotPareto} function returns a graphical representation
 #' (at most 3D) of the Pareto front.
 #'
-#' @usage plotPareto(ar, x, y)
-#'
-#' plotPareto(ar, x, y, z, mode = True)
+#' @usage plotPareto(ar, x, y, z = NULL, mode = T)
 #'
 #' @param ar A list as the \code{megaAR} returned by the \code{runTPLS} function.
 #' @param x The criterion on the x axis. It can be one of the following: \code{"I",
 #' "Id", "D", "Ds", "A"} and \code{"As"}.
 #' @param y The criterion on the y axis. It can be one of the following: \code{"I",
 #' "Id", "D", "Ds", "A"} and \code{"As"}.
-#' @param ... optional argument (see below).
-#'
-#' @details If three criteria are considered:
-#' \itemize{
-#' \item \code{z}: The criterion on the z axis. It can be one of the following:
-#' \code{"I", "Id", "D", "Ds", "A"} and \code{"As"}.
-#' \item \code{mode}: When \code{mode=True} the function returns a 3D interactive
+#' @param z The criterion on the z axis. It can be one of the following: \code{"I",
+#' "Id", "D", "Ds", "A"} and \code{"As"}.
+#' @param mode When \code{mode=True} the function returns a 3D interactive
 #' chart. When \code{mode=False} it returns a 2D chart in which the \code{z} criteria
 #' values are represented by a color scale.
-#' }
 #'
 #' @return The Pareto front chart.
 #' @export

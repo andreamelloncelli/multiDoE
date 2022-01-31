@@ -11,9 +11,6 @@
 #'
 #' @usage runTPLS(facts, units, criteria, model, iters, ...)
 #'
-#' runTPLS(facts, units, criteria, model, iters, "Etas", etas, "Levels",
-#' levels, "Restarts", restarts, "RestInit", restInit)
-#'
 #' @param facts A list of vectors representing the distribution of factors
 #' across strata. Each item in the list represents a stratum and the first item
 #' is the highest stratum of the multi-stratum structure of the experiment.
