@@ -21,7 +21,7 @@
 #' \item \code{solution}: The selected optimal design matrix.
 #' \item \code{score}: A vector containing the criteria scores for \code{solution}.
 #' }
-#
+#'
 #' @export
 optMultiCrit <- function(ar, ...) {
 
@@ -91,6 +91,10 @@ optSingleCrit <- function(ar) {
 #' values are represented by a color scale.
 #'
 #' @return The Pareto front chart.
+#'
+#' @import ggplot2
+#' @importFrom plotly plot_ly
+#'
 #' @export
 plotPareto <- function(ar, x, y, z = NULL, mode = T){
 
@@ -106,8 +110,8 @@ plotPareto <- function(ar, x, y, z = NULL, mode = T){
   # 2d
   if (is.null(z)) {
     ggplot(df, aes_string(x = x, y = y)) + geom_point() +
-      scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
-      scale_y_continuous(breaks = scales::pretty_breaks(n = 10))
+      scale_x_continuous(n.breaks = 10) +
+      scale_y_continuous(n.breaks = 10)
   } else if (is.null(z) == F & mode == T) {   # 3d interactive
 
     fig <- plot_ly(data = df, type="scatter3d",mode='markers',x = ~ df[[x]],
@@ -123,8 +127,8 @@ plotPareto <- function(ar, x, y, z = NULL, mode = T){
   } else if (is.null(z) == F & mode == F) {   # 3d = 2d + color
     ggplot(data = df, mapping = aes_string(x = x, y = y)) +
       geom_point(aes_string(colour = z), shape = 19) +
-      scale_x_continuous(breaks = scales::pretty_breaks(n = 6)) +
-      scale_y_continuous(breaks = scales::pretty_breaks(n = 8))
+      scale_x_continuous(n.breaks = 6) +
+      scale_y_continuous(n.breaks = 8)
   } else {
     stop("Number of criteria not valid")
   }

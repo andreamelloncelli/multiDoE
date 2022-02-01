@@ -1,0 +1,652 @@
+\documentclass[a4paper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\usepackage[utf8,latin1]{inputenc}
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Test of foo}}
+\par\bigskip{\large \today}
+\end{center}
+\inputencoding{utf8}
+\HeaderA{MSOpt}{MSOpt}{MSOpt}
+%
+\begin{Description}\relax
+The \code{MSOpt} function allows the user to define the
+structure of the experiment, the set of optimization criteria and the a priori
+model to be considered. The output is a list containing all information about
+the settings of the experiment. According to the declared criteria, the list
+also contains the basic matrices for their implementation, such as
+information matrix, matrix of moments and matrix of weights. This function
+returns the \code{msopt} argument of the \code{\LinkA{Score}{Score}} and
+\code{\LinkA{MSSearch}{MSSearch}} functions of the \code{multiDoE} package.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+MSOpt(facts, units, levels, etas, criteria, model)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{facts}] A list of vectors representing the distribution of factors
+across strata. Each item in the list represents a stratum and the first item
+is the highest stratum of the multi-stratum structure of the experiment.
+Within the vectors, experimental factors are indicated by progressive integer
+from 1 (the first factor of the highest stratum) to the total number of
+experimental factors (the last factor of the lowest stratum). Blocking
+factors are differently denoted by empty vectors.
+
+\item[\code{units}] A list whose \eqn{i}{}-th element, \eqn{n_i}{}, is the number of
+experimental units within each unit at the previous stratum (\eqn{i-1}{}). The
+first item in the list, \eqn{n_1}{}, represents the number of experimental
+units in the stratum \eqn{0}{}. The latter is defined as the entire experiment,
+such that \eqn{n_0 = 1}{}.
+
+\item[\code{levels}] A vector containing the number of available levels for each
+experimental factor in \code{facts} (blocking factors are excluded). If all
+experimental factors share the number of levels one integer is sufficient.
+
+\item[\code{etas}] A list specifying the ratios of error variance between subsequent
+strata. It follows that \code{length(etas)} must be equal to
+\code{length(facts)-1}.
+
+\item[\code{criteria}] A list specifying the criteria to be optimized. It can
+contain any combination of:
+\begin{itemize}
+
+\item{} "I" : I-optimality
+\item{} "Id" : Id-optimality
+\item{} "D" : D-optimality
+\item{} "A" : Ds-optimality
+\item{} "Ds" : A-optimality
+\item{} "As" : As-optimality
+
+\end{itemize}
+
+These criteria are well explained in Borrotti, Sambo, Mylona and Gilmour (2017).
+More detailed information on the available criteria is also given under
+\strong{Details}.
+
+\item[\code{model}] A string which indicates the type of model, among ``main",
+``interaction" and ``quadratic".
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+A little notation is introduced to show the criteria that can be
+used in the multi-objective approach of the \code{multiDoE} package. \\{}
+
+For an experiment with \eqn{N}{} runs and \eqn{s}{} strata, with stratum \eqn{i}{}
+having \eqn{n_i}{} units within each unit at stratum (\eqn{i-1}{}) and
+stratum 0 being defined as the entire experiment (\eqn{n_0 = 1}{}), the
+general form of the model can be written as:
+
+\deqn{y = X\beta + \sum\limits_{i = 1}^{s} Z_i\varepsilon_i}{}
+
+where
+\eqn{y}{} is an \eqn{N}{}-dimensional vector of responses (\eqn{N = \prod_{j = 1}^{s}n_j}{}),
+\eqn{X}{} is an \eqn{N}{} by \eqn{p}{} model matrix,
+\eqn{\beta}{} is a \eqn{p}{}-dimensional vector containing the \eqn{p}{} fixed model parameters,
+\eqn{Z_i}{} is an \eqn{N}{} by \eqn{b_i}{} indicator matrix of \eqn{0}{} and
+\eqn{1}{} for the units in stratum \eqn{i}{} (i.e. the (\eqn{k,l}{})th element
+of \eqn{Z_i}{} is \eqn{1}{} if the \eqn{k}{}th run belongs to the \eqn{l}{}th
+block in stratum \eqn{i}{} and \eqn{0}{} otherwise) and
+\eqn{b_i = \prod_{j = 1}^{i}n_j}{}.
+Finally, the vector \eqn{\varepsilon_i \sim N(0,\sigma_i^2I_{b_i})}{} is a \eqn{b_i}{}-dimensional vector
+containing the random effects, which are all uncorrelated. The variance
+components \eqn{\sigma^{2}_{i} (i = 1, \dots, s)}{} have to be estimated and this is usually done using
+the REML (\emph{REstricted Maximum Likelihood}) method.
+
+The best linear unbiased estimator for the parameter vector \eqn{\beta}{} is
+the generalized least square estimator:
+\deqn{ \hat{\beta}_{GLS} = (X'V^{-1}X)^{-1}X'V^{-1}y}{}
+
+This estimator has variance-covariance matrix:
+\deqn{Var(\hat{\beta}_{\emph{GLS}}) = \sigma^{2}(X'V^{-1}X)^{-1}}{}
+
+where
+\eqn{V = \sum\limits_{i = 1}^{s}\eta_i Z_i'Zi}{},
+\eqn{\eta_i = \frac{\sigma_i^{2}}{\sigma^{2}}}{} and
+\eqn{\sigma^{2} = \sigma^{2}_{s}}{}.
+
+Let \eqn{M = (X' V^{-1} X)}{} be the information matrix of \eqn{\hat{\beta}}{}.
+
+\begin{itemize}
+
+\item{}  \strong{\emph{D}-optimality.} It is based on minimizing the generalized
+variance of the parameter estimates. This can be done either by minimizing the
+determinant of the variance-covariance matrix of the factor effects' estimates
+or by maximizing the determinant of \eqn{M}{}. \\{}
+The objective function to be minimized is:
+\deqn{f_{D}(d; \eta) = \left(\frac{1}{\det(M)}\right)^{1/p}}{}
+where \eqn{d}{} is the design with information matrix \eqn{M}{} and \eqn{p}{} is the
+number of model parameters.
+
+\item{}  \strong{\emph{A}-optimality.} This criterion is based on
+minimizing the average variance of the estimates of the regression coefficients.
+The sum of the variances of the parameter estimates (elements of
+\eqn{\hat{\beta}}{}) is taken as a measure, which is equivalent to
+considering the trace of \eqn{M^{-1}}{}. \\{}
+The objective function to be minimized is:
+\deqn{f_{A}(d; \eta) = \texttt{tr}(M^{-1})}{}
+where \eqn{d}{} is the design with information matrix \eqn{M}{}.
+
+\item{}  \strong{\emph{I}-optimality.} It seeks to minimize the average
+prediction variance. \\{}
+The objective function to be minimized is:
+\deqn{f_{I}(d; \eta) = \frac{\int_{\chi} f'(x)(M)^{-1}f(x)\,dx }{\int_{\chi} \,dx}}{}
+where \eqn{d}{} is the design with information matrix \eqn{M}{} and \eqn{\chi}{}
+represents the design region. \\{}
+It can be proved that when there are \eqn{k}{} treatment factors each with two
+levels, so that the experimental region is of the form \eqn{[-1, +1]^{k}}{},
+the objective function can also be written as:
+\deqn{f_{I}(d; \eta) = \text{trace} \left[(M)^{-1} B\right]}{}
+where \eqn{d}{} is the design with information matrix \eqn{M}{} and
+\eqn{B = 2^{-k} \int_{\chi}f'(x)f(x) \,dx }{} is the moments matrix.
+To know the implemented expression for calculating the moments matrix for a
+cuboidal design region see Hardin and Sloane (1991).
+
+\item{}  \strong{\emph{Ds}-optimality.} Its aim is to minimize the generalized
+variance of the parameter estimates by excluding the intercept from the set
+of parameters of interest. Let \eqn{\beta_i}{} be the model parameter
+vector of dimension (\eqn{p_i - 1}{}) to be estimated in stratum \eqn{i}{}.
+Let \eqn{X_i}{} be the associated model matrix \eqn{m_i}{} by \eqn{(p_i-1)}{}, where \eqn{m_i}{} is the number of units in stratum \eqn{i}{}.
+The partition of interest of the matrix of variances and covariances of
+\eqn{\hat{\beta}_i}{} is
+\deqn{(M_i^{-1})_{22} = [X'_i (I - \frac{1}{m_i} 11^{'})X_i]^{-1}}{} \\{}
+The objective function to be minimized is:
+\deqn{f_{D_s}(d; \eta) = |(M_i^{-1})_{22}|}{}
+
+\item{} \strong{\emph{As}-optimality.} This criterion is based on minimizing
+the average variance of the estimates of the regression coefficients excluding
+the intercept from the set of parameters of interest. \\{}
+With reference to the notation introduced for the previous criterion, the
+objective function to be minimized is:
+\deqn{f_{A_s}(d; \eta) = \texttt{tr}(W_i(M_i^{-1})_{22})}{}
+where \eqn{W_i}{} is a diagonal matrix of weights, with the weights scaled so that
+the trace of \eqn{W_i}{} is equal to 1.
+
+\item{}  \strong{\emph{Id}-optimality.} It seeks to minimize the average
+prediction variance excluding the intercept from the set of parameters of
+interest. \\{}
+The objective function to be minimized is the same as the
+\emph{I}-optimality criterion where the first row and columns of the \eqn{B}{}
+matrix are deleted.
+
+\end{itemize}
+
+\end{Details}
+%
+\begin{Value}
+\code{MSOpt} returns a list containing the following components:
+\begin{itemize}
+
+\item{} \code{facts}: The argument \code{facts}.
+\item{} \code{nfacts}: An integer. The number of experimental factors (blocking factors are excluded from the count).
+\item{} \code{nstrat}: An integer. The number of strata.
+\item{} \code{units}: The argument \code{units}.
+\item{} \code{runs}: An integer. The number of runs.
+\item{} \code{etas}: The argument \code{etas}.
+\item{} \code{avlev}: A list showing the available levels for each experimental factor.
+\item{} \code{levs}: A vector showing the number of available levels for each experimental factor.
+\item{} \code{Vinv}: The inverse of the variance-covariance matrix of the responses.
+\item{} \code{model}: The argument \code{model}.
+\item{} \code{crit}: The argument \code{criteria}.
+\item{} \code{ncrit}: An integer. The number of criteria.
+\item{} \code{M}: The moment matrix. Only with \emph{I}-optimality criteria.
+\item{} \code{M0}: The moment matrix. Only with \emph{Id}-optimality criteria.
+\item{} \code{W}: The diagonal matrix of weights. Only with \emph{As}-optimality criteria.
+This matrix assigns to each main effect and each interaction effect an absolute
+weight equal to 1, while to the quadratic effects it assigns an absolute weight
+equal to 1/4.
+
+\end{itemize}
+
+\end{Value}
+%
+\begin{References}\relax
+R. H. Hardin and N. J. A. Sloane. Computer generated minimal (and larger)
+response-surface designs: (II) The cube. Technical report, 1991.
+
+M. Borrotti and F. Sambo and K. Mylona and S. Gilmour. A multi-objective
+coordinate-exchange two-phase local search algorithm for multi-stratum
+experiments. Statistics \& Computing, 2017.
+\end{References}
+\inputencoding{utf8}
+\HeaderA{MSSearch}{MSSearch}{MSSearch}
+%
+\begin{Description}\relax
+The \code{MSSearch} function can be used to obtain an optimal
+multi-stratum experimental design considering one or more optimization criteria,
+up to a maximum of six criteria simultaneously. \\{}
+This function implements the procedure MS-Opt proposed by Sambo, Borrotti,
+Mylona e Gilmour (2017) as an extension of the Coordinate-Exchange Algorithm
+for constructing exact optimal experimental designs. This innovative procedure,
+instead of minimizing a single objective function as in the CE algorithm,
+seeks to minimize the following scalarization of the objective functions for
+all criteria under consideration:
+\deqn{f_W = \sum_{c \in C}{\alpha_cf_c(d; \eta)=\overline{\alpha} \cdot \overline{f}},}{}
+with
+\deqn{\sum_{c\inC}(\alpha_c) = 1}{}
+where \eqn{c}{} is the set of criteria to be minimized, \eqn{f_c}{} is the objective function
+for the \eqn{c}{} criterion and \eqn{\overline{\alpha}}{} is the vector that controls
+the relative weights of the objective functions.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+MSSearch(msopt, alpha, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{msopt}] A list as returned by the \code{\LinkA{MSOpt}{MSOpt}} function.
+
+\item[\code{alpha}] A vector of weights, whose elements must sum to one.
+\code{length(alpha)} must be equal to the number of criteria considered, that
+is, it must be equal to the length of the \code{criteria} element of the
+\code{msopt} argument.
+
+\item[\code{...}] optional arguments (see below).
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+INSERIRE PARTE SULLA NORMALIZZAZIONE.
+
+Additional arguments can be specified as follows:
+\begin{itemize}
+
+\item{} \code{'Start', sol}: A string and a matrix, used in pair. They provide
+a starting solution (\code{sol}) or initial design to the algorithm. By
+default the initial solution is randomly generated following the
+\emph{SampleDesign} procedure described in Sambo, Borrotti, Mylona and Gilmour
+(2017).
+
+\item{} \code{'Restarts', r }: A string and an integer, used in pair. When
+\code{r=1}, the default value, the procedure implemented in \code{MSSearch}
+results in a local search algorithm that optimizes the objective function
+\eqn{f_W}{} starting from one initial design in the design space. These
+parameters allows to restart the algorithm \code{r} times. If no initial design
+is passed a different starting solution is generated for each iteration, letting
+the probability to find a global minimum be higher. \code{Mssearch} returns
+the solution that minimizes \eqn{f_W}{} across all the \code{r} iterations.
+
+\item{} \code{'Normalize', c(CritTR, CritSC)}: A string and a vector, used in
+pair. By specifying the \code{CritTR} and \code{CritSC} vectors, the user can
+establish the normalization factors to be applied to each objective function
+before evaluating \eqn{f_W}{}. \code{CritTR} and \code{CritSC} are vectors of
+length equal to the number of criteria, whose default elements are 0 and 1
+respectively.
+
+\end{itemize}
+
+\end{Details}
+%
+\begin{Value}
+\code{MSSearch} returns a list, whose elements are:
+\begin{itemize}
+
+\item{} \code{optsol}: A design matrix. The best solution found.
+\item{} \code{optscore}: A vector containing the criteria scores for
+\code{optsol}.
+\item{} \code{feval}: An integer representing the number of score function
+evaluations (number of \eqn{f_W}{} evaluations over all iterations).
+\item{} \code{trend}: A vector of length \code{r}. The \eqn{i}{}-th element is
+the value that minimizes \eqn{f_W}{} for the \eqn{i}{}-th iteration.
+
+\end{itemize}
+
+\end{Value}
+%
+\begin{References}\relax
+M. Borrotti and F. Sambo and K. Mylona and S. Gilmour. A multi-objective
+coordinate-exchange two-phase local search algorithm for multi-stratum
+experiments. Statistics \& Computing, 2017.
+\end{References}
+\inputencoding{utf8}
+\HeaderA{Score}{Score}{Score}
+%
+\begin{Description}\relax
+The \code{Score} function returns the optimization criteria values for a
+given \code{\LinkA{MSOpt}{MSOpt}} list and design matrix.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Score(msopt, settings)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{msopt}] A list as returned by the function \LinkA{MSOpt}{MSOpt}.
+
+\item[\code{settings}] The design matrix for which criteria scores have to be calculated.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+The vector of scores.
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{multiDoE-package}{multiDoE: What the Package Does (Title Case)}{multiDoE.Rdash.package}
+\aliasA{multiDoE}{multiDoE-package}{multiDoE}
+%
+\begin{Description}\relax
+The R package \code{MultiDoE} can be used to construct
+multi-stratum experimental designs that optimize up to six statistical
+criteria simultaneously. The algorithms implemented in the package to solve
+such optimization problems are the \emph{MS-Opt} and \emph{MS-TPLS} algorithms
+proposed in Sambo, Borrotti, Mylona, and Gilmour (2017). The former relies on
+a search procedure to find locally optimal solutions; the latter, by embedding
+MS-Opt in a TPLS framework, is able to generate a good Pareto front
+approximation for the optimization problem under study.
+Although the implemented methods are designed to handle designs with
+experimental factors in at least two different strata, their flexibility
+allows their application to even the simplest cases of completely randomized
+and randomized block designs. Whatever the case of interest, the designs
+manageable by the package are balanced. The user can choose the structure of
+the experimental design by defining:
+\begin{itemize}
+
+\item{} the number of strata of the experiment;
+\item{} the number of experimental factors in each stratum;
+\item{} the number of experimental units in each stratum and thus the total number of runs;
+\item{} the number of levels of each experimental factor;
+\item{} the presence or not of blocking factors.
+
+\end{itemize}
+
+It is possible to choose the a priori model among: the model with main effects
+only, the model with main and interaction effects and the full quadratic model.
+Finally, estimation of the ratios of error variances in consecutive strata is
+required. With the package \code{MultiDoE} it is possible to obtain experimental
+designs that optimize any combination of the following criteria: "I", "Id",
+"D", "Ds", "A" and "As". Depending on the function used, it is possible to obtain
+either a single optimal solution for the optimization problem of interest or
+the set of solutions belonging to the (approximate) Pareto front. Once the
+Pareto front is available, the package offers: a method for the graphical
+visualization of the Pareto front (up to a three-dimensional criteria space);
+an objective method for selecting the best design with respect to the entire
+set of criteria considered and an objective method for selecting the best design
+with respect to to the criteria considered individually.
+\end{Description}
+%
+\begin{Details}\relax
+XXX TODO FIX ME XXXX The only function you're likely to need from roxygen2 is [roxygenize()].
+Otherwise refer to the vignettes to see how to format the documentation.
+This comes from the R/multiDOE-package.R
+\end{Details}
+%
+\begin{References}\relax
+M. Borrotti and F. Sambo and K. Mylona and S. Gilmour. A multi-objective
+coordinate-exchange two-phase local search algorithm for multi-stratum
+experiments. Statistics \& Computing, 2017.
+\end{References}
+\inputencoding{utf8}
+\HeaderA{optMultiCrit}{optMultiCrit}{optMultiCrit}
+%
+\begin{Description}\relax
+The \code{optMultiCrit} function suggests an objective criterion
+for the selection of the best experimental design among all Pareto front solutions.
+The selection is based on minimizing the euclidean distance in the criteria space
+between all the Pareto front designs and an approximate utopian point. By default
+the utopian point coordinates are the minimum value reached by every criteria
+during an optimization procedure (\code{\LinkA{runTPLS}{runTPLS}}); otherwise
+it can be set to a specific value by the user.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+optMultiCrit(ar, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{ar}] A list as the \code{megaAR} returned by the \code{runTPLS} function.
+
+\item[\code{...}] optional argument (see below).
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Additional arguments can be specified as follows:
+\begin{itemize}
+
+\item{} \code{myUtopianPoint}: A vector containing the utopian point coordinates.
+
+\end{itemize}
+
+\end{Details}
+%
+\begin{Value}
+The \code{optMultiCrit} function returns a list whose elements are:
+\begin{itemize}
+
+\item{} \code{solution}: The selected optimal design matrix.
+\item{} \code{score}: A vector containing the criteria scores for \code{solution}.
+
+\end{itemize}
+
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{optSingleCrit}{optSingleCrit}{optSingleCrit}
+%
+\begin{Description}\relax
+The \code{optSingleCrit} function selects the Pareto front designs
+that optimizes the individually considered criteria.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+optSingleCrit(ar)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{ar}] A list as the \code{megaAR} returned by the \code{runTPLS} function.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+A list whose \eqn{i}{}-th element corresponds to the solution that optimizes
+the \eqn{i}{}-th criterion in \code{criteria}. The solution is a list of two elements:
+\begin{itemize}
+
+\item{} \code{score}: A vector containing the scores for every element in \code{criteria}.
+\item{} \code{solution}: The design matrix.
+
+\end{itemize}
+
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{plotPareto}{plotPareto}{plotPareto}
+%
+\begin{Description}\relax
+The \code{plotPareto} function returns a graphical representation
+(at most 3D) of the Pareto front.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+plotPareto(ar, x, y, z = NULL, mode = T)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{ar}] A list as the \code{megaAR} returned by the \code{runTPLS} function.
+
+\item[\code{x}] The criterion on the x axis. It can be one of the following: \code{"I",
+"Id", "D", "Ds", "A"} and \code{"As"}.
+
+\item[\code{y}] The criterion on the y axis. It can be one of the following: \code{"I",
+"Id", "D", "Ds", "A"} and \code{"As"}.
+
+\item[\code{z}] The criterion on the z axis. It can be one of the following: \code{"I",
+"Id", "D", "Ds", "A"} and \code{"As"}.
+
+\item[\code{mode}] When \code{mode=True} the function returns a 3D interactive
+chart. When \code{mode=False} it returns a 2D chart in which the \code{z} criteria
+values are represented by a color scale.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+The Pareto front chart.
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{runTPLS}{runTPLS}{runTPLS}
+%
+\begin{Description}\relax
+This function implements the \emph{Multi-Stratum Two-Phase Local
+Search} (MS-TPLS) algorithm described in Borrotti, Sambo, Mylona and Gilmour
+(2017). The MS-TPLS algorithm is useful to obtain exact optimal multi-stratum
+designs using a multi-criteria approach. The number of iterations of the MS-TPLS
+algorithm must be set by the user. The resulting experimental designs can minimize up
+to six criteria simultaneously from the following: I, D, A, Id, Ds and As. The
+\code{runTPLS} function is able to provide the set of solutions that build the
+approximate Pareto front for the specified optimization problem.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+runTPLS(facts, units, criteria, model, iters, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{facts}] A list of vectors representing the distribution of factors
+across strata. Each item in the list represents a stratum and the first item
+is the highest stratum of the multi-stratum structure of the experiment.
+Within the vectors, experimental factors are indicated by progressive integer
+from 1 (the first factor of the highest stratum) to the total number of
+experimental factors (the last factor of the lowest stratum). Blocking
+factors are differently denoted by empty vectors.
+
+\item[\code{units}] A list whose \eqn{i}{}-th element, \eqn{n_i}{}, is the number of
+experimental units within each unit at the previous stratum (\eqn{i-1}{}). The
+first item in the list, \eqn{n_1}{}, represents the number of experimental
+units in the stratum \eqn{0}{}. The latter is defined as the entire experiment,
+such that \eqn{n_0 = 1}{}.
+
+\item[\code{criteria}] A list specifying the criteria to be optimized. It can
+contain any combination of:
+\begin{itemize}
+
+\item{} ``I" : I-optimality
+\item{} ``Id" : Id-optimality
+\item{} ``D" : D-optimality
+\item{} ``A" : Ds-optimality
+\item{} ``Ds" : A-optimality
+\item{} ``As" : As-optimality
+
+\end{itemize}
+
+These criteria are well explained in Borrotti, Sambo, Mylona and Gilmour (2017).
+More detailed information on the available criteria is also given in
+\code{\LinkA{MSOpt}{MSOpt}.}
+
+\item[\code{model}] A string which indicates the type of model, among ``main",
+``interaction" and ``quadratic".
+
+\item[\code{iters}] An integer indicating the number of iterations of the MS-TPLS
+algorithm.
+
+\item[\code{...}] optional arguments (see below).
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Additional arguments can be specified as follows:
+\begin{itemize}
+
+\item{} \code{'Restarts', restarts}: A string and an integer, used in pair. \code{r}
+defines the number of times the MS-Opt procedure is altogether called within
+each iteration of the MS-TPLS algorithm. The default value is \code{r=100}.
+
+\item{} \code{'Levels', levels}: A string and a vector, used in pair. \code{levels}
+is a vector containing the number of available levels for each experimental
+factor in the argument \code{facts} (blocking factors are excluded). If all
+experimental factors share the number of levels one integer is sufficient.
+
+\item{} \code{'Etas', etas}: A string and a list, used in pair. In \code{etas}
+the user must specify the ratios of error variance between subsequent strata,
+starting from the highest strata. It follows that \code{length(etas)} must be
+equal to \code{length(facts)-1}.
+
+\item{} \code{'RestInit', restInit}: A string and an integer, used in pair. Through
+these parameters, it is possible to determine how many of the \code{r} iterations
+of MS-Opt should be used for each criterion in the first step of the MS-TPLS
+algorithm (lines 3-6 of the pseudo-code of MS-TPLS, see Borrotti, Sambo, Mylona
+and Gilmour (2017)). The default value is \code{restInit=50}. Let \eqn{n}{} be
+the number of criteria under consideration. One can calculate accordingly as
+\eqn{r - (n * restInit)}{} the number of times MS-Opt is called in the
+second step (lines 7-11 of the pseudo-code of MS-TPLS) of each iteration of MS-TPLS.
+
+\end{itemize}
+
+\end{Details}
+%
+\begin{Value}
+\code{runTPLS} returns a list, whose elements are:
+\begin{itemize}
+
+\item{} \code{ar}: A list of length equal to \code{iters}. The \eqn{i}{}-th element
+is a list whose elements are:
+\begin{itemize}
+
+\item{} \code{nsols}: Number of designs produced during the \eqn{i}{}-th iteration.
+\item{} \code{dim}: The criteria space dimension.
+\item{} \code{scores}: A matrix of \code{nsols} rows and \code{dim} columns.
+Every row contains the value of the criteria for each solution of the
+\eqn{i}{}-th iteration.
+\item{} \code{solutions}: A list of length equal to \code{nsols} containing the
+design matrices produced during the \eqn{i}{}-th iteration. The values of the
+criteria corresponding at the first element of \code{solutions} are placed
+in the first row of the \code{scores} matrix and so on.
+
+\end{itemize}
+
+\item{} \code{stats}: A list of length equal to \code{iters}. Every element is a
+vector of size \eqn{r - (n * restInit) + 1}{}, where \eqn{n}{} is the number of the
+considered criteria. The first element represents the number of function
+evaluations during the first step of the MS-TPLS algorithm; the \eqn{i}{}-th
+element (excluding the first one) is the sum of the number of evaluations for
+the \eqn{i}{}-th scalarization and the maximum value in the \code{stats}.
+
+\item{} \code{megaAR}: A list whose elements are:
+\begin{itemize}
+
+\item{} \code{nsols}: The number of the Pareto front solutions.
+\item{} \code{dim}: The criteria space dimension.
+\item{} \code{scores}: A matrix of \code{nsols} rows and \code{dim} columns.
+Every row contains the criteria values for each Pareto front design.
+\item{} \code{solutions}: A list of length equal to \code{nsols} containing
+the design matrices for the Pareto front designs. The values of the criteria
+corresponding at the first element of \code{solutions} are placed in the
+first row of the \code{scores} matrix and so on.
+
+\end{itemize}
+
+
+\end{itemize}
+
+\end{Value}
+%
+\begin{References}\relax
+M. Borrotti and F. Sambo and K. Mylona and S. Gilmour. A multi-objective
+coordinate-exchange two-phase local search algorithm for multi-stratum
+experiments. Statistics \& Computing, 2017.
+\end{References}
+\printindex{}
+\end{document}

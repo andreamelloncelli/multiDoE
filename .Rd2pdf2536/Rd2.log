@@ -1,0 +1,65 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.1) (preloaded format=pdflatex 2022.1.31)  1 FEB 2022 00:18
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**C:/Users/Francesca/Desktop/new1/multiDoE/.Rd2pdf2536/Rd2.tex
+(C:/Users/Francesca/Desktop/new1/multiDoE/.Rd2pdf2536/Rd2.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-01-21>
+(C:\Users\Francesca\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\book.cls
+Document Class: book 2021/10/04 v1.4n Standard LaTeX document class
+(C:\Users\Francesca\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\bk10.clo
+File: bk10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count185
+\c@chapter=\count186
+\c@section=\count187
+\c@subsection=\count188
+\c@subsubsection=\count189
+\c@paragraph=\count190
+\c@subparagraph=\count191
+\c@figure=\count192
+\c@table=\count193
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+) (C:/PROGRA~1/R/R-40~1.5/share/texmf/tex/latex\Rd.sty
+Package: Rd 
+
+(C:\Users\Francesca\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ifthen.sty
+Package: ifthen 2020/11/24 v1.1c Standard LaTeX ifthen package (DPC)
+)
+
+! LaTeX Error: File `longtable.sty' not found.
+
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: sty)
+
+Enter file name: 
+
+! LaTeX Error: No counter 'LTchunksize' defined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.35 \setcounter{LTchunksize}{250}
+                                  
+? 
+
+! LaTeX Error: File `bm.sty' not found.
+
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: sty)
+
+Enter file name: 
+(C:\Users\Francesca\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\alltt.sty
+Package: alltt 2021/01/29 v2.0g defines alltt environment
+)
+
+! LaTeX Error: File `verbatim.sty' not found.
+
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: sty)
+
+Enter file name: 

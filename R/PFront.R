@@ -81,11 +81,11 @@ AddNoNorm <- function(pf, solPtr) {
   return(pf)
 }
 
-HyperVolume <- function(pf) {
-  hv <- dominated_hypervolume(pf$Getnorm(pf$ptrs),
-                              matrix(1, pf$arch$dim, 1) * 1.1)
-  return(hv)
-}
+#HyperVolume <- function(pf) {
+#  hv <- dominated_hypervolume(pf$Getnorm(pf$ptrs),
+#                              matrix(1, pf$arch$dim, 1) * 1.1)
+#  return(hv)
+#}
 
 IsWeakDominated <- function(pf, solPtr) {
   flag <- any(apply(FixRepmat(pf$arch$scores[solPtr, ], length(pf$ptrs), 1) >= pf$arch$scores[pf$ptrs, ], 1, all))

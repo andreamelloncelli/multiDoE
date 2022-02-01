@@ -1,4 +1,4 @@
-
+#' @importFrom stats runif
 TPLSearch <- function(facts, units, criteria, model, ...) {
 
   varargin <- list(...)[[1]]
