@@ -2,8 +2,8 @@ Package: multiDoE
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: Matteo Borrotti
+Author: Matteo Borrott, Francesca Cucchi, Andrea Melloncelli, Francesco Sambo & Kalliopi Mylona
+Maintainer: Matteo Borrotti <matteo.borrotti@unimib.it>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: file LICENSE
@@ -11,9 +11,8 @@ Encoding: UTF-8
 LazyData: true
 Suggests: 
     testthat (>= 3.0.0),
-    usethis,
     devtools,
-    markdown, 
+    markdown,
     here
 Config/testthat/edition: 3
 Imports:
@@ -21,5 +20,6 @@ Imports:
     logr,
     rgl,
     ggplot2,
-    plotly
+    plotly,
+    usethis
 RoxygenNote: 7.1.2
