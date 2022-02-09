@@ -13,7 +13,7 @@
 #' \deqn{f_W = \sum_{c \in C}{\alpha_c f_c(d; \eta)=\overline{\alpha} \cdot \overline{f}},}{%
 #' f_W = \sum{c in C}(\alpha_c*f_c(d;\eta)) = \overline{\alpha} \overline{f},}
 #' with
-#' \deqn{\sum_{c\in C}(\alpha_c) = 1}{\sum{c in C}(\alpha_c) = 1,}
+#' \deqn{\sum_{c\in C} \alpha_c = 1,}{\sum{c in C}(\alpha_c) = 1,}
 #' where \eqn{C} is the set of criteria to be minimized, \eqn{f_c} is the
 #' objective function for the \eqn{c} criterion and \eqn{\overline{\alpha}} is
 #' the vector that controls the relative weights of the objective functions.
@@ -26,7 +26,7 @@
 #' is it must be equal to the length of the \code{criteria} element of \code{msopt}.
 #' @param ... optional arguments (see \strong{Details}).
 #'
-#' @details \code{MSSearch} by default does not apply any normalization of the
+#' @details \code{MSSearch} by default does not apply any normalization to the
 #' individual objective functions \eqn{f_c} before the calculation of f_w is
 #' performed. However, it is possible to subject the vector of objective functions
 #' \eqn{\overline{f}} to the following transformation:
@@ -74,6 +74,9 @@
 #' M. Borrotti and F. Sambo and K. Mylona and S. Gilmour. A multi-objective
 #' coordinate-exchange two-phase local search algorithm for multi-stratum
 #' experiments. Statistics & Computing, 2016.
+#'
+#' @examples
+#' ## Inserire un esempio.
 #'
 #' @export
 MSSearch <- function(msopt, alpha, ...) {
