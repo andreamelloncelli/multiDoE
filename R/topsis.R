@@ -4,6 +4,22 @@ Ldist <- function(x, y, w, p) {
   return(ldist)
 }
 
+#' Technique for Order of Preference by Similarity to Ideal Solution (TOPSIS)
+#'
+#' @param paretoFront A list as the megaAR returned by the
+#' \code{\link[multiDoE]{runTPLS}} function.
+#' @param w A vector of weights. It must sum to 1.
+#' @param p A coefficient. It determines the type of distance used (see the
+#' \strong{Details} section).
+#'
+#' @return \code{topsisOpt} returns a list containing the following items:
+#' \itemize{
+#' \item{\code{ranking}: .}
+#' \item{\code{bestScore}: .}
+#' \item{\code{bestSol}: .}
+#' }
+#' @export
+#'
 topsisOpt <- function(paretoFront, w, p) {
 
   if (sum(w) != 1) {
