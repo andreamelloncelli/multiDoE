@@ -1,15 +1,15 @@
 #### MSOpt ####
 
-#' MSOpt
+#' Experimental setup
 #'
 #' @description The \code{MSOpt} function allows the user to define the
 #' structure of the experiment, the set of optimization criteria and the a priori
 #' model to be considered. The output is a list containing all information about
 #' the settings of the experiment. According to the declared criteria, the list
-#' also contains the basic matrices for their implementation, such as
-#' information matrix, matrix of moments and matrix of weights. This function
-#' returns the \code{msopt} argument of the \code{\link[multiDoE]{Score}} and
-#' \code{\link[multiDoE]{MSSearch}} functions of the \code{multiDoE} package.
+#' also contains the basic matrices for their implementation, such as information
+#' matrix, matrix of moments and matrix of weights. The returned list
+#' is argument of the \code{\link[multiDoE]{Score}} and \code{\link[multiDoE]{MSSearch}}
+#' functions of the \code{multiDoE} package.
 #'
 #' @usage MSOpt(facts, units, levels, etas, criteria, model)
 #'
@@ -17,15 +17,15 @@
 #' across strata. Each item in the list represents a stratum and the first item
 #' is the highest stratum of the multi-stratum structure of the experiment.
 #' Within the vectors, experimental factors are indicated by progressive integer
-#' from 1 (the first factor of the highest stratum) to the total number of
+#' from \eqn{1} (the first factor of the highest stratum) to the total number of
 #' experimental factors (the last factor of the lowest stratum). Blocking
-#' factors are differently denoted by empty vectors.
+#' factors are denoted by empty vectors.
 #'
-#' @param units A list whose \eqn{i}-th element, \eqn{n_i}, is the number of
-#' experimental units within each unit at the previous stratum (\eqn{i-1}). The
-#' first item in the list, \eqn{n_1}, represents the number of experimental
-#' units in the stratum \eqn{0}. The latter is defined as the entire experiment,
-#' such that \eqn{n_0 = 1}{n_0 = 1}.
+#' @param units A list whose \eqn{i}-th element is the number of experimental
+#' units within each unit at the previous stratum \eqn{i-1}.
+#' The first item in the list, \eqn{n_1}{n1}, represents the number of experimental
+#' units in the stratum \eqn{0}, defined as the entire experiment (so that
+#' \eqn{n_0 = 1}{n0 = 1}).
 #'
 #' @param levels A vector containing the number of available levels for each
 #' experimental factor in \code{facts} (blocking factors are excluded). If all
@@ -38,15 +38,14 @@
 #' @param criteria A list specifying the criteria to be optimized. It can
 #' contain any combination of:
 #' \itemize{
-#'   \item{"I" : I-optimality}
-#'   \item{"Id" : Id-optimality}
-#'   \item{"D" : D-optimality}
-#'   \item{"A" : Ds-optimality}
-#'   \item{"Ds" : A-optimality}
-#'   \item{"As" : As-optimality}
+#'   \item{``I" : I-optimality}
+#'   \item{``Id" : Id-optimality}
+#'   \item{``D" : D-optimality}
+#'   \item{``A" : Ds-optimality}
+#'   \item{``Ds" : A-optimality}
+#'   \item{``As" : As-optimality}
 #' }
-#' These criteria are well explained in Borrotti, Sambo, Mylona and Gilmour (2017).
-#' More detailed information on the available criteria is also given under
+#' More detailed information on the available criteria is given under
 #' \strong{Details}.
 #'
 #' @param model A string which indicates the type of model, among ``main",
@@ -56,12 +55,12 @@
 #' used in the multi-objective approach of the \code{multiDoE} package. \cr
 #'
 #' For an experiment with \eqn{N} runs and \eqn{s} strata, with stratum \eqn{i}
-#' having \eqn{n_i}{ni} units within each unit at stratum (\eqn{i-1}) and
+#' having \eqn{n_i}{ni} units within each unit at stratum \eqn{i-1} and
 #' stratum 0 being defined as the entire experiment (\eqn{n_0 = 1}{n0 = 1}), the
 #' general form of the model can be written as:
 #'
 #' \deqn{y = X\beta + \sum\limits_{i = 1}^{s} Z_i\varepsilon_i}{y = X\beta +
-#' \sum{i=1}^{s} Zi \epsiloni}
+#' \sum{i=1}^{s} Zi \epsiloni,}
 #'
 #' where
 #' \eqn{y} is an \eqn{N}-dimensional vector of responses (\eqn{N = \prod_{j = 1}^{s}n_j}{N = \prod{j = 1}^{s}nj}),
@@ -93,8 +92,8 @@
 #' \eqn{\eta_i = \frac{\sigma_i^{2}}{\sigma^{2}}}{\etai = \sigmai^{2} / \sigma^{2}} and
 #' \eqn{\sigma^{2} = \sigma^{2}_{s}}{\sigma^{2} = \sigmas^{2}}.
 #'
-#' Let \eqn{M = (X' V^{-1} X)} be the information matrix of \eqn{\hat{\beta}}{%
-#' hat{\beta}}.
+#' Let \eqn{M = (X' V^{-1} X)} be the information matrix about \eqn{\hat{\beta}}{%
+#' hat{\beta}} and let \eqn{\eta} be the vector of the variance components.
 #'
 #' \itemize{
 #' \item{ \strong{\emph{D}-optimality.} It is based on minimizing the generalized
@@ -113,8 +112,9 @@
 #' \eqn{\hat{\beta}}{hat{\beta}}) is taken as a measure, which is equivalent to
 #' considering the trace of \eqn{M^{-1}}. \cr
 #' The objective function to be minimized is:
-#' \deqn{f_{A}(d; \eta) = \texttt{tr}(M^{-1})}{f_A(d; \eta) = trace(M^{-1}),}
-#' where \eqn{d} is the design with information matrix \eqn{M}}.
+#' \deqn{f_{A}(d; \eta) = trace(M^{-1})/p}{f_A(d; \eta) = trace(M^{-1})/p,}
+#' where \eqn{d} is the design with information matrix \eqn{M} and \eqn{p} is the
+#' number of model parameters.}
 #'
 #' \item{ \strong{\emph{I}-optimality.} It seeks to minimize the average
 #' prediction variance. \cr
@@ -132,7 +132,8 @@
 #' \eqn{B = 2^{-k} \int_{\chi}f'(x)f(x) \,dx }{%
 #'      B = 2^{-k} (integral_{\chi} f'(x)f(x) dx)} is the moments matrix.
 #' To know the implemented expression for calculating the moments matrix for a
-#' cuboidal design region see Hardin and Sloane (1991).}
+#' cuboidal design region see section 2.3 of Sambo, Borrotti, Mylona, and Gilmour
+#' (2016).}
 #'
 #' \item{ \strong{\emph{Ds}-optimality.} Its aim is to minimize the generalized
 #' variance of the parameter estimates by excluding the intercept from the set
@@ -145,24 +146,29 @@
 #' \deqn{(M_i^{-1})_{22} = [X'_i (I - \frac{1}{m_i} 11^{'})X_i]^{-1}}{%
 #' (Mi^{-1})_{22} = [Xi' (I - (1 / mi) 11') Xi]^{-1}.} \cr
 #' The objective function to be minimized is:
-#' \deqn{f_{D_s}(d; \eta) = |(M_i^{-1})_{22}|}{f_Ds(d; \eta) = |(Mi^{-1})_{22}|.}}
+#' \deqn{f_{D_s}(d; \eta) = (|(M_i^{-1})_{22}|)^{1/(p_i-1)}}{%
+#' f_Ds(d; \eta) = (|(Mi^{-1})_{22}|)^{1/(pi-1)}.}}
+#'
 #'
 #' \item{\strong{\emph{As}-optimality.} This criterion is based on minimizing
-#' the average variance of the estimates of the regression coefficients excluding
+#' the average variance of the estimates of the regression coefficients by excluding
 #' the intercept from the set of parameters of interest. \cr
 #' With reference to the notation introduced for the previous criterion, the
 #' objective function to be minimized is:
-#' \deqn{f_{A_s}(d; \eta) = \texttt{tr}(W_i(M_i^{-1})_{22})}{%
+#' \deqn{f_{A_s}(d; \eta) = trace(W_i(M_i^{-1})_{22})}{%
 #'       f_As(d; \eta) = trace(Wi (Mi^{-1})_{22}),}
-#' where \eqn{W_i}{Wi} is a diagonal matrix of weights, with the weights scaled so that
-#' the trace of \eqn{W_i}{Wi} is equal to 1.}
+#' where \eqn{W_i}{Wi} is a diagonal matrix of weights, with the weights scaled
+#' so that the trace of \eqn{W_i}{Wi} is equal to 1. Specifically the implemented
+#' matrix assigns to each main effect and each interaction effect an absolute
+#' weight equal to 1, while to the quadratic effects it assigns an absolute weight
+#' equal to 1/4.}
 #'
 #' \item{ \strong{\emph{Id}-optimality.} It seeks to minimize the average
-#' prediction variance excluding the intercept from the set of parameters of
+#' prediction variance by excluding the intercept from the set of parameters of
 #' interest. \cr
 #' The objective function to be minimized is the same as the
 #' \emph{I}-optimality criterion where the first row and columns of the \eqn{B}
-#' matrix are deleted.}
+#' matrix (see the \strong{\emph{Id}-optimality} criterion) are deleted.}
 #'}
 #'
 #'
@@ -173,33 +179,48 @@
 #' \item{\code{nfacts}: An integer. The number of experimental factors (blocking factors are excluded from the count).}
 #' \item{\code{nstrat}: An integer. The number of strata.}
 #' \item{\code{units}: The argument \code{units}.}
-#' \item{\code{runs}: An integer. The number of runs.}
+#' \item{\code{runs}: An integer. The total number of runs.}
 #' \item{\code{etas}: The argument \code{etas}.}
-#' \item{\code{avlev}: A list showing the available levels for each experimental factor.}
+#' \item{\code{avlev}: A list showing the available levels for each experimental factor.
+#' The design space for each factor is [-1, 1].}
 #' \item{\code{levs}: A vector showing the number of available levels for each experimental factor.}
 #' \item{\code{Vinv}: The inverse of the variance-covariance matrix of the responses.}
 #' \item{\code{model}: The argument \code{model}.}
 #' \item{\code{crit}: The argument \code{criteria}.}
-#' \item{\code{ncrit}: An integer. The number of criteria.}
+#' \item{\code{ncrit}: An integer. The number of criteria considered.}
 #' \item{\code{M}: The moment matrix. Only with \emph{I}-optimality criteria.}
 #' \item{\code{M0}: The moment matrix. Only with \emph{Id}-optimality criteria.}
-#' \item{\code{W}: The diagonal matrix of weights. Only with \emph{As}-optimality criteria.
-#' This matrix assigns to each main effect and each interaction effect an absolute
-#' weight equal to 1, while to the quadratic effects it assigns an absolute weight
-#' equal to 1/4.}
+#' \item{\code{W}: The diagonal matrix of weights. Only with \emph{As}-optimality criteria.}
 #' }
 #'
-#'
 #' @references
-#' R. H. Hardin and N. J. A. Sloane. Computer generated minimal (and larger)
-#' response-surface designs: (II) The cube. Technical report, 1991.
-#'
 #' M. Borrotti and F. Sambo and K. Mylona and S. Gilmour. A multi-objective
 #' coordinate-exchange two-phase local search algorithm for multi-stratum
 #' experiments. Statistics & Computing, 2017.
 #'
+#' S. G. Gilmour, J. M. Pardo, L. A. Trinca, K. Niranjan, D.S. Mottram. A
+#' split-plot response surface design for improving aroma retention in freeze
+#' dried coffee. In: Proceedings of the 6th. European conference on Food-Industry
+#' Statist, 2000.
+#'
+#' @examples
+#' ## This example uses MSOpt to setup a split-plot design with
+#' ## 1 whole-plot factor, 4 subplot factors, 6 whole plots and
+#' ## 30 runs (Gilmour et al., 2000).
+#'
+#' options(digits = 10)
+#' ## To check the number of digits to be printed.
+#'
+#' facts <- list(1, 2:5)
+#' units <- list(6, 5)
+#' levels <- 3
+#' etas <- list(1)
+#' criteria <- c('I', 'D', 'A')
+#' model <- "quadratic"
+#'
+#' msopt <- MSOpt(facts, units, levels, etas, criteria, model)
+#'
 #' @export
-
 MSOpt <- function(facts, units, levels, etas, criteria, model) {
 
   msopt <- list()
@@ -371,7 +392,6 @@ colprod <- function(X) {
 #'
 #' @return The vector of scores.
 #' @export
-
 Score <- function(msopt, settings) {
 
   switch(msopt$model,

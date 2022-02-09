@@ -1,40 +1,46 @@
 #' MSSearch
 #'
 #' @description The \code{MSSearch} function can be used to obtain an optimal
-#' multi-stratum experimental design considering one or more optimization criteria,
+#' multi-stratum experimental design considering one or more optimality criteria,
 #' up to a maximum of six criteria simultaneously. \cr
 #' This function implements the procedure MS-Opt proposed by Sambo, Borrotti,
-#' Mylona e Gilmour (2017) as an extension of the Coordinate-Exchange Algorithm
-#' for constructing exact optimal experimental designs. This innovative procedure,
-#' instead of minimizing a single objective function as in the CE algorithm,
-#' seeks to minimize the following scalarization of the objective functions for
-#' all criteria under consideration:
-#' \deqn{f_W = \sum_{c \in C}{\alpha_cf_c(d; \eta)=\overline{\alpha} \cdot \overline{f}},}{%
-#' f_W = \sum{c in C}(\alpha_c*f_c(d;\eta)) = \overline{\alpha} \overline{f}}
+#' Mylona e Gilmour (2016) as an extension of the Coordinate-Exchange (CE)
+#' algorithm for constructing approximately optimal designs. This innovative
+#' procedure is able to handle all possible multi-stratum experimental structures
+#' and, instead of minimizing a single objective function as in the original CE
+#' algorithm, it seeks to minimize the following scalarization of the objective
+#' functions for all considered criteria:
+#' \deqn{f_W = \sum_{c \in C}{\alpha_c f_c(d; \eta)=\overline{\alpha} \cdot \overline{f}},}{%
+#' f_W = \sum{c in C}(\alpha_c*f_c(d;\eta)) = \overline{\alpha} \overline{f},}
 #' with
-#' \deqn{\sum_{c\inC}(\alpha_c) = 1}{\sum{c in C}(\alpha_c) = 1,}
-#' where \eqn{c} is the set of criteria to be minimized, \eqn{f_c} is the objective function
-#' for the \eqn{c} criterion and \eqn{\overline{\alpha}} is the vector that controls
-#' the relative weights of the objective functions.
+#' \deqn{\sum_{c\in C}(\alpha_c) = 1}{\sum{c in C}(\alpha_c) = 1,}
+#' where \eqn{C} is the set of criteria to be minimized, \eqn{f_c} is the
+#' objective function for the \eqn{c} criterion and \eqn{\overline{\alpha}} is
+#' the vector that controls the relative weights of the objective functions.
 #'
 #' @usage MSSearch(msopt, alpha, ...)
 #'
 #' @param msopt A list as returned by the \code{\link[multiDoE]{MSOpt}} function.
 #' @param alpha A vector of weights, whose elements must sum to one.
 #' \code{length(alpha)} must be equal to the number of criteria considered, that
-#' is, it must be equal to the length of the \code{criteria} element of the
-#' \code{msopt} argument.
-#' @param ... optional arguments (see below).
+#' is it must be equal to the length of the \code{criteria} element of \code{msopt}.
+#' @param ... optional arguments (see \strong{Details}).
 #'
-#' @details INSERIRE PARTE SULLA NORMALIZZAZIONE.
+#' @details \code{MSSearch} by default does not apply any normalization of the
+#' individual objective functions \eqn{f_c} before the calculation of f_w is
+#' performed. However, it is possible to subject the vector of objective functions
+#' \eqn{\overline{f}} to the following transformation:
+#' \deqn{\overline{f}_{norm} = \frac{\overline{f} - CritTR}{CritSC},}{%
+#' \overline{f}_norm = (\overline{f} - CritTR) / CritSC,}
+#' by specifying \eqn{CritTR} and \eqn{CritSC} vectors as additional parameters,
+#' as described below.
 #'
 #' Additional arguments can be specified as follows:
 #' \itemize{
 #' \item \code{'Start', sol}: A string and a matrix, used in pair. They provide
-#' a starting solution (\code{sol}) or initial design to the algorithm. By
-#' default the initial solution is randomly generated following the
-#' \emph{SampleDesign} procedure described in Sambo, Borrotti, Mylona and Gilmour
-#' (2017).
+#' a starting solution (or an initial design) to the algorithm. By default the
+#' initial solution is randomly generated following the \emph{SampleDesign()}
+#' procedure described in Sambo, Borrotti, Mylona and Gilmour (2016).
 #'
 #' \item \code{'Restarts', r }: A string and an integer, used in pair. When
 #' \code{r=1}, the default value, the procedure implemented in \code{MSSearch}
@@ -67,11 +73,9 @@
 #' @references
 #' M. Borrotti and F. Sambo and K. Mylona and S. Gilmour. A multi-objective
 #' coordinate-exchange two-phase local search algorithm for multi-stratum
-#' experiments. Statistics & Computing, 2017.
+#' experiments. Statistics & Computing, 2016.
 #'
 #' @export
-
-
 MSSearch <- function(msopt, alpha, ...) {
   varargin <- list(...)
 
