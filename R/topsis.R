@@ -12,7 +12,7 @@ Ldist <- function(x, y, w, p) {
 #' criteria space. The weighted distance measure used to detect these similarities
 #' allows the user to possibly assign different importance to the criteria considered.
 #' The distance measure used is:
-#' \deqn{L_p(a,b) = \left[ \sum_{j=1}^{m}((w_j)^p(|a-b|)^p)\right]^(1/p)}{%
+#' \deqn{L_p(a,b) = \left[ \sum_{j=1}^{m}(w_j)^p(|a-b|)^p\right] ^(1/p)}{%
 #' L_p(a,b) = [ \sum{j=1}^{m}(w_j^p * |a-b|^p]^(1/p)}
 #' The metric on the basis of which solution ranking occurs is:
 #'
