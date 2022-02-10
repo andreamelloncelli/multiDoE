@@ -2,7 +2,7 @@ Package: multiDoE
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author: Matteo Borrott, Francesca Cucchi, Andrea Melloncelli, Francesco Sambo & Kalliopi Mylona
+Author: Matteo Borrotti, Francesca Cucchi, Andrea Melloncelli, Francesco Sambo & Kalliopi Mylona
 Maintainer: Matteo Borrotti <matteo.borrotti@unimib.it>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
