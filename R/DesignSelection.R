@@ -1,14 +1,14 @@
 #' optMultiCrit
 #'
-#' @description The \code{optMultiCrit} function suggests an objective criterion
+#' @description The \code{optMultiCrit} function provides an objective criterion
 #' for the selection of the best experimental design among all Pareto front solutions.
 #' The selection is based on minimizing the euclidean distance in the criteria space
-#' between all the Pareto front designs and an approximate utopian point. By default
-#' the utopian point coordinates are the minimum value reached by every criteria
-#' during an optimization procedure (\code{\link[multiDoE]{runTPLS}}); otherwise
-#' it can be set to a specific value by the user.
+#' between all the Pareto front points and an approximate utopian point. By default,
+#' the coordinates of the utopian point correspond to the minimum value reached
+#' by each criterion during the \code{\link[multiDoE]{runTPLS}} optimization procedure.
+#' Alternatively, the utopian point can be chosen by the user.
 #'
-#' @param ar A list as the \code{megaAR} returned by the \code{runTPLS} function.
+#' @param ar A list as the \code{megaAR} list returned by \code{\link[multiDoE]{runTPLS}}.
 #' @param ... optional argument (see below).
 #'
 #' @details Additional arguments can be specified as follows:
@@ -21,6 +21,9 @@
 #' \item \code{solution}: The selected optimal design matrix.
 #' \item \code{score}: A vector containing the criteria scores for \code{solution}.
 #' }
+#'
+#' @examples
+#' ## Inserire un esempio.
 #'
 #' @export
 optMultiCrit <- function(ar, ...) {
@@ -44,15 +47,15 @@ optMultiCrit <- function(ar, ...) {
 
 #' optSingleCrit
 #'
-#' @description The \code{optSingleCrit} function selects the Pareto front designs
-#' that optimizes the individually considered criteria.
+#' @description The \code{optSingleCrit} function selects from the Pareto front
+#' those designs that minimize the criteria when considered individually.
 #'
-#' @param ar A list as the \code{megaAR} returned by the \code{runTPLS} function.
+#' @param ar A list as the \code{megaAR} list returned by \code{\link[multiDoE]{runTPLS}}.
 #'
 #' @return A list whose \eqn{i}-th element corresponds to the solution that optimizes
-#' the \eqn{i}-th criterion in \code{criteria}. The solution is a list of two elements:
+#' the \eqn{i}-th criterion. Every solution is a list of two elements:
 #' \itemize{
-#' \item \code{score}: A vector containing the scores for every element in \code{criteria}.
+#' \item \code{score}: Scores vector.
 #' \item \code{solution}: The design matrix.
 #' }
 #' @export
@@ -74,12 +77,12 @@ optSingleCrit <- function(ar) {
 
 #' plotPareto
 #'
-#' @description The \code{plotPareto} function returns a graphical representation
-#' (at most 3D) of the Pareto front.
+#' @description \code{plotPareto} returns a graphical representation (at most 3D)
+#' of the Pareto front.
 #'
 #' @usage plotPareto(ar, x, y, z = NULL, mode = T)
 #'
-#' @param ar A list as the \code{megaAR} returned by the \code{runTPLS} function.
+#' @param ar A list as the \code{megaAR} list returned by \code{\link[multiDoE]{runTPLS}}.
 #' @param x The criterion on the x axis. It can be one of the following: \code{"I",
 #' "Id", "D", "Ds", "A"} and \code{"As"}.
 #' @param y The criterion on the y axis. It can be one of the following: \code{"I",

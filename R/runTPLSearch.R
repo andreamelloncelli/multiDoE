@@ -1,13 +1,15 @@
-#' runTPLS
+#' Multi-Stratum Two-Phase Local Search (MS-TPLS) Algorithm
 #'
 #' @description This function implements the \emph{Multi-Stratum Two-Phase Local
 #' Search} (MS-TPLS) algorithm described in Borrotti, Sambo, Mylona and Gilmour
-#' (2017). The MS-TPLS algorithm is useful to obtain exact optimal multi-stratum
-#' designs using a multi-criteria approach. The number of iterations of the MS-TPLS
-#' algorithm must be set by the user. The resulting experimental designs can minimize up
-#' to six criteria simultaneously from the following: I, D, A, Id, Ds and As. The
-#' \code{runTPLS} function is able to provide the set of solutions that build the
-#' approximate Pareto front for the specified optimization problem.
+#' (2016). This algorithm is useful to obtain exact optimal multi-stratum
+#' designs through a multi-criteria approach. When using runTPLS the user must
+#' establish the search problem (structure of the experiment, number of trials,
+#' optimization criteria, etc.) and the total number of iterations of MS-TPLS.
+#' The resulting experimental designs can minimize up to six criteria simultaneously
+#' from the following: "I", "Id", "D", "Ds", "A" and "As". \code{runTPLS} is able
+#' to provide the set of solutions building the approximate Pareto front for
+#' the specified optimization problem.
 #'
 #' @usage runTPLS(facts, units, criteria, model, iters, ...)
 #'
@@ -35,8 +37,7 @@
 #'   \item{``Ds" : A-optimality}
 #'   \item{``As" : As-optimality}
 #' }
-#' These criteria are well explained in Borrotti, Sambo, Mylona and Gilmour (2017).
-#' More detailed information on the available criteria is also given in
+#' More detailed information on the available criteria is given in
 #' \code{\link[multiDoE]{MSOpt}.}
 #'
 #' @param model A string which indicates the type of model, among ``main",
@@ -71,7 +72,9 @@
 #' the number of criteria under consideration. One can calculate accordingly as
 #' \eqn{r - (n * restInit)} the number of times MS-Opt is called in the
 #' second step (lines 7-11 of the pseudo-code of MS-TPLS) of each iteration of MS-TPLS.
-#' }
+#'
+#' \item \code{'RngSeed', rngSeed}: A number indicating the seed for reproducibility.
+#' The default value is \code{rngSeed=0}.}
 #'
 #' @return \code{runTPLS} returns a list, whose elements are:
 #' \itemize{
@@ -114,6 +117,8 @@
 #' coordinate-exchange two-phase local search algorithm for multi-stratum
 #' experiments. Statistics & Computing, 2017.
 #'
+#' @examples
+#' ## Inserire un esempio.
 #'
 #' @export
 

@@ -1,4 +1,4 @@
-#' MSSearch
+#' Local search algorithm for high quality design generation
 #'
 #' @description The \code{MSSearch} function can be used to obtain an optimal
 #' multi-stratum experimental design considering one or more optimality criteria,
@@ -13,7 +13,7 @@
 #' \deqn{f_W = \sum_{c \in C}{\alpha_c f_c(d; \eta)=\overline{\alpha} \cdot \overline{f}},}{%
 #' f_W = \sum{c in C}(\alpha_c*f_c(d;\eta)) = \overline{\alpha} \overline{f},}
 #' with
-#' \deqn{\sum_{c\in C} \alpha_c = 1,}{\sum{c in C}(\alpha_c) = 1,}
+#' \deqn{\sum_{c \in C} \alpha_c = 1,}{\sum{c in C}(\alpha_c) = 1,}
 #' where \eqn{C} is the set of criteria to be minimized, \eqn{f_c} is the
 #' objective function for the \eqn{c} criterion and \eqn{\overline{\alpha}} is
 #' the vector that controls the relative weights of the objective functions.

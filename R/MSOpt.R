@@ -126,7 +126,7 @@
 #' It can be proved that when there are \eqn{k} treatment factors each with two
 #' levels, so that the experimental region is of the form \eqn{[-1, +1]^{k}},
 #' the objective function can also be written as:
-#' \deqn{f_{I}(d; \eta) = \text{trace} \left[(M)^{-1} B\right]}{%
+#' \deqn{f_{I}(d; \eta) = trace \left[(M)^{-1} B\right]}{%
 #'       f_I(d; \eta) = trace[(M)^{-1} B],}
 #' where \eqn{d} is the design with information matrix \eqn{M} and
 #' \eqn{B = 2^{-k} \int_{\chi}f'(x)f(x) \,dx }{%

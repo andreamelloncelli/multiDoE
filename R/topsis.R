@@ -6,18 +6,38 @@ Ldist <- function(x, y, w, p) {
 
 #' Technique for Order of Preference by Similarity to Ideal Solution (TOPSIS)
 #'
-#' @param paretoFront A list as the megaAR returned by the
-#' \code{\link[multiDoE]{runTPLS}} function.
-#' @param w A vector of weights. It must sum to 1.
-#' @param p A coefficient. It determines the type of distance used (see the
-#' \strong{Details} section).
+#' @description This function implements TOPSIS. This approach is based on
+#' the principle that the best solutions must be near to a positive ideal
+#' solution \eqn{(I+)} and far from a negative ideal solution \eqn{(I-)} in the
+#' criteria space. The weighted distance measure used to detect these similarities
+#' allows the user to possibly assign different importance to the criteria considered.
+#' The distance measure used is:
+#' \deqn{L_p(a,b) = \left[ \sum_{j=1}^{m}((w_j)^p(|a-b|)^p)\right]^(1/p)}{%
+#' L_p(a,b) = [ \sum{j=1}^{m}(w_j^p * |a-b|^p]^(1/p)}
+#' The metric on the basis of which solution ranking occurs is:
 #'
-#' @return \code{topsisOpt} returns a list containing the following items:
+#' \deqn{S(x) = \frac{L_p(x,I-)}{(L_p(x,I+) + L_p(x,I-)}}{%
+#' S(x) = L_p(x,I-) / (L_p(x,I+) + L_p(x,I-))}
+#'
+#'
+#' @param paretoFront A list as the \code{megaAR} list returned by \code{\link[multiDoE]{runTPLS}}.
+#' @param w A vector of weights. It must sum to 1.
+#' @param p A coefficient. It determines the type of distance used.
+#'
+#' @return The function returns a list containing the following items:
 #' \itemize{
-#' \item{\code{ranking}: .}
-#' \item{\code{bestScore}: .}
-#' \item{\code{bestSol}: .}
+#' \item{\code{ranking}: A dataframe containing the ranking values of S(x) and the
+#' ordered indexes according to the TOPSIS approach (from the best to the worst).}
+#' \item{\code{bestScore}: The scores of the best solution.}
+#' \item{\code{bestSol}: The best solution.}
 #' }
+#'
+#' @references
+#' M. Méndez, M. Frutos, F. Miguel and R. Aguasca-Colomo. TOPSIS Decision on
+#' Approximate Pareto Fronts by Using Evolutionary Algorithms: Application to an
+#' Engineering Design Problem. Mathematics, 2020.
+#' \url{https://www.mdpi.com/2227-7390/8/11/2072}
+#'
 #' @export
 #'
 topsisOpt <- function(paretoFront, w, p) {
