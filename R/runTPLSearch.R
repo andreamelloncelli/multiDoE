@@ -127,7 +127,7 @@ runTPLS <- function(facts, units, criteria, model, iters, ...) {
 
   for (i in 1:iters) {
     print(i)
-    varargin[which(varargin == "RngSeed") + 1] <- i
+    varargin[which(varargin == "RngSeed") + 1] <- varargin[which(varargin == "RngSeed") + 1] + i
     tpls <- TPLSearch(facts, units, criteria, model, varargin)
     ar[[i]] <- tpls$ar
     stats[[i]] <- tpls$stats
