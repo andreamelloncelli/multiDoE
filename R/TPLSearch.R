@@ -15,13 +15,11 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
   levels <- 3
   etas <- matrix(1, 1, nStrat - 1)
   rngSeed <- 0
-  startMode <- 1
-  alphaMode <- 0
   restInit <- 50
-  interact <- 0   # interactive è nome di funzione
+  # interact <- 0
 
   # optional parameters
-  if (length(varargin) != 0) {       # condizioni modificate (if aggiunto)
+  if (length(varargin) != 0) {
     for (i in seq(1, length(varargin), 2)) {
       switch(varargin[[i]],
              "Restarts" = {
@@ -36,18 +34,12 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
              "RngSeed" = {
                rngSeed = varargin[[i+1]]
              },
-             "StartMode" = {
-               startMode = varargin[[i+1]]
-             },
-             "AlphaMode" = {
-               alphaMode = varargin[[i+1]]
-             },
              "RestInit" = {
                restInit = varargin[[i+1]]
-             },
-             "Interactive" = {
-               interact = varargin[[i+1]]
              }
+             # "Interactive" = {
+             #   interact = varargin[[i+1]]
+             # }
       )
     }
   }
@@ -55,10 +47,10 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
   scalarizations <- restarts - (restInit * nCrit)
   mso <- MSOpt(facts, units, levels, etas, criteria, model)
   set.seed(rngSeed)
-  print(rngSeed)
+  # cat("set.seed =", rngSeed)
 
   # good quality solutions for the single objectives
-  initSol <- vector(mode = "list", length = nCrit)    # lista di lunghezza 6 con 6 soluzioni iniziali [[i]] matrice
+  initSol <- vector(mode = "list", length = nCrit)    # lista di lunghezza 6 con 6 soluzioni iniziali, [[i]] matrice
   initScores <- matrix(0, nCrit, nCrit)               # matrice 6 x 6
   totFEval <- 0                                       # numero
 

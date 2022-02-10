@@ -121,16 +121,20 @@ runTPLS <- function(facts, units, criteria, model, iters, ...) {
 
   varargin <- list(...)
 
+  if ("RngSeed" %in% varargin == F) {
+    varargin <- append(varargin, "RngSeed")
+    varargin <- append(varargin, 0)
+  }
+
   ar <- vector(mode = "list", iters)
   stats <- vector(mode = "list", iters)
 
-
   for (i in 1:iters) {
     print(i)
-    varargin[which(varargin == "RngSeed") + 1] <- varargin[which(varargin == "RngSeed") + 1] + i
     tpls <- TPLSearch(facts, units, criteria, model, varargin)
     ar[[i]] <- tpls$ar
     stats[[i]] <- tpls$stats
+    varargin[which(varargin == "RngSeed") + 1][[1]] <- varargin[which(varargin == "RngSeed") + 1][[1]] + 1
   }
 
   lCrit <- length(criteria)
