@@ -55,8 +55,7 @@ FixRepmat <- function(data, num_rows, num_cols) {
   if ((length(data) == 0 & is.matrix(data)) || (num_rows == 0 & is.matrix(data))) {
     return(matrix(NA, 0, dim(data)[2] * num_cols))
   } else if (num_rows == 0) {
-
-      return(matrix(NA, 0, length(data) * num_cols))
+    return(matrix(NA, 0, length(data) * num_cols))
   } else {
     return(repmat(data, num_rows, num_cols))
   }
