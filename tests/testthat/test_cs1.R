@@ -57,17 +57,17 @@ test_that("Score works",{expect_equal(Score(msopt, example),
 
 
 
-# MSSearch x I-optimality (CE) ####
+# test: MSSearch x I-optimality (CE) ####
 set.seed(2)
 msopt_I <- MSOpt(facts, units, levels, etas, c("I"), model)
-#mssearch_I <- MSSearch(msopt_I, 1, "Restarts", 100)
+#mssearch_I <- MSSearch(msopt_I, 1)
 file_name <- here::here("tests/testthat/tests_data/mss_I_cs1.Rds")
 #saveRDS(mssearch_I, file = file_name)
 mss_I_cs1 <- readRDS(file_name)
 
 set.seed(2)
 test_that("MSSearch works", {
-  expect_equal(MSSearch(msopt_I, 1, "Restarts", 100),
+  expect_equal(MSSearch(msopt_I, 1),
                list("optsol" = mss_I_cs1$optsol,
                     "optsc" = mss_I_cs1$optsc,
                     "feval" = mss_I_cs1$feval,
@@ -76,7 +76,7 @@ test_that("MSSearch works", {
   )
 })
 
-# MSSearch x I-optimality (CE) + parametri opz. ####
+# test: MSSearch x I-optimality (CE) + parametri opz. ####
 set.seed(2)
 #mssearch_I2 <- MSSearch(msopt_I, 1, "Restarts", 50, "Start", example)
 file_name <- here::here("tests/testthat/tests_data/mss_I2_cs1.Rds")
@@ -94,7 +94,7 @@ test_that("MSSearch works", {
   )
 })
 
-# MSSearch x IDA-optimality + parametri opz. ####
+# test: MSSearch x I,D,A-optimality + parametri opz. ####
 set.seed(2)
 # mssearch3 <- MSSearch(msopt, c(2/4, 1/4, 1/4),
 #                         "Restarts", 50,
@@ -118,4 +118,33 @@ test_that("MSSearch works", {
   )
 })
 
+
+
+# test: runTPLS ####
+
+lCrit <- length(criteria)
+iters <- 3 * lCrit
+restarts <- 30
+restInit <- 2
+
+#tpls <- runTPLS(facts, units, criteria, model, iters,
+#                "Restarts", restarts,
+#                "RestInit", restInit,
+#                "RngSeed", 4)
+file_name <- here::here("tests/testthat/tests_data/tpls_cs1.Rds")
+#saveRDS(tpls, file = file_name)
+tpls_cs1 <- readRDS(file_name)
+
+test_that("runTPLSearch works", {
+  expect_equal(runTPLS(facts, units, criteria, model, iters,
+                       "Etas", etas,
+                       "Restarts", restarts,
+                       "RestInit", restInit,
+                       "RngSeed", 4),
+               list("ar" = tpls_cs1$ar,
+                    "stats" = tpls_cs1$stats,
+                    "megaAR" = tpls_cs1$megaAR)
+  )
+}
+)
 

@@ -31,7 +31,7 @@ Wint <- c(w / sum(w)) * diag(a)
 msopt_cs2 <- MSOpt(facts, units, levels, etas, criteria, model)
 file_name <- here::here("tests/testthat/tests_data/msopt_cs2.Rds")
 #saveRDS(msopt_cs2, file = file_name)
-msopt_cs2 <- readRDS(file_name)
+msopt_cs2 <- readRDS(file = file_name)
 
 test_that("MSOpt works", {
   expect_equal(MSOpt(facts, units, levels, etas, criteria, model),
