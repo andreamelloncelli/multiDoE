@@ -137,7 +137,6 @@ tpls_cs1 <- readRDS(file_name)
 
 test_that("runTPLSearch works", {
   expect_equal(runTPLS(facts, units, criteria, model, iters,
-                       "Etas", etas,
                        "Restarts", restarts,
                        "RestInit", restInit,
                        "RngSeed", 4),
@@ -147,4 +146,53 @@ test_that("runTPLSearch works", {
   )
 }
 )
+
+
+# test: optMultiCrit ####
+
+# facts <- list(c(), 1:3)
+# units <- list(7, 4)
+# levels <- 3
+# etas <- list(1)
+# criteria <- c("I", "D", "A")
+# model2 <- "quadratic"
+#
+# lCrit <- length(criteria)
+# iters <- 10 * lCrit
+# restarts <- 100
+# restInit <- 2
+#
+# tpls1 <- runTPLS(facts, units, criteria, model2, iters, "Etas", etas,
+#                 "Levels", levels, "Restarts", restarts, "RestInit", restInit)
+
+file_name <- here::here("tests/testthat/tests_data/opt_cs1.Rds")
+#saveRDS(tpls1, file = file_name)
+tpls1 <- readRDS(file_name)
+
+#res <- optMultiCrit(tpls1$megaAR)
+file_name <- here::here("tests/testthat/tests_data/res_cs1.Rds")
+#saveRDS(res, file = file_name)
+res1 <- readRDS(file_name)
+
+test_that("optMultiCrit works",
+          {expect_equal(optMultiCrit(tpls1$megaAR),
+                        list("solution" = res1$solution, "scores" = res1$scores)
+                        )
+            }
+          )
+
+# test: OptSingleCrit ####
+
+#res2 <- optSingleCrit(tpls1$megaAR)
+file_name <- here::here("tests/testthat/tests_data/res2_cs1.Rds")
+#saveRDS(res2, file = file_name)
+res2 <- readRDS(file_name)
+
+test_that("optSingleCrit works",
+          {expect_equal(optSingleCrit(tpls1$megaAR),
+                        list("I" = res2$I, "D" = res2$D, "A" = res2$A)
+          )
+          }
+)
+
 
