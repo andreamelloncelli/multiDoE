@@ -154,8 +154,9 @@ runTPLS <- function(facts, units, criteria, model, iters, ...) {
   megaAR <- RemoveDuplicates(megaAR)
   megaAR <- RemoveDominated(megaAR)
   colnames(megaAR$scores) <- criteria
-
-  return(list("ar" = ar, "stats" = stats, "megaAR" = megaAR))
+  out <- list("ar" = ar, "stats" = stats, "megaAR" = megaAR)
+  class(out) <- "runTPLS"
+  return(out)
 }
 
 

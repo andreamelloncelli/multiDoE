@@ -18,7 +18,7 @@ rowleq <- function(A, B) {
 }
 
 
-# verificare se può andare bene questa
+# può andare bene questa?
 rowleq2 <- function(A, B) {
   argmin = which.min(A==B)   # restituisce il primo FALSE (0)
   return(A[argmin] <= B[argmin])

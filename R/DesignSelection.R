@@ -26,8 +26,8 @@
 #' ## Inserire un esempio.
 #'
 #' @export
-optMultiCrit <- function(ar, ...) {
-
+optMultiCrit.runTPLS <- function(out, ...) {
+  ar <- out$megaAR
   varargin <- list(...)
 
   if (nargs() == 1) {
@@ -60,7 +60,8 @@ optMultiCrit <- function(ar, ...) {
 #' }
 #' @export
 #'
-optSingleCrit <- function(ar) {
+optSingleCrit.runTPLS <- function(out) {
+  ar <- out$megaAR
 
   nCrit <- dim(ar$scores)[2]
   best <- vector("list", nCrit)
@@ -99,7 +100,8 @@ optSingleCrit <- function(ar) {
 #' @importFrom plotly plot_ly
 #'
 #' @export
-plotPareto <- function(ar, x, y, z = NULL, mode = T){
+plotPareto.runTPLS <- function(out, x, y, z = NULL, mode = T){
+  ar <- out$megaAR
 
   # data.frame
   if (ar$nsols == 1) {

@@ -14,17 +14,16 @@ PFront <- function(arch) {
 
   pf <- UpdateMinMaxSc(pf)
   # UpdateGaps
+  class(pf) <- "PFront"
   return(pf)
 }
-
-# Add_PF perchè Add è gia una funzione della classe Archive
 
 # arch$: nsols, dim, scores, solutions
 
 # Add_PF e AddNoNorm (quasi uguali) possono essere unite in un'unica funzione con un
 # argomento T/F opzionale ? quando si usa l'una o l'altra?
 
-Add_PF <- function(pf, solPtr) {
+Add_PF.PFront <- function(pf, solPtr) {
 
   if (IsWeakDominated(pf, solPtr)) {
     return(pf)
@@ -56,7 +55,7 @@ Add_PF <- function(pf, solPtr) {
   return(pf)
 }
 
-AddNoNorm <- function(pf, solPtr) {
+AddNoNorm.PFront <- function(pf, solPtr) {
 
   if (IsWeakDominated(pf, solPtr)) {
     return(pf)
@@ -87,17 +86,17 @@ AddNoNorm <- function(pf, solPtr) {
 #  return(hv)
 #}
 
-IsWeakDominated <- function(pf, solPtr) {
+IsWeakDominated.PFront <- function(pf, solPtr) {
   flag <- any(apply(FixRepmat(pf$arch$scores[solPtr, ], length(pf$ptrs), 1) >= pf$arch$scores[pf$ptrs, ], 1, all))
   return(flag)
 }
 
-GetWeakDominated <- function(pf, solPtr) {
+GetWeakDominated.PFront <- function(pf, solPtr) {
   wDom <- apply(pf$arch$scores[pf$ptrs, ] >= FixRepmat(pf$arch$scores[solPtr, ], length(pf$ptrs), 1), 1, all)
   return(wDom)
 }
 
-UpdateMinMaxSc <- function(pf) {
+UpdateMinMaxSc.PFront <- function(pf) {
   temp <- pf$arch$scores[pf$ptrs, ]
   if (is.matrix(temp)) {
     pf$scmax <- apply(temp, 2, max)
@@ -109,13 +108,13 @@ UpdateMinMaxSc <- function(pf) {
   return(pf)
 }
 
-SetMinMaxSc <- function(pf, scmax, scmin) {
+SetMinMaxSc.PFront <- function(pf, scmax, scmin) {
   pf$scmax <- scmax
   pf$scmin <- scmin
   return(pf)
-} # OK
+}
 
-GetNorm <- function(pf, solInd) {
+GetNorm.PFront <- function(pf, solInd) {
   cnorm <- (pf$arch$scores[solInd, ] - FixRepmat(pf$scmin, length(solInd), 1)) /
     FixRepmat(pf$scmax - pf$scmin, length(solInd), 1)
   return(cnorm)

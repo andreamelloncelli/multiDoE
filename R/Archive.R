@@ -11,10 +11,11 @@ Archive <- function(dim, capacity) {
   }
   ar$scores <- matrix(0, capacity, dim)
   ar$solutions <- vector("list", capacity)
+  class(ar) <- "Archive"
   return(ar)
 }
 
-Resize <- function(ar) {
+Resize.Archive <- function(ar) {
   n <- dim(ar$scores)[1] # capacity
   m <- dim(ar$scores)[2] # dim (numero criteri)
   ar$scores <- rbind(ar$scores, matrix(0, n, m))
@@ -22,7 +23,7 @@ Resize <- function(ar) {
   return(ar)
 }
 
-Add <- function(ar, sol, score) {
+Add.Archive <- function(ar, sol, score) {
   # check for capacity
   if (length(ar$solutions) == ar$nsols) {
     ar <- Resize(ar)
@@ -68,7 +69,7 @@ FixRepmat <- function(data, num_rows, num_cols) {
 # In questo modo in R funziona se e solo se il numero di soluzioni coincide con
 # la lunghezza della matrice scores dei punteggi
 
-RemoveDominated <- function(ar) {
+RemoveDominated.Archive <- function(ar) {
   # select dominated solutions (and empty lines)
   # toRemove <- matrix(0, dim(ar$scores)[1], 1)
     toRemove <- matrix(0, ar$nsols, 1)
@@ -86,7 +87,7 @@ RemoveDominated <- function(ar) {
   return(ar)
 }
 
-RemoveDuplicates <- function(ar) {
+RemoveDuplicates.Archive <- function(ar) {
   i <- ! duplicated(ar$scores)
   ar$scores <- ar$scores[i, ]
   ar$solutions <- ar$solutions[i]
@@ -94,7 +95,7 @@ RemoveDuplicates <- function(ar) {
   return(ar)
 }
 
-Trim <- function(ar) {
+Trim.Archive <- function(ar) {
   toRemove <- apply(ar$scores == 0, 1, all)
   ar$scores <- ar$scores[ ! toRemove, ]
   ar$solutions <- ar$solutions[ ! toRemove]

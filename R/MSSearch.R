@@ -79,7 +79,7 @@
 #' ## Inserire un esempio.
 #'
 #' @export
-MSSearch <- function(msopt, alpha, ...) {
+MSSearch.MSOpt <- function(msopt, alpha, ...) {
   varargin <- list(...)
 
   # default parameters
