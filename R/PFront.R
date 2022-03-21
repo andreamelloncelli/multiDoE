@@ -1,3 +1,4 @@
+# PFront ####
 PFront <- function(arch) {
   pf <- vector(mode = "list")
 
@@ -14,16 +15,17 @@ PFront <- function(arch) {
 
   pf <- UpdateMinMaxSc(pf)
   # UpdateGaps
-  class(pf) <- "PFront"
   return(pf)
 }
 
 # arch$: nsols, dim, scores, solutions
 
-# Add_PF e AddNoNorm (quasi uguali) possono essere unite in un'unica funzione con un
-# argomento T/F opzionale ? quando si usa l'una o l'altra?
+# Add_PF ####
 
-Add_PF.PFront <- function(pf, solPtr) {
+# Add_PF e AddNoNorm (quasi uguali) possono essere unite in un'unica funzione con
+# un argomento T/F opzionale ?
+
+Add_PF <- function(pf, solPtr) {
 
   if (IsWeakDominated(pf, solPtr)) {
     return(pf)
@@ -55,7 +57,8 @@ Add_PF.PFront <- function(pf, solPtr) {
   return(pf)
 }
 
-AddNoNorm.PFront <- function(pf, solPtr) {
+# AddNoNorm ####
+AddNoNorm <- function(pf, solPtr) {
 
   if (IsWeakDominated(pf, solPtr)) {
     return(pf)
@@ -79,24 +82,27 @@ AddNoNorm.PFront <- function(pf, solPtr) {
   }
   return(pf)
 }
-
+# HyperVolume ####
 #HyperVolume <- function(pf) {
 #  hv <- dominated_hypervolume(pf$Getnorm(pf$ptrs),
 #                              matrix(1, pf$arch$dim, 1) * 1.1)
 #  return(hv)
 #}
 
-IsWeakDominated.PFront <- function(pf, solPtr) {
+# IsWeakDominated ####
+IsWeakDominated <- function(pf, solPtr) {
   flag <- any(apply(FixRepmat(pf$arch$scores[solPtr, ], length(pf$ptrs), 1) >= pf$arch$scores[pf$ptrs, ], 1, all))
   return(flag)
 }
 
-GetWeakDominated.PFront <- function(pf, solPtr) {
+# GetWeakDominated ####
+GetWeakDominated <- function(pf, solPtr) {
   wDom <- apply(pf$arch$scores[pf$ptrs, ] >= FixRepmat(pf$arch$scores[solPtr, ], length(pf$ptrs), 1), 1, all)
   return(wDom)
 }
 
-UpdateMinMaxSc.PFront <- function(pf) {
+# UpdateMinMaxSc ####
+UpdateMinMaxSc <- function(pf) {
   temp <- pf$arch$scores[pf$ptrs, ]
   if (is.matrix(temp)) {
     pf$scmax <- apply(temp, 2, max)
@@ -108,13 +114,15 @@ UpdateMinMaxSc.PFront <- function(pf) {
   return(pf)
 }
 
-SetMinMaxSc.PFront <- function(pf, scmax, scmin) {
+# SetMinMaxSc ####
+SetMinMaxSc <- function(pf, scmax, scmin) {
   pf$scmax <- scmax
   pf$scmin <- scmin
   return(pf)
 }
 
-GetNorm.PFront <- function(pf, solInd) {
+# GetNorm ####
+GetNorm <- function(pf, solInd) {
   cnorm <- (pf$arch$scores[solInd, ] - FixRepmat(pf$scmin, length(solInd), 1)) /
     FixRepmat(pf$scmax - pf$scmin, length(solInd), 1)
   return(cnorm)

@@ -1,4 +1,4 @@
-
+#### Archive ####
 Archive <- function(dim, capacity) {
   ar <- list()
   if (nargs() < 2) {
@@ -11,11 +11,11 @@ Archive <- function(dim, capacity) {
   }
   ar$scores <- matrix(0, capacity, dim)
   ar$solutions <- vector("list", capacity)
-  class(ar) <- "Archive"
   return(ar)
 }
 
-Resize.Archive <- function(ar) {
+#### Resize ####
+Resize <- function(ar) {
   n <- dim(ar$scores)[1] # capacity
   m <- dim(ar$scores)[2] # dim (numero criteri)
   ar$scores <- rbind(ar$scores, matrix(0, n, m))
@@ -23,7 +23,8 @@ Resize.Archive <- function(ar) {
   return(ar)
 }
 
-Add.Archive <- function(ar, sol, score) {
+#### Add ####
+Add <- function(ar, sol, score) {
   # check for capacity
   if (length(ar$solutions) == ar$nsols) {
     ar <- Resize(ar)
@@ -40,13 +41,14 @@ Add.Archive <- function(ar, sol, score) {
   return(ar)
 }
 
-# problema con repmat /kronecker
+#### FixRepmat ####
+# problema con la funzione "repmat"
 
-# non uso direttamente repmat (pacchetto pracma) perchè quando "data" è una matrice
-# con elementi nulli il risultato è null, mentre dovrei avere come risultato
-# una matrice di dimensione diversa da 1, con elementi nulli.
-# Fixrepmat prende in input solitamente (verificare se sempre) una riga di una matrice.
-
+# non uso direttamente repmat (pacchetto pracma) perchè in R quando "data" è una
+# matrice con elementi nulli il risultato è null, mentre dovrei avere come
+# risultato una matrice di dimensione diversa da 1 e con elementi nulli.
+# Fixrepmat prende in input solitamente (verificare se sempre) una riga di una
+# matrice.
 # CASI CHE DANNO PROBLEMI:
 # es. repmat(matrix(c(0,0,1,2,3,3), 2,3, byrow = T),0,1) -- diverso da matlab
 # es. repmat(matrix(NA,0,3),2,1) -- NULL
@@ -62,14 +64,15 @@ FixRepmat <- function(data, num_rows, num_cols) {
   }
 }
 
+#### RemoveDominated ####
 # RemoveDominated: Problema se il numero di soluzioni ar$nsols è
 # diverso (minore) dalle righe della matrice scores. Vuol dire che rimangono
 # delle righe di zeri, da rimuovere poi con la funzione Trim (mai usata?!)
+# In R funziona se e solo se il numero di soluzioni coincide con
+# la lunghezza della matrice scores dei punteggi e dovrebbe accadere proprio
+# questo.
 
-# In questo modo in R funziona se e solo se il numero di soluzioni coincide con
-# la lunghezza della matrice scores dei punteggi
-
-RemoveDominated.Archive <- function(ar) {
+RemoveDominated <- function(ar) {
   # select dominated solutions (and empty lines)
   # toRemove <- matrix(0, dim(ar$scores)[1], 1)
     toRemove <- matrix(0, ar$nsols, 1)
@@ -87,7 +90,8 @@ RemoveDominated.Archive <- function(ar) {
   return(ar)
 }
 
-RemoveDuplicates.Archive <- function(ar) {
+#### RemoveDuplicates ####
+RemoveDuplicates <- function(ar) {
   i <- ! duplicated(ar$scores)
   ar$scores <- ar$scores[i, ]
   ar$solutions <- ar$solutions[i]
@@ -95,7 +99,8 @@ RemoveDuplicates.Archive <- function(ar) {
   return(ar)
 }
 
-Trim.Archive <- function(ar) {
+#### Trim ####
+Trim <- function(ar) {
   toRemove <- apply(ar$scores == 0, 1, all)
   ar$scores <- ar$scores[ ! toRemove, ]
   ar$solutions <- ar$solutions[ ! toRemove]

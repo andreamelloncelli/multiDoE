@@ -1,3 +1,4 @@
+#### MSSearch ####
 #' Local search algorithm for high quality design generation
 #'
 #' @description The \code{MSSearch} function can be used to obtain an optimal
@@ -79,7 +80,7 @@
 #' ## Inserire un esempio.
 #'
 #' @export
-MSSearch.MSOpt <- function(msopt, alpha, ...) {
+MSSearch <- function(msopt, alpha, ...) {
   varargin <- list(...)
 
   # default parameters
@@ -191,8 +192,28 @@ MSSearch.MSOpt <- function(msopt, alpha, ...) {
 
     trend[t] <- wopt
   } # for t
-  return(list("optsol" = optsol, "optsc" = optsc, "feval" = feval, "trend" = trend))
+  out <- list("optsol" = optsol, "optsc" = optsc, "feval" = feval, "trend" = trend)
+  class(out) <- c("MSSearch", "list")"MSSearch"
+  return(out)
 }
+
+
+
+#### print.MSSearch ####
+print.MSSearch <- function(mss) {
+  cat("MSSearch object")
+  return(invisible(NULL))
+}
+
+#### summary.MSSearch ####
+summary.MSSearch <- function(mss) {
+  cat("nfacts: ", msopt$nfacts, "\n")
+  cat("Per ulteriori info ?MSOpt")
+  return(invisible(NULL))
+}
+
+
+
 
 
 

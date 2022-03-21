@@ -1,3 +1,4 @@
+#### optMultiCrit ####
 #' optMultiCrit
 #'
 #' @description The \code{optMultiCrit} function provides an objective criterion
@@ -26,8 +27,7 @@
 #' ## Inserire un esempio.
 #'
 #' @export
-optMultiCrit.runTPLS <- function(out, ...) {
-  ar <- out$megaAR
+optMultiCrit <- function(ar, ...) {
   varargin <- list(...)
 
   if (nargs() == 1) {
@@ -45,6 +45,7 @@ optMultiCrit.runTPLS <- function(out, ...) {
   return(list("solution" = ar$solutions[ind], "scores" = ar$score[ind, ]))
 }
 
+#### optSingleCrit ####
 #' optSingleCrit
 #'
 #' @description The \code{optSingleCrit} function selects from the Pareto front
@@ -60,8 +61,7 @@ optMultiCrit.runTPLS <- function(out, ...) {
 #' }
 #' @export
 #'
-optSingleCrit.runTPLS <- function(out) {
-  ar <- out$megaAR
+optSingleCrit <- function(ar) {
 
   nCrit <- dim(ar$scores)[2]
   best <- vector("list", nCrit)
@@ -75,7 +75,7 @@ optSingleCrit.runTPLS <- function(out) {
   return(best)
 }
 
-
+#### plotPareto ####
 #' plotPareto
 #'
 #' @description \code{plotPareto} returns a graphical representation (at most 3D)
@@ -100,8 +100,7 @@ optSingleCrit.runTPLS <- function(out) {
 #' @importFrom plotly plot_ly
 #'
 #' @export
-plotPareto.runTPLS <- function(out, x, y, z = NULL, mode = T){
-  ar <- out$megaAR
+plotPareto <- function(ar, x, y, z = NULL, mode = T){
 
   # data.frame
   if (ar$nsols == 1) {

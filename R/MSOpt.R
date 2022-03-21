@@ -343,9 +343,27 @@ MSOpt <- function(facts, units, levels, etas, criteria, model) {
     a <- length(w / sum(w))
     msopt$W <- c(w / sum(w)) * diag(a)
   }
-  class(msopt) <- "MSOpt"
+  class(msopt) <- c("MSOpt", "list")
   return(msopt)
 }
+
+
+
+#### print.MSOpt ####
+print.MSOpt <- function(msopt) {
+  cat("MSOpt object")
+  return(invisible(NULL))
+}
+
+#### summary.MSOpt ####
+summary.MSOpt <- function(msopt) {
+  cat("nfacts: ", msopt$nfacts, "\n")
+  cat("Per ulteriori info ?MSOpt")
+  return(invisible(NULL))
+}
+
+
+
 
 #### colprod ####
 
@@ -393,7 +411,7 @@ colprod <- function(X) {
 #'
 #' @return The vector of scores.
 #' @export
-Score.MSOpt <- function(msopt, settings) {
+Score <- function(msopt, settings) {
 
   switch(msopt$model,
          "main" = {
