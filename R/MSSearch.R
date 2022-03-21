@@ -193,7 +193,7 @@ MSSearch <- function(msopt, alpha, ...) {
     trend[t] <- wopt
   } # for t
   out <- list("optsol" = optsol, "optsc" = optsc, "feval" = feval, "trend" = trend)
-  class(out) <- c("MSSearch", "list")"MSSearch"
+  class(out) <- c("MSSearch", "list")
   return(out)
 }
 

@@ -350,6 +350,7 @@ MSOpt <- function(facts, units, levels, etas, criteria, model) {
 
 
 #### print.MSOpt ####
+#' @export
 print.MSOpt <- function(msopt) {
   cat("MSOpt object")
   return(invisible(NULL))

@@ -40,7 +40,7 @@ Ldist <- function(x, y, w, p) {
 #'
 #' @export
 #'
-topsisOpt.runTPLS <- function(out, w, p) {
+topsisOpt <- function(out, w, p) {
   paretoFront <- out$megaAR
   if (sum(w) != 1) {
     stop("Weight vector invalid.")
