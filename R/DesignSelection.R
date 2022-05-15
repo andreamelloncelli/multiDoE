@@ -1,5 +1,6 @@
 #### optMultiCrit ####
-#' optMultiCrit
+#' Selection of a symmetrical design on the Pareto Front based on the utopian point
+#'
 #'
 #' @description The \code{optMultiCrit} function provides an objective criterion
 #' for the selection of the best experimental design among all Pareto front solutions.
@@ -23,8 +24,6 @@
 #' \item \code{score}: A vector containing the criteria scores for \code{solution}.
 #' }
 #'
-#' @examples
-#' ## Inserire un esempio.
 #'
 #' @export
 optMultiCrit <- function(ar, ...) {
@@ -46,7 +45,7 @@ optMultiCrit <- function(ar, ...) {
 }
 
 #### optSingleCrit ####
-#' optSingleCrit
+#' Selection of the best design from the Pareto Front for each criterion
 #'
 #' @description The \code{optSingleCrit} function selects from the Pareto front
 #' those designs that minimize the criteria when considered individually.
@@ -76,7 +75,7 @@ optSingleCrit <- function(ar) {
 }
 
 #### plotPareto ####
-#' plotPareto
+#' Graphical representation of the Pareto Front
 #'
 #' @description \code{plotPareto} returns a graphical representation (at most 3D)
 #' of the Pareto front.

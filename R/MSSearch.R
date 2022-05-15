@@ -77,7 +77,27 @@
 #' experiments. Statistics & Computing, 2016.
 #'
 #' @examples
-#' ## Inserire un esempio.
+#' library(multiDoE)
+#'
+#' ## To check the number of digits to be printed.
+#' options(digits = 10)
+#'
+#' ## Definition of parameters for experimental setup
+#' facts <- list(1, 2:5)
+#' units <- list(21, 2)
+#' level <- 3
+#' etas <- list(1)
+#' model2 <- "quadratic"
+#'
+#' ## Single-objective optimization
+#' criteria_S <- c('I')
+#' msopt_S <- MSOpt(facts, units, level, etas, criteria_S, model2)
+#' mssearch_S <- MSSearch(msopt_S, alpha = 1, "Restarts", 100)
+#'
+#' ## Multi-objective optimization
+#' criteria_M <- c('Id', 'Ds', 'As')
+#' msopt_M <- MSOpt(facts, units, level, etas, criteriaM, model2)
+#' mssearch_M <- MSSearch(msoptM, alpha = c(1/2, 1/4, 1/4), "Restarts", 100)
 #'
 #' @export
 MSSearch <- function(msopt, alpha, ...) {
@@ -200,12 +220,16 @@ MSSearch <- function(msopt, alpha, ...) {
 
 
 #### print.MSSearch ####
+#' @export
+#'
 print.MSSearch <- function(mss) {
   cat("MSSearch object")
   return(invisible(NULL))
 }
 
 #### summary.MSSearch ####
+#' @export
+#'
 summary.MSSearch <- function(mss) {
   cat("nfacts: ", msopt$nfacts, "\n")
   cat("Per ulteriori info ?MSOpt")

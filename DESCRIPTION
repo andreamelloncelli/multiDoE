@@ -1,11 +1,10 @@
 Package: multiDoE
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Multi-criteria Design of Experiments for optimal design
 Version: 0.1.0
-Author: Matteo Borrotti, Francesca Cucchi, Andrea Melloncelli, Francesco Sambo & Kalliopi Mylona
-Maintainer: Matteo Borrotti <matteo.borrotti@unimib.it>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: Francesca Cucchi, Andrea Melloncelli, Francesco Sambo, Kalliopi Mylona and Matteo Borrotti
+Maintainer: Francesca Cucchi <f.cucchi4@campus.unimib.it>
+Description: Multi-criteria design of experiments algorithm that simultaneously optmizes up to six different criteria (I, Id, D, Ds, A and As). The algorithm finds the optimal Pareto front and, if requested, selects a possible symmetrical design on it. The symmetrical design is selected based on two techniques: minimum distance with the Utopia point or the TOPSIS approach.
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -13,7 +12,9 @@ Suggests:
     testthat (>= 3.0.0),
     devtools,
     markdown,
-    here
+    here,
+    knitr,
+    rmarkdown
 Config/testthat/edition: 3
 Imports:
     pracma,
@@ -23,3 +24,4 @@ Imports:
     plotly,
     usethis
 RoxygenNote: 7.1.2
+VignetteBuilder: knitr

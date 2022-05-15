@@ -117,8 +117,6 @@
 #' coordinate-exchange two-phase local search algorithm for multi-stratum
 #' experiments. Statistics & Computing, 2017.
 #'
-#' @examples
-#' ## Inserire un esempio.
 #'
 #' @export
 

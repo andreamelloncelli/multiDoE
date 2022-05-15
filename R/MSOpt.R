@@ -205,11 +205,14 @@
 #'
 #' @examples
 #' ## This example uses MSOpt to setup a split-plot design with
-#' ## 1 whole-plot factor, 4 subplot factors, 6 whole plots and
-#' ## 30 runs (Gilmour et al., 2000).
+#' ## 1 whole-plot factor and 4 subplot factors, which in the \code{facts}
+#' ## element appear numbered from 2 to 5.
+#' ## The experiment must be structured as follows: 6 whole plots and 5 subplots
+#' ## per whole plot, for a total of 30 runs.
+#' ## Each experimental factor has 3 different levels.
 #'
-#' options(digits = 10)
 #' ## To check the number of digits to be printed.
+#' options(digits = 10)
 #'
 #' facts <- list(1, 2:5)
 #' units <- list(6, 5)
@@ -351,17 +354,28 @@ MSOpt <- function(facts, units, levels, etas, criteria, model) {
 
 #### print.MSOpt ####
 #' @export
+#'
 print.MSOpt <- function(msopt) {
-  cat("MSOpt object")
+  cat("MSOpt object of", length(msopt), "elements defining the experimental structure.")
   return(invisible(NULL))
 }
 
 #### summary.MSOpt ####
+#' @export
+#'
 summary.MSOpt <- function(msopt) {
-  cat("nfacts: ", msopt$nfacts, "\n")
-  cat("Per ulteriori info ?MSOpt")
+  cat("- Number of experimental factors: ", msopt$nfacts, "\n")
+  cat("- Number of strata: ", msopt$nstrat, "\n")
+  cat("- Total number of runs: ", msopt$runs, "\n")
+  cat("- Etas: ", unlist(msopt$etas), "\n" )
+  cat("- Levels per experimental factor: ", msopt$levs, "\n" )
+  cat("- Model type: ", msopt$model, "\n" )
+  cat("- Criteria: ", msopt$crit, "\n" )
+  cat("\n")
+  cat("For further information see ?MSOpt")
   return(invisible(NULL))
 }
+
 
 
 
@@ -401,8 +415,7 @@ colprod <- function(X) {
 }
 
 #### Score ####
-
-#' Score
+#' Criteria values for design matrix
 #'
 #' The \code{Score} function returns the optimization criteria values for a
 #' given \code{\link[multiDoE]{MSOpt}} list and design matrix.
@@ -471,7 +484,7 @@ Score <- function(msopt, settings) {
       scores[ind] <- sum(diag(msopt$W %*% Binv[2:rws, 2:cls]))
     }
   }
-  return(scores)
+  return(data.frame("criteria" = msopt$crit, "score" = scores))
 }
 
 

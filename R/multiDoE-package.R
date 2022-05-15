@@ -29,9 +29,9 @@
 #'
 #' @details
 #' Package: multiDoE \cr
-#' Version: \cr
-#' Date:    \cr
-#' License: \cr
+#' Version: ?\cr
+#' Date: ?\cr
+#' License: ?\cr
 #'
 #' Although the implemented algorithms are designed to handle experimental designs
 #' with experimental factors in at least two different strata, their flexibility
@@ -70,16 +70,11 @@
 #' multi-criteria decision analysis approach that in the final design selection
 #' process allows the differentiation of criteria on the basis of their importance.
 #'
-#'
-#' (Prof. Melloncelli: XXX TODO FIX ME XXXX The only function you're likely to
-#' need from roxygen2 is [roxygenize()]. Otherwise refer to the vignettes to see
-#' how to format the documentation. This comes from the R/multiDOE-package.R)
-#'
 #' @author
-#' Matteo Borrotti, Francesca Cucchi, Andrea Melloncelli, Francesco Sambo &
-#' Kalliopi Mylona
+#' Francesca Cucchi, Andrea Melloncelli, Francesco Sambo, Kalliopi Mylona
+#' and Matteo Borrotti
 #'
-#' Maintainer: Matteo Borrotti <matteo.borrotti@unimib.it>.
+#' Maintainer: Francesca Cucchi <f.cucchi4@campus.unimib.it>
 #'
 #' @references
 #' M. Borrotti, F. Sambo and K. Mylona. A coordinate-exchange two-phase local
@@ -97,8 +92,5 @@
 #' Engineering Design Problem. Mathematics, 2020.
 #' \url{https://www.mdpi.com/2227-7390/8/11/2072}
 #'
-#' @examples
-#' ## Inserire un esempio.
 #'
-#'
-"_PACKAGE"
+
