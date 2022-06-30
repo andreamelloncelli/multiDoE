@@ -423,7 +423,7 @@ colprod <- function(X) {
 #' @param msopt A list as returned by the function \link[multiDoE]{MSOpt}.
 #' @param settings The design matrix for which criteria scores have to be calculated.
 #'
-#' @return The vector of scores.
+#' @return The data frame of criteria and scores.
 #' @export
 Score <- function(msopt, settings) {
 
