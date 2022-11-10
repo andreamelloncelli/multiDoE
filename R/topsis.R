@@ -20,6 +20,7 @@ Ldist <- function(x, y, w, p) {
 #' S(x) = L_p(x,I-) / (L_p(x,I+) + L_p(x,I-))}
 #'
 #'
+# TODO: issue 2: https://github.com/andreamelloncelli/multiDoE/issues/2
 #' @param paretoFront A list as the \code{megaAR} list returned by \code{\link[multiDoE]{runTPLS}}.
 #' @param w A vector of weights. It must sum to 1.
 #' @param p A coefficient. It determines the type of distance used.

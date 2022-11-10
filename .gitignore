@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+^.Rd2pdf*
 # ignore notebook cache
 *.nb.html
 # ignore documentation files (man/*.Rd), they are rebuild every time.

@@ -96,7 +96,7 @@ optSingleCrit <- function(ar) {
 #' @return The Pareto front chart.
 #'
 #' @import ggplot2
-#' @importFrom plotly plot_ly
+#' @importFrom plotly plot_ly layout
 #'
 #' @export
 plotPareto <- function(ar, x, y, z = NULL, mode = T){

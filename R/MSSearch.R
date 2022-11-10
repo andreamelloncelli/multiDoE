@@ -76,6 +76,7 @@
 #' coordinate-exchange two-phase local search algorithm for multi-stratum
 #' experiments. Statistics & Computing, 2016.
 #'
+# TODO: issue 4: https://github.com/andreamelloncelli/multiDoE/issues/4
 #' @examples
 #' library(multiDoE)
 #'
