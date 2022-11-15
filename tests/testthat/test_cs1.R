@@ -75,7 +75,7 @@ file_name <- here::here("tests/testthat/tests_data/mss_I_cs1.Rds")
 mss_I_cs1 <- readRDS(file_name)
 
 set.seed(2)
-test_that("MSSearch works", {
+test_that("MSSearch works 1", {
   skip("to fix")
   expect_equal(
     MSSearch(msopt_I, 1),
@@ -96,14 +96,20 @@ file_name <- here::here("tests/testthat/tests_data/mss_I2_cs1.Rds")
 mss_I2_cs1 <- readRDS(file_name)
 
 set.seed(2)
-test_that("MSSearch works", {
+test_that("MSSearch works 2", {
   expect_equal(
     MSSearch(msopt_I, 1, "Restarts", 50, "Start", example),
-    list(
-      "optsol" = mss_I2_cs1$optsol,
-      "optsc" = mss_I2_cs1$optsc,
-      "feval" = mss_I2_cs1$feval,
-      "trend" = mss_I2_cs1$trend
+    structure(
+      list(
+        "optsol" = mss_I2_cs1$optsol,
+        "optsc" = data.frame(
+          "criteria" = "I",
+          "score" = mss_I2_cs1$optsc
+        ),
+        "feval" = mss_I2_cs1$feval,
+        "trend" = mss_I2_cs1$trend
+      ),
+      class = c("MSSearch", "list")
     )
   )
 })
@@ -115,20 +121,29 @@ set.seed(2)
 #                         "Start", example,
 #                         "Normalize", c(rep(0.5, 3), rep(1, 3)))
 file_name <- here::here("tests/testthat/tests_data/mss_3_cs1.Rds")
-#saveRDS(mssearch3, file = file_name)
 mss_3_cs1 <- readRDS(file_name)
 
 set.seed(2)
-test_that("MSSearch works", {
-  expect_equal(MSSearch(msopt, c(2/4, 1/4, 1/4),
-                        "Restarts", 50,
-                        "Start", example,
-                        "Normalize", c(rep(0.5, 3), rep(1, 3))),
-               list("optsol" = mss_3_cs1$optsol,
-                    "optsc" = mss_3_cs1$optsc,
-                    "feval" = mss_3_cs1$feval,
-                    "trend" = mss_3_cs1$trend
-               )
+test_that("MSSearch works 3", {
+  expect_equal(
+    MSSearch(
+      msopt, c(2/4, 1/4, 1/4),
+        "Restarts", 50,
+        "Start", example,
+        "Normalize", c(rep(0.5, 3), rep(1, 3))
+    ),
+    structure(
+      list(
+        "optsol" = mss_3_cs1$optsol,
+        "optsc" = data.frame(
+          "criteria" = c("I", "D", "A"),
+          "score" = mss_3_cs1$optsc
+        ),
+        "feval" = mss_3_cs1$feval,
+        "trend" = mss_3_cs1$trend
+      ),
+      class = c("MSSearch", "list")
+    )
   )
 })
 

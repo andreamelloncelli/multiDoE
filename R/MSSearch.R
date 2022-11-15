@@ -164,6 +164,7 @@ MSSearch <- function(msopt, alpha, ...) {
 
     # score initial solution
     score <- Score(msopt, sol)
+    score <- score[["score"]]
     wscore <- as.numeric(as.vector(alpha) %*% as.vector((score - CritTR) / CritSC))
 
     if (is.nan(wscore) | is.na(wscore)){
@@ -187,10 +188,9 @@ MSSearch <- function(msopt, alpha, ...) {
               if (sol[i * sizUnits[s], j] != msopt$avlev[[j]][f]) {
                 sol2[(sizUnits[s]*(i - 1) + 1):(i * sizUnits[s]), j] <- msopt$avlev[[j]][f]
                 score2 <- Score(msopt, sol2)
-
+                score2 <- score2[["score"]]
                 wscore2 <- as.numeric(as.vector(alpha) %*% as.vector((score2 - CritTR) / CritSC))
                 feval <- feval + 1
-                #print(wscore2)
                 if ((!is.nan(wscore2)) && (!is.na(wscore2)) && (wscore2 < wscore)){
                   sol <- sol2
                   wscore <- wscore2
