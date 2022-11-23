@@ -59,7 +59,7 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
     mssearch <- MSSearch(mso, a, "Restarts", restInit)
 
     initSol[[i]] <- mssearch$optsol
-    initScores[i, ] <- mssearch$optsc
+    initScores[i, ] <- mssearch$optsc$score
     totFEval <- totFEval + mssearch$feval
   }
 
@@ -102,7 +102,7 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
 
     newMssearch <- MSSearch(mso, alpha, "Start", start[[1]], "Normalize", norms)
     newSol <- newMssearch$optsol
-    newScore <- newMssearch$optsc
+    newScore <- newMssearch$optsc$score
     newFeval <- newMssearch$feval
 
     pf$arch <- Add(pf$arch, newSol, newScore)

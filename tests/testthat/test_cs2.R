@@ -34,21 +34,26 @@ file_name <- here::here("tests/testthat/tests_data/msopt_cs2.Rds")
 msopt_cs2 <- readRDS(file = file_name)
 
 test_that("MSOpt works", {
-  expect_equal(MSOpt(facts, units, levels, etas, criteria, model),
-               list("facts" = list(1, 2, 3),
-                    "nfacts" = 3,
-                    "nstrat" = 3,
-                    "units" = list(3, 3, 3),
-                    "runs" = 27,
-                    "etas" = list(1, 1),
-                    "avlev" = list(c(-1, 0 , 1), c(-1, 0, 1), c(-1, 0, 1)),
-                    "levs" = c(3, 3, 3),
-                    "Vinv" = msopt_cs2$Vinv,
-                    "model"  = 'interaction',
-                    "crit" = c('Id', 'Ds', 'As'),
-                    "ncrit" = 3,
-                    "M0" = M0int,
-                    "W" = Wint
-               )
+  expect_equal(
+    MSOpt(facts, units, levels, etas, criteria, model),
+    structure(
+      list(
+        "facts" = list(1, 2, 3),
+        "nfacts" = 3,
+        "nstrat" = 3,
+        "units" = list(3, 3, 3),
+        "runs" = 27,
+        "etas" = list(1, 1),
+        "avlev" = list(c(-1, 0 , 1), c(-1, 0, 1), c(-1, 0, 1)),
+        "levs" = c(3, 3, 3),
+        "Vinv" = msopt_cs2$Vinv,
+        "model"  = 'interaction',
+        "crit" = c('Id', 'Ds', 'As'),
+        "ncrit" = 3,
+        "M0" = M0int,
+        "W" = Wint
+      ),
+      class = c("MSOpt", "list")
+    )
   )
 })

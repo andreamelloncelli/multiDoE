@@ -76,14 +76,19 @@ mss_I_cs1 <- readRDS(file_name)
 
 set.seed(2)
 test_that("MSSearch works 1", {
-  skip("to fix")
   expect_equal(
     MSSearch(msopt_I, 1),
-    list(
-      "optsol" = mss_I_cs1$optsol,
-      "optsc" = mss_I_cs1$optsc,
-      "feval" = mss_I_cs1$feval,
-      "trend" = mss_I_cs1$trend
+    structure(
+      list(
+        "optsol" = mss_I_cs1$optsol,
+        "optsc" = data.frame(
+            "criteria" = c("I"),
+            "score" = mss_I_cs1$optsc
+          ),
+        "feval" = mss_I_cs1$feval,
+        "trend" = mss_I_cs1$trend
+      ),
+      class = c("MSSearch", "list")
     )
   )
 })
@@ -165,13 +170,17 @@ file_name <- here::here("tests/testthat/tests_data/tpls_cs1.Rds")
 tpls_cs1 <- readRDS(file_name)
 
 test_that("runTPLSearch works", {
-  expect_equal(runTPLS(facts, units, criteria, model, iters,
-                       "Restarts", restarts,
-                       "RestInit", restInit,
-                       "RngSeed", 4),
-               list("ar" = tpls_cs1$ar,
-                    "stats" = tpls_cs1$stats,
-                    "megaAR" = tpls_cs1$megaAR)
+  expect_equal(
+    runTPLS(facts, units, criteria, model, iters,
+            "Restarts", restarts,
+            "RestInit", restInit,
+            "RngSeed", 4),
+    structure(
+      list("ar" = tpls_cs1$ar,
+          "stats" = tpls_cs1$stats,
+          "megaAR" = tpls_cs1$megaAR),
+      class = c("runTPLS", "list")
+    )
   )
 }
 )
