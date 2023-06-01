@@ -76,7 +76,6 @@
 #' coordinate-exchange two-phase local search algorithm for multi-stratum
 #' experiments. Statistics & Computing, 2016.
 #'
-# TODO: issue 4: https://github.com/andreamelloncelli/multiDoE/issues/4
 #' @examples
 #' library(multiDoE)
 #'
@@ -97,8 +96,8 @@
 #'
 #' ## Multi-objective optimization
 #' criteria_M <- c('Id', 'Ds', 'As')
-#' msopt_M <- MSOpt(facts, units, level, etas, criteriaM, model2)
-#' mssearch_M <- MSSearch(msoptM, alpha = c(1/2, 1/4, 1/4), "Restarts", 100)
+#' msopt_M <- MSOpt(facts, units, level, etas, criteria_M, model2)
+#' mssearch_M <- MSSearch(msopt_M, alpha = c(1/2, 1/4, 1/4), "Restarts", 100)
 #'
 #' @export
 MSSearch <- function(msopt, alpha, ...) {

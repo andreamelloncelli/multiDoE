@@ -1,0 +1,83 @@
+---
+title: "my-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+### The `MultiDoE` package
+
+The `MultiDoE` package can be used to construct multi-stratum experimental designs (for any number of strata) that optimize up to six statistical criteria simultaneously. To solve such optimization problems, the innovative MS-Opt and MS-TPLS algorithms are implemented. The former relies on a local search procedure to find a locally optimal experimental design. More precisely, it is an extension of the Coordinate-Exchange (CE) algorithm that allows both the search of experimental designs for any type of nested multi-stratum experiment and the optimization of multiple criteria simultaneously. The latter, by embedding MS-Opt in a Two-Phase Local Search framework, is able to generate a good Pareto front approximation for the optimization problem under study. The package provides different ways to choose the final optimal experimental design among those belonging to the Pareto front.
+
+In what follows, we report a practical example.
+
+### The protein extraction experiment
+In this experiment, a split-plot design is used. The final aim is to investigate the effect of five factors on protein extraction. More precisely, a mixture containing two valuable proteins, among other components, is considered after fermentation and purification processes. 
+
+The experiment is intended to separate the two proteins from the mixture, and the responses were the yields and purities of the two proteins. The factors are: $x_1$, the feed position for the inflow of a mixture, which is hard to set; $x_2$ the feed flow rate; $x_3$ the gas flow rate; $x_4$ the concentration of the first protein; $x_5$, the concentration of the second protein. Three levels are used for each factor. The split-plot design was set up as follows: one whole-plot factor, four subplot factors, twenty-one whole plots of size two, and 42 runs.
+
+Let use the package for simultaneously optmize more than one criterion.
+
+First step is to upload the package.
+```{r setup}
+library(multiDoE)
+```
+
+It is time to initialize the main arguments for defining the experimental design.
+
+```{r }
+set.seed(13)
+options(digits = 15)
+
+facts <- list(1, 2:5)
+units <- list(21, 2)
+levels <- 3
+etas <- list(1)
+criteria <- c('Id', 'Ds')
+model <- "quadratic"
+```
+
+`facts` is a list of vectors representing the distribution of factors across strata. Each item in the list represents a stratum and the first item is the highest stratum of the multi-stratum structure of the experiment. Within the vectors, experimental factors are indicated by progressive integer from 1 (the first factor of the highest stratum) to the total number of experimental factors (the last factor of the lowest stratum). Blocking factors are differently denoted by empty vectors.
+
+`units` is a list whose $i$-th element, $n_i$, is the number of experimental units within each unit at the previous stratum ($i-1$).
+
+`levels` is the number of available levels for each experimental factor.
+
+`etas` is used to specify the ratios of error variance between subsequent strata, starting from the highest strata.
+
+`criteria` is a list specifying the criteria to be optimized among I-, Id-, D-, A-, Ds, and As-optimality.
+
+`model` is a string which indicates the type of model, among main effects only ("main"), interaction ("interaction") and full quadratic ("quadratic").
+
+Now, we need to declare the main arguments for the MS-TPLS algorithms in order to get the final Pareto Front.
+
+```{r}
+iters <- 5 * length(criteria)
+restarts <- 20
+restInit <- 2
+```
+
+`model` is an integer indicating the number of iterations of the MS-TPLS algorithm. In this case, we set the iteration as 5 times the number of criteria.
+
+`restarts` defines the number of times the MS-Opt procedure is altogether called within each iteration of the MS-TPLS algorithm.
+
+`restInit` determines how many of the iterations of MS-Opt should be used for each criterion in the first step of the MS-TPLS algorithm.
+
+`restarts` and `restInit`may be tuned.
+
+We now simultaneously minimize Id- and Ds-criteria.
+
+```{r}
+tpls <- runTPLS(facts,units, criteria, model, iters, 
+                "Restarts", restarts, 
+                "RestInit", restInit)
+```

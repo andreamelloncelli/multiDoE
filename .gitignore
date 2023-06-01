@@ -9,3 +9,4 @@
 *.Rd
 my_R_log.txt
 provamsopt.pdf
+inst/doc
