@@ -21,8 +21,8 @@ Ldist <- function(x, y, w, p) {
 #'
 #'
 #' @param out A list as the \code{megaAR} list returned by \code{\link[multiDoE]{runTPLS}}.
-#' @param w A vector of weights. It must sum to 1.
-#' @param p A coefficient. It determines the type of distance used.
+#' @param w A vector of weights. It must sum to 1. The default wights are uniform.
+#' @param p A coefficient. It determines the type of distance used. The default value is 2.
 #'
 #' @return The function returns a list containing the following items:
 #' \itemize{
@@ -40,8 +40,13 @@ Ldist <- function(x, y, w, p) {
 #'
 #' @export
 #'
-topsisOpt <- function(out, w, p) {
+topsisOpt <- function(out, w = NULL, p = 2) {
+  if (is.null(w)){
+    w <- rep(1/out$megaAR$dim, out$megaAR$dim)
+  }
+
   paretoFront <- out$megaAR
+
   if (sum(w) != 1) {
     stop("Weight vector invalid.")
 

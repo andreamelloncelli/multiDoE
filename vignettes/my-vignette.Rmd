@@ -1,5 +1,5 @@
 ---
-title: "my-vignette"
+title: "Multi-stratum experimental designs: a practical example"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{my-vignette}
@@ -62,7 +62,7 @@ Now, we need to declare the main arguments for the MS-TPLS algorithms in order t
 
 ```{r}
 iters <- 5 * length(criteria)
-restarts <- 20
+restarts <- 10
 restInit <- 2
 ```
 
@@ -72,7 +72,7 @@ restInit <- 2
 
 `restInit` determines how many of the iterations of MS-Opt should be used for each criterion in the first step of the MS-TPLS algorithm.
 
-`restarts` and `restInit`may be tuned.
+`restarts` and `restInit`could be tuned.
 
 We now simultaneously minimize Id- and Ds-criteria.
 
@@ -80,4 +80,40 @@ We now simultaneously minimize Id- and Ds-criteria.
 tpls <- runTPLS(facts,units, criteria, model, iters, 
                 "Restarts", restarts, 
                 "RestInit", restInit)
+```
+
+Given the `tpls` object, you have now different options. First of all, you can inspect your Pareto front by using the `plotPareto` function. As input of the `plotPareto` function, you should use the `megaAr` output of the `runTPLS` function. `megaAR` contains different information, among them it includes a matrix on which every row contains the criteria values for each Pareto front design.
+
+```{r}
+plotPareto(tpls$megaAR)
+```
+
+Now, you would probably like to find the best compromise between Id- and Ds-criteria. For this purpose, the `optMultiCrit` is the function you are searching for. The `optMultiCrit` function provides an objective criterion for the selection of the best experimental design among all Pareto front solutions. The selection is based on minimizing the euclidean distance in the criteria space between all the Pareto front points and an approximate utopian point. By default, the coordinates of the utopian point correspond to the minimum value reached by each criterion during the `runTPLS` optimization procedure. Alternatively, the utopian point can be chosen by the user (please see the documentation).
+
+```{r}
+optMultiCrit(tpls$megaAR)
+```
+
+Another option is the use of the `topsisOpt` function. This approach is based on the principle that the best solutions must be near to a positive ideal solution $(I+)$ and far from a negative ideal solution $(I-)$ in the criteria space. Please see the main reference for more details.
+
+M. Méndez, M. Frutos, F. Miguel and R. Aguasca-Colomo. TOPSIS Decision on Approximate Pareto Fronts by Using Evolutionary Algorithms: Application to an Engineering Design Problem. Mathematics, 2020.
+
+You can access the scores of the best compromised design found by the TOPSIS procedure.
+
+```{r}
+topsis_solutions <- topsisOpt(tpls)
+
+topsis_solutions$bestScore
+```
+
+Then, you can also investigate the best design matrix.
+
+```{r}
+topsis_solutions$bestSol
+```
+
+At this point, another interesting analysis is related to the identification of the best design matrices for each criterion in the Pareto front. `optSingleCrit` function selects he best design from the Pareto Front for each criterion.
+
+```{r}
+optSingleCrit(tpls$megaAR)
 ```

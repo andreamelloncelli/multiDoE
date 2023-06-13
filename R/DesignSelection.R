@@ -112,7 +112,7 @@ plotPareto <- function(ar, x, y, z = NULL, mode = T){
 
   # 2d
   if (is.null(z)) {
-    ggplot(df, aes_string(x = x, y = y)) + geom_point() +
+    ggplot(df, aes_string(x = colnames(df)[1], y = colnames(df)[2])) + geom_point() +
       scale_x_continuous(n.breaks = 10) +
       scale_y_continuous(n.breaks = 10)
   } else if (is.null(z) == F & mode == T) {   # 3d interactive
