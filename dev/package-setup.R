@@ -26,7 +26,7 @@ usethis::use_build_ignore("materials")
 usethis::use_description(
   list(
     Title = "App title",
-    `Authors@R` = "person('Andrea', 'Melloncelli', email = 'andrea@vanlog.it', role = c('cre', 'aut'))",
+    `Authors@R` = "c(person('Andrea', 'Melloncelli', email = 'andrea@vanlog.it', role = c('cre', 'aut')))",
     Description = "A sentence describing the package.",
     URL = "https://github.com/vanlog/R-for-data-science-2020"
   )

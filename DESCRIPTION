@@ -1,28 +1,35 @@
-Package: multiDoE
 Type: Package
+Package: multiDoE
 Title: Multi-criteria Design of Experiments for optimal design
 Version: 0.9.0
-Author: Francesca Cucchi, Andrea Melloncelli, Francesco Sambo, Kalliopi Mylona and Matteo Borrotti
+Author: Francesca Cucchi, Andrea Melloncelli, Francesco Sambo, Kalliopi
+    Mylona and Matteo Borrotti
 Maintainer: Andrea Melloncelli <andrea.melloncelli@vanlog.it>
-Description: Multi-criteria design of experiments algorithm that simultaneously optmizes up to six different criteria (I, Id, D, Ds, A and As). The algorithm finds the optimal Pareto front and, if requested, selects a possible symmetrical design on it. The symmetrical design is selected based on two techniques: minimum distance with the Utopia point or the TOPSIS approach.
+Description: Multi-criteria design of experiments algorithm that
+    simultaneously optmizes up to six different criteria (I, Id, D, Ds, A
+    and As). The algorithm finds the optimal Pareto front and, if
+    requested, selects a possible symmetrical design on it. The
+    symmetrical design is selected based on two techniques: minimum
+    distance with the Utopia point or the TOPSIS approach.
 License: file LICENSE
-Encoding: UTF-8
-LazyData: true
+Imports:
+    ggplot2,
+    magrittr,
+    plotly,
+    pracma
 Suggests: 
-    testthat (>= 3.0.0),
     devtools,
-    markdown,
     here,
     knitr,
     logr,
+    markdown,
     rgl,
     rmarkdown,
+    testthat (>= 3.0.0),
     usethis
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
-Imports:
-    pracma,
-    ggplot2,
-    plotly,
-    magrittr
+Encoding: UTF-8
+LazyData: true
 RoxygenNote: 7.3.1
-VignetteBuilder: knitr
