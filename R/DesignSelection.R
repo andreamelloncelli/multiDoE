@@ -25,6 +25,8 @@
 #' }
 #'
 #'
+#' @importFrom stats dist
+#' 
 #' @export
 optMultiCrit <- function(ar, ...) {
   varargin <- list(...)

@@ -231,8 +231,8 @@ print.MSSearch <- function(mss) {
 #' @export
 #'
 summary.MSSearch <- function(mss) {
-  cat("nfacts: ", msopt$nfacts, "\n")
-  cat("Per ulteriori info ?MSOpt")
+  cat("nfacts: ", mss$nfacts, "\n")
+  cat("For more info ?MSOpt")
   return(invisible(NULL))
 }
 

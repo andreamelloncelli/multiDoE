@@ -123,6 +123,8 @@
 runTPLS <- function(facts, units, criteria, model, iters, ...) {
 
   varargin <- list(...)
+  restarts <- varargin$restarts
+  restInit <- varargin$restInit
 
   if ("RngSeed" %in% varargin == F) {
     varargin <- append(varargin, "RngSeed")
