@@ -1,5 +1,4 @@
 # instance 4 paper 2016
-setwd(here::here())
 options(digits = 10)
 
 # setting
@@ -29,7 +28,7 @@ Wint <- c(w / sum(w)) * diag(a)
 
 # test: MSOpt works ####
 msopt_cs2 <- MSOpt(facts, units, levels, etas, criteria, model)
-file_name <- here::here("tests/testthat/tests_data/msopt_cs2.Rds")
+file_name <- test_path("tests_data/msopt_cs2.Rds")
 #saveRDS(msopt_cs2, file = file_name)
 msopt_cs2 <- readRDS(file = file_name)
 
