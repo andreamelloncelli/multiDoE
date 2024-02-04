@@ -6,3 +6,4 @@
 ^materials$
 ^Rd2pdf*
 .vscode
+.cspell
