@@ -25,10 +25,15 @@ usethis::use_build_ignore("materials")
 # rstudioapi::navigateToFile( "DESCRIPTION" )
 usethis::use_description(
   list(
-    Title = "App title",
+    Title = "multiDoE",
     `Authors@R` = "c(person('Andrea', 'Melloncelli', email = 'andrea@vanlog.it', role = c('cre', 'aut')))",
-    Description = "A sentence describing the package.",
-    URL = "https://github.com/vanlog/R-for-data-science-2020"
+    Description = "Multi-criteria design of experiments algorithm that
+    simultaneously optmizes up to six different criteria (I, Id, D, Ds, A
+    and As). The algorithm finds the optimal Pareto front and, if
+    requested, selects a possible symmetrical design on it. The
+    symmetrical design is selected based on two techniques: minimum
+    distance with the Utopia point or the TOPSIS approach.",
+    URL = "https://github.com/andreamelloncelli/multiDoE"
   )
 )
 usethis::use_proprietary_license("unimib")       # You can set another license here

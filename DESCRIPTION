@@ -12,6 +12,7 @@ Description: Multi-criteria design of experiments algorithm that
     symmetrical design is selected based on two techniques: minimum
     distance with the Utopia point or the TOPSIS approach.
 License: file LICENSE
+URL: https://github.com/andreamelloncelli/multiDoE
 Imports:
     ggplot2,
     magrittr,
