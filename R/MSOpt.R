@@ -355,15 +355,16 @@ MSOpt <- function(facts, units, levels, etas, criteria, model) {
 #### print.MSOpt ####
 #' @export
 #'
-print.MSOpt <- function(msopt) {
-  cat("MSOpt object of", length(msopt), "elements defining the experimental structure.")
+print.MSOpt <- function(x, ...) {
+  cat("MSOpt object of", length(x), "elements defining the experimental structure.")
   return(invisible(NULL))
 }
 
 #### summary.MSOpt ####
 #' @export
 #'
-summary.MSOpt <- function(msopt) {
+summary.MSOpt <- function(object, ...) {
+  msopt <- object
   cat("- Number of experimental factors: ", msopt$nfacts, "\n")
   cat("- Number of strata: ", msopt$nstrat, "\n")
   cat("- Total number of runs: ", msopt$runs, "\n")

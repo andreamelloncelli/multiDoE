@@ -222,7 +222,7 @@ MSSearch <- function(msopt, alpha, ...) {
 #### print.MSSearch ####
 #' @export
 #'
-print.MSSearch <- function(mss) {
+print.MSSearch <- function(x, ...) {
   cat("MSSearch object")
   return(invisible(NULL))
 }
@@ -230,8 +230,8 @@ print.MSSearch <- function(mss) {
 #### summary.MSSearch ####
 #' @export
 #'
-summary.MSSearch <- function(mss) {
-  cat("nfacts: ", mss$nfacts, "\n")
+summary.MSSearch <- function(object, ...) {
+  cat("nfacts: ", object$nfacts, "\n")
   cat("For more info ?MSOpt")
   return(invisible(NULL))
 }
