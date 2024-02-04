@@ -1,4 +1,6 @@
 # Custom Dictionary Words
 cran
 dont
+levs
+nstrat
 testthat

@@ -8,8 +8,8 @@ devtools::check(
     # force_suggests = FALSE,
     run_dont_test = TRUE,
     args = c(
-        "--timings"
-        # "--no-examples"
+        "--timings",
+        "--no-examples"
         # "--no-tests"
     ),
     # env_vars = c(NOT_CRAN = "true"),
