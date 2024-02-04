@@ -123,12 +123,35 @@
 runTPLS <- function(facts, units, criteria, model, iters, ...) {
 
   varargin <- list(...)
-  restarts <- varargin$restarts
-  restInit <- varargin$restInit
-
+  
   if ("RngSeed" %in% varargin == F) {
     varargin <- append(varargin, "RngSeed")
     varargin <- append(varargin, 0)
+  }
+  # optional parameters
+  if (length(varargin) != 0) {
+    for (i in seq(1, length(varargin), 2)) {
+      switch(varargin[[i]],
+             "Restarts" = {
+               restarts = varargin[[i+1]]
+             },
+             "Levels" = {
+               levels = varargin[[i+1]]
+             },
+             "Etas" = {
+               etas = varargin[[i+1]]
+             },
+             "RngSeed" = {
+               rngSeed = varargin[[i+1]]
+             },
+             "RestInit" = {
+               restInit = varargin[[i+1]]
+             }
+             # "Interactive" = {
+             #   interact = varargin[[i+1]]
+             # }
+      )
+    }
   }
 
   ar <- vector(mode = "list", iters)
