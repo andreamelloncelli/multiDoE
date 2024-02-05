@@ -98,7 +98,7 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
     norms <- c(pf$scmin, pf$scmax - pf$scmin)
     r <- matrix(runif(nCrit - 1), 1, nCrit - 1)
     alpha <- cbind(r, 1 - sum(r))
-    start <- pf$arch$solutions[pf$ptrs[sample(1, 1:length(pf$ptrs))]]
+    start <- pf$arch$solutions[pf$ptrs[sample(1:length(pf$ptrs), 1)]]
 
     newMssearch <- MSSearch(mso, alpha, "Start", start[[1]], "Normalize", norms)
     newSol <- newMssearch$optsol
