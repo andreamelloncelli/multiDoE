@@ -74,7 +74,7 @@
 #' Francesca Cucchi, Andrea Melloncelli, Francesco Sambo, Kalliopi Mylona
 #' and Matteo Borrotti
 #'
-#' Maintainer: Francesca Cucchi <f.cucchi4@campus.unimib.it>
+#' Maintainer: Andrea Melloncelli <andrea.melloncelli@vanlog.it>
 #'
 #' @references
 #' M. Borrotti, F. Sambo and K. Mylona. A coordinate-exchange two-phase local

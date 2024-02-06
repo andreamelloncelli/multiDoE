@@ -1,6 +1,22 @@
 # Custom Dictionary Words
+Aguasca
+Borrotti
+Colomo
 cran
+Cucchi
 dont
+Francesco
+Frutos
+Gilmour
+Kalliopi
 levs
+Matteo
+Melloncelli
+Méndez
+Mylona
 nstrat
+Roxygen
 testthat
+topsis
+TOPSIS
+TPLS
