@@ -92,12 +92,18 @@
 #' ## Single-objective optimization
 #' criteria_S <- c('I')
 #' msopt_S <- MSOpt(facts, units, level, etas, criteria_S, model2)
+#' \dontrun{
 #' mssearch_S <- MSSearch(msopt_S, alpha = 1, "Restarts", 100)
+#' }
 #'
 #' ## Multi-objective optimization
 #' criteria_M <- c('Id', 'Ds', 'As')
 #' msopt_M <- MSOpt(facts, units, level, etas, criteria_M, model2)
+#' \dontrun{
 #' mssearch_M <- MSSearch(msopt_M, alpha = c(1/2, 1/4, 1/4), "Restarts", 100)
+#' }
+#'
+#' ## To reduce the computational cost of MSSearch function, you may reduce the number of restarts.
 #'
 #' @export
 MSSearch <- function(msopt, alpha, ...) {
