@@ -4,7 +4,11 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of `multiDoE` is to ...
+Multi-criteria design of experiments algorithm that simultaneously optimizes up
+to six different criteria (I, Id, D, Ds, A and As). The algorithm finds the
+optimal Pareto front and, if requested, selects a possible symmetrical design on
+it. The symmetrical design is selected based on two techniques: minimum distance
+with the Utopia point or the TOPSIS approach.
 
 ## Installation
 
@@ -16,17 +20,8 @@ install.packages("multiDoE")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+See the vignette.
 
-``` r
-library(multiDoE)
-## basic example code
-## TODO
-```
+## Development
 
-## Project Repository
-
-- [materials](./materials) Notebooks useful for develompent
 - [dev](./dev) Development scripts
-
-
