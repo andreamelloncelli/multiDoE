@@ -84,7 +84,7 @@
 #'        hat{\beta}_{GLS} = (X' V^{-1} X)^{-1} X' V^{-1} y.}
 #'
 #' This estimator has variance-covariance matrix:
-#' \deqn{Var(\hat{\beta}_{\emph{GLS}}) = \sigma^{2}(X'V^{-1}X)^{-1}}{%
+#' \deqn{Var(\hat{\beta}_{GLS}) = \sigma^{2}(X'V^{-1}X)^{-1}}{%
 #'       Var(hat{\beta}_{GLS}) = \sigma^{2} (X' V^{-1} X)^{-1}, }
 #'
 #' where
