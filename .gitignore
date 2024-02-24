@@ -7,7 +7,8 @@
 *.nb.html
 # ignore documentation files (man/*.Rd), they are rebuild every time.
 *.Rd
-my_R_log.txt
-provamsopt.pdf
 inst/doc
+# ignore builds
 multiDoE_*.tar.gz
+multiDoE.Rcheck
+..Rcheck
