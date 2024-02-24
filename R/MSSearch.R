@@ -40,7 +40,7 @@
 #' \itemize{
 #' \item \code{'Start', sol}: A string and a matrix, used in pair. They provide
 #' a starting solution (or an initial design) to the algorithm. By default the
-#' initial solution is randomly generated following the \emph{SampleDesign()}
+#' initial solution is randomly generated following the SampleDesign()
 #' procedure described in Sambo, Borrotti, Mylona and Gilmour (2016).
 #'
 #' \item \code{'Restarts', r }: A string and an integer, used in pair. When

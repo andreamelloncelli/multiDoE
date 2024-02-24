@@ -76,7 +76,7 @@
 #' containing the random effects, which are all uncorrelated. The variance
 #' components \eqn{\sigma^{2}_{i} (i = 1, \dots, s)}{\sigmai^{2}
 #' (i = 1, \dots, s)} have to be estimated and this is usually done using
-#' the REML (\emph{REstricted Maximum Likelihood}) method.
+#' the REML (REstricted Maximum Likelihood) method.
 #'
 #' The best linear unbiased estimator for the parameter vector \eqn{\beta} is
 #' the generalized least square estimator:
@@ -96,7 +96,7 @@
 #' hat{\beta}} and let \eqn{\eta} be the vector of the variance components.
 #'
 #' \itemize{
-#' \item{ \strong{\emph{D}-optimality.} It is based on minimizing the generalized
+#' \item{ \strong{D-optimality.} It is based on minimizing the generalized
 #' variance of the parameter estimates. This can be done either by minimizing the
 #' determinant of the variance-covariance matrix of the factor effects' estimates
 #' or by maximizing the determinant of \eqn{M}. \cr
@@ -106,7 +106,7 @@
 #' where \eqn{d} is the design with information matrix \eqn{M} and \eqn{p} is the
 #' number of model parameters.}
 #'
-#' \item{ \strong{\emph{A}-optimality.} This criterion is based on
+#' \item{ \strong{A-optimality.} This criterion is based on
 #' minimizing the average variance of the estimates of the regression coefficients.
 #' The sum of the variances of the parameter estimates (elements of
 #' \eqn{\hat{\beta}}{hat{\beta}}) is taken as a measure, which is equivalent to
@@ -116,7 +116,7 @@
 #' where \eqn{d} is the design with information matrix \eqn{M} and \eqn{p} is the
 #' number of model parameters.}
 #'
-#' \item{ \strong{\emph{I}-optimality.} It seeks to minimize the average
+#' \item{ \strong{I-optimality.} It seeks to minimize the average
 #' prediction variance. \cr
 #' The objective function to be minimized is:
 #' \deqn{f_{I}(d; \eta) = \frac{\int_{\chi} f'(x)(M)^{-1}f(x)\,dx }{\int_{\chi} \,dx}}{%
@@ -135,7 +135,7 @@
 #' cuboidal design region see section 2.3 of Sambo, Borrotti, Mylona, and Gilmour
 #' (2016).}
 #'
-#' \item{ \strong{\emph{Ds}-optimality.} Its aim is to minimize the generalized
+#' \item{ \strong{Ds-optimality.} Its aim is to minimize the generalized
 #' variance of the parameter estimates by excluding the intercept from the set
 #' of parameters of interest. Let \eqn{\beta_i}{\betai} be the model parameter
 #' vector of dimension (\eqn{p_i - 1}{pi-1}) to be estimated in stratum \eqn{i}.
@@ -150,7 +150,7 @@
 #' f_Ds(d; \eta) = (|(Mi^{-1})_{22}|)^{1/(pi-1)}.}}
 #'
 #'
-#' \item{\strong{\emph{As}-optimality.} This criterion is based on minimizing
+#' \item{\strong{As-optimality.} This criterion is based on minimizing
 #' the average variance of the estimates of the regression coefficients by excluding
 #' the intercept from the set of parameters of interest. \cr
 #' With reference to the notation introduced for the previous criterion, the
@@ -163,12 +163,12 @@
 #' weight equal to 1, while to the quadratic effects it assigns an absolute weight
 #' equal to 1/4.}
 #'
-#' \item{ \strong{\emph{Id}-optimality.} It seeks to minimize the average
+#' \item{ \strong{Id-optimality.} It seeks to minimize the average
 #' prediction variance by excluding the intercept from the set of parameters of
 #' interest. \cr
 #' The objective function to be minimized is the same as the
-#' \emph{I}-optimality criterion where the first row and columns of the \eqn{B}
-#' matrix (see the \strong{\emph{Id}-optimality} criterion) are deleted.}
+#' I-optimality criterion where the first row and columns of the \eqn{B}
+#' matrix (see the \strong{Id-optimality} criterion) are deleted.}
 #'}
 #'
 #'
@@ -188,9 +188,9 @@
 #' \item{\code{model}: The argument \code{model}.}
 #' \item{\code{crit}: The argument \code{criteria}.}
 #' \item{\code{ncrit}: An integer. The number of criteria considered.}
-#' \item{\code{M}: The moment matrix. Only with \emph{I}-optimality criteria.}
-#' \item{\code{M0}: The moment matrix. Only with \emph{Id}-optimality criteria.}
-#' \item{\code{W}: The diagonal matrix of weights. Only with \emph{As}-optimality criteria.}
+#' \item{\code{M}: The moment matrix. Only with I-optimality criteria.}
+#' \item{\code{M0}: The moment matrix. Only with Id-optimality criteria.}
+#' \item{\code{W}: The diagonal matrix of weights. Only with As-optimality criteria.}
 #' }
 #'
 #' @references
