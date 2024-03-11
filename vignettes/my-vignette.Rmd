@@ -35,6 +35,8 @@ library(multiDoE)
 It is time to initialize the main arguments for defining the experimental design.
 
 ```{r }
+backup_options <- options()
+
 set.seed(13)
 options(digits = 15)
 
@@ -116,4 +118,9 @@ At this point, another interesting analysis is related to the identification of 
 
 ```{r}
 optSingleCrit(tpls$megaAR)
+```
+
+
+```{r}
+options(backup_options)
 ```

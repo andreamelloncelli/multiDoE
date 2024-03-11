@@ -26,7 +26,7 @@
 #'
 #'
 #' @importFrom stats dist
-#' 
+#'
 #' @export
 optMultiCrit <- function(ar, ...) {
   varargin <- list(...)
@@ -82,7 +82,7 @@ optSingleCrit <- function(ar) {
 #' @description \code{plotPareto} returns a graphical representation (at most 3D)
 #' of the Pareto front.
 #'
-#' @usage plotPareto(ar, x, y, z = NULL, mode = T)
+#' @usage plotPareto(ar, x, y, z = NULL, mode = TRUE)
 #'
 #' @param ar A list as the \code{megaAR} list returned by \code{\link[multiDoE]{runTPLS}}.
 #' @param x The criterion on the x axis. It can be one of the following: \code{"I",
@@ -101,7 +101,7 @@ optSingleCrit <- function(ar) {
 #' @importFrom plotly plot_ly layout
 #'
 #' @export
-plotPareto <- function(ar, x, y, z = NULL, mode = T){
+plotPareto <- function(ar, x, y, z = NULL, mode = TRUE){
 
   # data.frame
   if (ar$nsols == 1) {
@@ -129,7 +129,7 @@ plotPareto <- function(ar, x, y, z = NULL, mode = T){
                                        zaxis = list(title = z)))
     fig
 
-  } else if (is.null(z) == F & mode == F) {   # 3d = 2d + color
+  } else if (is.null(z) == F & mode == FALSE) {   # 3d = 2d + color
     ggplot(data = df, mapping = aes_string(x = x, y = y)) +
       geom_point(aes_string(colour = z), shape = 19) +
       scale_x_continuous(n.breaks = 6) +

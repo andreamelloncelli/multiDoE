@@ -212,6 +212,7 @@
 #' ## Each experimental factor has 3 different levels.
 #'
 #' ## To check the number of digits to be printed.
+#' backup_options <- options()
 #' options(digits = 10)
 #'
 #' facts <- list(1, 2:5)
@@ -222,6 +223,8 @@
 #' model <- "quadratic"
 #'
 #' msopt <- MSOpt(facts, units, levels, etas, criteria, model)
+#'
+#' options(backup_options)
 #'
 #' @export
 MSOpt <- function(facts, units, levels, etas, criteria, model) {
