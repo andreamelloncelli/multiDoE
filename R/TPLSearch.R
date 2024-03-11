@@ -14,7 +14,7 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
   restarts <- 1000
   levels <- 3
   etas <- matrix(1, 1, nStrat - 1)
-  rngSeed <- 0
+  rngSeed <- NA
   restInit <- 50
   # interact <- 0
 
@@ -32,7 +32,7 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
                etas = varargin[[i+1]]
              },
              "RngSeed" = {
-               rngSeed = varargin[[i+1]]
+                rngSeed = varargin[[i+1]]
              },
              "RestInit" = {
                restInit = varargin[[i+1]]
@@ -46,8 +46,10 @@ TPLSearch <- function(facts, units, criteria, model, ...) {
 
   scalarizations <- restarts - (restInit * nCrit)
   mso <- MSOpt(facts, units, levels, etas, criteria, model)
-  set.seed(rngSeed)
-  # cat("set.seed =", rngSeed)
+  if (!is.na(rngSeed)){
+    set.seed(rngSeed)
+  }
+
 
   # good quality solutions for the single objectives
   initSol <- vector(mode = "list", length = nCrit)    # lista di lunghezza 6 con 6 soluzioni iniziali, [[i]] matrice

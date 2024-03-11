@@ -74,7 +74,7 @@
 #' second step (lines 7-11 of the pseudo-code of MS-TPLS) of each iteration of MS-TPLS.
 #'
 #' \item \code{'RngSeed', rngSeed}: A number indicating the seed for reproducibility.
-#' The default value is \code{rngSeed=0}.}
+#' Default is to leave the random number generator alone.}
 #'
 #' @return \code{runTPLS} returns a list, whose elements are:
 #' \itemize{
@@ -123,7 +123,7 @@
 runTPLS <- function(facts, units, criteria, model, iters, ...) {
 
   varargin <- list(...)
-  
+
   if ("RngSeed" %in% varargin == F) {
     varargin <- append(varargin, "RngSeed")
     varargin <- append(varargin, 0)
