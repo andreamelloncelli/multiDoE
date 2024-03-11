@@ -6,8 +6,8 @@ Ldist <- function(x, y, w, p) {
 
 #' Technique for Order of Preference by Similarity to Ideal Solution (TOPSIS)
 #'
-#' @description This function implements TOPSIS. This approach is based on
-#' the principle that the best solutions must be near to a positive ideal
+#' @description This function implements Technique for Order of Preference by Similarity to Ideal Solution (TOPSIS).
+#' This approach is based on the principle that the best solutions must be near to a positive ideal
 #' solution \eqn{(I+)} and far from a negative ideal solution \eqn{(I-)} in the
 #' criteria space. The weighted distance measure used to detect these similarities
 #' allows the user to possibly assign different importance to the criteria considered.
