@@ -2,8 +2,35 @@ Type: Package
 Package: multiDoE
 Title: Multi-criteria Design of Experiments for optimal design
 Version: 0.9.0
-Author: Francesca Cucchi, Andrea Melloncelli, Francesco Sambo, Kalliopi
-    Mylona and Matteo Borrotti
+Authors@R:
+    c(
+        person(
+            given = "Francesca",
+            family = "Cucchi",
+            role = c("aut")
+        ),
+        person(
+            given = "Andrea",
+            family = "Melloncelli",
+            role = c("aut", "cre"),
+            email = "andrea.melloncelli@vanlog.it"
+        ),
+        person(
+            given = "Francesco",
+            family = "Sambo",
+            role = c("aut")
+        ),
+        person(
+            given = "Kalliopi",
+            family = "Mylona",
+            role = c("aut")
+        ),
+        person(
+            given = "Matteo",
+            family = "Borrotti",
+            role = c("aut")
+        )
+    )
 Maintainer: Andrea Melloncelli <andrea.melloncelli@vanlog.it>
 Description: Multi-criteria design of experiments algorithm that
     simultaneously optimizes up to six different criteria ('I', 'Id', 'D', 'Ds', 'A'
