@@ -22,6 +22,3 @@ install.packages("multiDoE")
 
 See the vignette.
 
-## Development
-
-- [dev](./dev) Development scripts
