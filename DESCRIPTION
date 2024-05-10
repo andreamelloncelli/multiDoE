@@ -1,7 +1,7 @@
 Type: Package
 Package: multiDoE
 Title: Multi-criteria Design of Experiments for optimal design
-Version: 0.9.0
+Version: 0.9.1
 Authors@R:
     c(
         person(
@@ -38,7 +38,7 @@ Description: Multi-criteria design of experiments algorithm that
     requested, selects a possible symmetrical design on it. The
     symmetrical design is selected based on two techniques: minimum
     distance with the Utopia point or the 'TOPSIS' approach.
-License: file LICENSE
+License: CC BY 4.0
 URL: https://github.com/andreamelloncelli/multiDoE
 Imports:
     ggplot2,

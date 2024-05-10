@@ -1,3 +1,4 @@
+#!/usr/bin/env Rscript
 
 # create package PDF document  --------------------------------------------
 
@@ -6,7 +7,7 @@ devtools::document(roclets = c('rd', 'collate', 'namespace'))
 # create the manual
 devtools::build_manual()
 # open the output file (or do it through the file browser)
-system(paste0("xdg-open ../multiDoE_0.1.0.pdf"))
+system(paste0("xdg-open ../multiDoE_0.9.1.pdf"))
 # in case it does not work you can debug it with:
 devtools::check(manual=TRUE)
 
