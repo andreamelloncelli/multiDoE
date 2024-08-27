@@ -1,6 +1,6 @@
 Type: Package
 Package: multiDoE
-Title: Multi-criteria Design of Experiments for Optimal Design
+Title: Multi-Criteria Design of Experiments for Optimal Design
 Version: 0.9.1
 Authors@R:
     c(
