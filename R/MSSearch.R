@@ -80,6 +80,7 @@
 #' library(multiDoE)
 #'
 #' ## To check the number of digits to be printed.
+#' backup_options <- options()
 #' options(digits = 10)
 #'
 #' ## Definition of parameters for experimental setup
@@ -103,6 +104,8 @@
 #' mssearch_M <- MSSearch(msopt_M, alpha = c(1/2, 1/4, 1/4), "Restarts", 100)
 #' }
 #'
+#' options(backup_options)
+#' 
 #' ## To reduce the computational cost of MSSearch function, you may reduce the number of restarts.
 #'
 #' @export
