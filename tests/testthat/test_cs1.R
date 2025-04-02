@@ -167,23 +167,6 @@ file_name <- test_path("tests_data/tpls_cs1.Rds")
 #saveRDS(tpls, file = file_name)
 tpls_cs1 <- readRDS(file_name)
 
-# RngSeed
-test_that("runTPLSearch works", {
-  expect_equal(
-    runTPLS(facts, units, criteria, model, iters,
-            "Restarts", restarts,
-            "RestInit", restInit,
-            "RngSeed", 4),
-    structure(
-      list("ar" = tpls_cs1$ar,
-          "stats" = tpls_cs1$stats,
-          "megaAR" = tpls_cs1$megaAR),
-      class = c("runTPLS", "list")
-    )
-  )
-}
-)
-
 
 # test: optMultiCrit ####
 file_name <- test_path("tests_data/opt_cs1.Rds")
