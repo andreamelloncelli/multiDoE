@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGE_FILE=multiDoE_0.9.2.tar.gz
+PACKAGE_FILE=multiDoE_0.9.3.tar.gz
 
 if [[ ! -f $PACKAGE_FILE ]]; then
   echo "File not found: $PACKAGE_FILE. Run 'R CMD build .' first. Then check the file name."
